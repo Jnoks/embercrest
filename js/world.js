@@ -4,6 +4,7 @@ import Enemy from "./entities/enemy.js";
 export default class World {
   constructor(canvas) {
     this.ctx = canvas.getContext("2d");
+    this.canvas = canvas;
     this.character = new Character(100, 300);
     this.enemies = [
       new Enemy(832, 321),
@@ -14,6 +15,7 @@ export default class World {
   }
 
   draw() {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.character.draw(this.ctx);
     for (let i = 0; i < this.enemies.length; i++) {
       this.enemies[i].draw(this.ctx);
