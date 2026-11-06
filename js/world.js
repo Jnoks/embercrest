@@ -1,7 +1,7 @@
 import Character from "./entities/character.js";
 import Enemy from "./entities/enemy.js";
 import BackgroundLayer from "./entities/background-layer.js";
-import Tile from "./entities/tile.js";
+import Tile, { TILE_SIZE } from "./entities/tile.js";
 
 const BACKGROUND_PATH = "./assets/images/forest/background/";
 const GROUND_Y = 482;
@@ -25,11 +25,11 @@ export default class World {
       new BackgroundLayer(0, 0, BACKGROUND_PATH + "trees.png"),
     ];
     this.groundTiles = [];
-    for (let i = 0; i < 15; i++) {
+    for (let i = 0; i < this.canvas.width / TILE_SIZE; i++) {
       this.groundTiles.push(
         new Tile(
-          i * 64,
-          476,
+          i * TILE_SIZE,
+          this.canvas.height - TILE_SIZE,
           "./assets/images/forest/tiles/grass-top-middle.png",
         ),
       );
