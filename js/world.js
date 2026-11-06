@@ -39,17 +39,16 @@ export default class World {
 
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    for (let i = 0; i < this.backgroundLayers.length; i++) {
-      this.backgroundLayers[i].draw(this.ctx);
-    }
-    for (let i = 0; i < this.groundTiles.length; i++) {
-      this.groundTiles[i].draw(this.ctx);
-    }
+    this.drawObjects(this.backgroundLayers);
+    this.drawObjects(this.groundTiles);
     this.character.draw(this.ctx);
-    for (let i = 0; i < this.enemies.length; i++) {
-      this.enemies[i].draw(this.ctx);
-    }
-
+    this.drawObjects(this.enemies);
     requestAnimationFrame(() => this.draw());
+  }
+
+  drawObjects(objects) {
+    for (let i = 0; i < objects.length; i++) {
+      objects[i].draw(this.ctx);
+    }
   }
 }
