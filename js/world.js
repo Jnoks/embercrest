@@ -12,7 +12,9 @@ export default class World {
       new Enemy(632, 321),
       new Enemy(432, 321),
     ];
-    this.clouds = [new Cloud(0, 0)];
+    this.clouds = [
+      new Cloud(0, 0, "./assets/images/forest/background/clouds-small.png"),
+    ];
     this.draw();
   }
 
