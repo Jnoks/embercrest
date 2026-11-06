@@ -10,9 +10,9 @@ export default class World {
     this.canvas = canvas;
     this.character = new Character(100, 300);
     this.enemies = [
-      new Enemy(832, 321),
-      new Enemy(632, 321),
-      new Enemy(432, 321),
+      new Enemy(832, 410),
+      new Enemy(632, 410),
+      new Enemy(432, 410),
     ];
     this.backgroundLayers = [
       new BackgroundLayer(0, 0, BACKGROUND_PATH + "sky.png"),
