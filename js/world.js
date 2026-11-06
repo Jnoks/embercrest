@@ -1,6 +1,6 @@
 import Character from "./entities/character.js";
 import Enemy from "./entities/enemy.js";
-import Cloud from "./entities/cloud.js";
+import BackgroundLayer from "./entities/background-layer.js";
 
 export default class World {
   constructor(canvas) {
@@ -12,16 +12,20 @@ export default class World {
       new Enemy(632, 321),
       new Enemy(432, 321),
     ];
-    this.clouds = [
-      new Cloud(0, 0, "./assets/images/forest/background/clouds-small.png"),
+    this.backgroundLayers = [
+      new BackgroundLayer(
+        0,
+        0,
+        "./assets/images/forest/background/clouds-small.png",
+      ),
     ];
     this.draw();
   }
 
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    for (let i = 0; i < this.clouds.length; i++) {
-      this.clouds[i].draw(this.ctx);
+    for (let i = 0; i < this.backgroundLayers.length; i++) {
+      this.backgroundLayers[i].draw(this.ctx);
     }
     this.character.draw(this.ctx);
     for (let i = 0; i < this.enemies.length; i++) {
