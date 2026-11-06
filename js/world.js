@@ -3,16 +3,17 @@ import Enemy from "./entities/enemy.js";
 import BackgroundLayer from "./entities/background-layer.js";
 
 const BACKGROUND_PATH = "./assets/images/forest/background/";
+const GROUND_Y = 410;
 
 export default class World {
   constructor(canvas) {
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
-    this.character = new Character(100, 410);
+    this.character = new Character(100, GROUND_Y);
     this.enemies = [
-      new Enemy(832, 410),
-      new Enemy(632, 410),
-      new Enemy(432, 410),
+      new Enemy(832, GROUND_Y),
+      new Enemy(632, GROUND_Y),
+      new Enemy(432, GROUND_Y),
     ];
     this.backgroundLayers = [
       new BackgroundLayer(0, 0, BACKGROUND_PATH + "sky.png"),
