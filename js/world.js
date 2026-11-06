@@ -13,11 +13,28 @@ export default class World {
       new Enemy(432, 321),
     ];
     this.backgroundLayers = [
+      new BackgroundLayer(0, 0, "./assets/images/forest/background/sky.png"),
+      new BackgroundLayer(
+        0,
+        0,
+        "./assets/images/forest/background/clouds-back-layer2.png",
+      ),
+      new BackgroundLayer(
+        0,
+        0,
+        "./assets/images/forest/background/clouds-back-layer1.png",
+      ),
+      new BackgroundLayer(
+        0,
+        0,
+        "./assets/images/forest/background/mountains.png",
+      ),
       new BackgroundLayer(
         0,
         0,
         "./assets/images/forest/background/clouds-small.png",
       ),
+      new BackgroundLayer(0, 0, "./assets/images/forest/background/trees.png"),
     ];
     this.draw();
   }
