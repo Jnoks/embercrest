@@ -2,6 +2,8 @@ import Character from "./entities/character.js";
 import Enemy from "./entities/enemy.js";
 import BackgroundLayer from "./entities/background-layer.js";
 
+const BACKGROUND_PATH = "./assets/images/forest/background/";
+
 export default class World {
   constructor(canvas) {
     this.ctx = canvas.getContext("2d");
@@ -13,28 +15,12 @@ export default class World {
       new Enemy(432, 321),
     ];
     this.backgroundLayers = [
-      new BackgroundLayer(0, 0, "./assets/images/forest/background/sky.png"),
-      new BackgroundLayer(
-        0,
-        0,
-        "./assets/images/forest/background/clouds-back-layer2.png",
-      ),
-      new BackgroundLayer(
-        0,
-        0,
-        "./assets/images/forest/background/clouds-back-layer1.png",
-      ),
-      new BackgroundLayer(
-        0,
-        0,
-        "./assets/images/forest/background/mountains.png",
-      ),
-      new BackgroundLayer(
-        0,
-        0,
-        "./assets/images/forest/background/clouds-small.png",
-      ),
-      new BackgroundLayer(0, 0, "./assets/images/forest/background/trees.png"),
+      new BackgroundLayer(0, 0, BACKGROUND_PATH + "sky.png"),
+      new BackgroundLayer(0, 0, BACKGROUND_PATH + "clouds-back-layer2.png"),
+      new BackgroundLayer(0, 0, BACKGROUND_PATH + "clouds-back-layer1.png"),
+      new BackgroundLayer(0, 0, BACKGROUND_PATH + "mountains.png"),
+      new BackgroundLayer(0, 0, BACKGROUND_PATH + "clouds-small.png"),
+      new BackgroundLayer(0, 0, BACKGROUND_PATH + "trees.png"),
     ];
     this.draw();
   }
