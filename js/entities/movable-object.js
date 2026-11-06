@@ -5,6 +5,7 @@ export default class MovableObject {
     this.y = y;
     this.width = width;
     this.height = height;
+    this.anchorY = 0;
   }
 
   loadImage(path) {
@@ -14,7 +15,13 @@ export default class MovableObject {
 
   draw(ctx) {
     if (!this.img) return;
-    ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+    ctx.drawImage(
+      this.img,
+      this.x,
+      this.y - this.anchorY,
+      this.width,
+      this.height,
+    );
   }
 
   moveRight() {
