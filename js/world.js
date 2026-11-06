@@ -8,7 +8,7 @@ export default class World {
   constructor(canvas) {
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
-    this.character = new Character(100, 300);
+    this.character = new Character(100, 410);
     this.enemies = [
       new Enemy(832, 410),
       new Enemy(632, 410),
