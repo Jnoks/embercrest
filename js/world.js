@@ -1,5 +1,6 @@
 import Character from "./entities/character.js";
 import Enemy from "./entities/enemy.js";
+import Cloud from "./entities/cloud.js";
 
 export default class World {
   constructor(canvas) {
@@ -11,15 +12,20 @@ export default class World {
       new Enemy(632, 321),
       new Enemy(432, 321),
     ];
+    this.clouds = [new Cloud(0, 0)];
     this.draw();
   }
 
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    for (let i = 0; i < this.clouds.length; i++) {
+      this.clouds[i].draw(this.ctx);
+    }
     this.character.draw(this.ctx);
     for (let i = 0; i < this.enemies.length; i++) {
       this.enemies[i].draw(this.ctx);
     }
+
     requestAnimationFrame(() => this.draw());
   }
 }
