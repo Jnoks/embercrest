@@ -4,7 +4,7 @@ import BackgroundLayer from "./entities/background-layer.js";
 import Tile from "./entities/tile.js";
 
 const BACKGROUND_PATH = "./assets/images/forest/background/";
-const GROUND_Y = 410;
+const GROUND_Y = 482;
 
 export default class World {
   constructor(canvas) {
