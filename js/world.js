@@ -2,6 +2,7 @@ import Character from "./entities/character.js";
 import Enemy from "./entities/enemy.js";
 import BackgroundLayer from "./entities/background-layer.js";
 import Tile, { TILE_SIZE } from "./entities/tile.js";
+import CloudLayer from "./entities/cloud-layer.js";
 
 const BACKGROUND_PATH = "./assets/images/forest/background/";
 const GROUND_Y = 482;
@@ -19,10 +20,10 @@ export default class World {
     ];
     this.backgroundLayers = [
       new BackgroundLayer(0, 0, BACKGROUND_PATH + "sky.png"),
-      new BackgroundLayer(0, 0, BACKGROUND_PATH + "clouds-back-layer2.png"),
-      new BackgroundLayer(0, 0, BACKGROUND_PATH + "clouds-back-layer1.png"),
+      new CloudLayer(0, 0, BACKGROUND_PATH + "clouds-back-layer2.png"),
+      new CloudLayer(0, 0, BACKGROUND_PATH + "clouds-back-layer1.png"),
       new BackgroundLayer(0, 0, BACKGROUND_PATH + "mountains.png"),
-      new BackgroundLayer(0, 0, BACKGROUND_PATH + "clouds-small.png"),
+      new CloudLayer(0, 0, BACKGROUND_PATH + "clouds-small.png"),
       new BackgroundLayer(0, 0, BACKGROUND_PATH + "trees.png"),
     ];
     this.groundTiles = [];
