@@ -56,6 +56,7 @@ export default class World {
 
   update(delta) {
     this.updateObjects(this.backgroundLayers, delta);
+    this.character.update(delta);
   }
 
   updateObjects(objects, delta) {

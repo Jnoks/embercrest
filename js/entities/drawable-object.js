@@ -7,6 +7,10 @@ export default class DrawableObject {
     this.height = height;
     this.anchorY = 0;
     this.frames = [];
+    this.frameIndex = 0;
+    this.frameTimer = 0;
+    this.frameDuration = 0.2;
+    this.loopPause = 2;
   }
 
   loadImage(path) {
@@ -21,6 +25,16 @@ export default class DrawableObject {
       this.frames.push(img);
     }
     this.img = this.frames[0];
+  }
+
+  animate(delta) {
+    this.frameTimer += delta;
+    if (this.frameTimer >= this.frameDuration) {
+      this.frameTimer -= this.frameDuration;
+      this.frameIndex = (this.frameIndex + 1) % this.frames.length;
+      this.img = this.frames[this.frameIndex];
+      if (this.frameIndex === 0) this.frameTimer -= this.loopPause;
+    }
   }
 
   draw(ctx) {

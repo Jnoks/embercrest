@@ -10,4 +10,8 @@ export default class Character extends MovableObject {
     }
     this.loadImages(paths);
   }
+
+  update(delta) {
+    this.animate(delta);
+  }
 }
