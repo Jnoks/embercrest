@@ -53,9 +53,20 @@ export default class World {
     }
   }
 
+  update(delta) {
+    this.updateObjects(this.backgroundLayers, delta);
+  }
+
+  updateObjects(objects, delta) {
+    for (let i = 0; i < objects.length; i++) {
+      objects[i].update(delta);
+    }
+  }
+
   loop(time) {
     const delta = (time - this.lastTime) / 1000;
     this.lastTime = time;
+    this.update(delta);
     this.draw();
     requestAnimationFrame((t) => this.loop(t));
   }

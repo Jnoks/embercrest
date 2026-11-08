@@ -6,11 +6,11 @@ export default class MovableObject extends DrawableObject {
     this.speed = 0;
   }
 
-  moveRight() {
-    this.x += this.speed;
+  moveRight(delta) {
+    this.x += this.speed * delta;
   }
 
-  moveLeft() {
-    this.x -= this.speed;
+  moveLeft(delta) {
+    this.x -= this.speed * delta;
   }
 }

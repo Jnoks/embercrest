@@ -23,4 +23,6 @@ export default class DrawableObject {
       this.height,
     );
   }
+
+  update(delta) {}
 }
