@@ -14,10 +14,14 @@ export default class DrawableObject {
   }
 
   draw(ctx) {
+    this.drawAt(ctx, this.x);
+  }
+
+  drawAt(ctx, x) {
     if (!this.img) return;
     ctx.drawImage(
       this.img,
-      this.x,
+      Math.round(x),
       this.y - this.anchorY,
       this.width,
       this.height,

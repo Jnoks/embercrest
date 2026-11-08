@@ -10,6 +10,7 @@ const GROUND_Y = 482;
 export default class World {
   constructor(canvas) {
     this.ctx = canvas.getContext("2d");
+    this.ctx.imageSmoothingEnabled = false;
     this.canvas = canvas;
     this.lastTime = 0;
     this.character = new Character(100, GROUND_Y);
@@ -20,10 +21,10 @@ export default class World {
     ];
     this.backgroundLayers = [
       new BackgroundLayer(0, 0, BACKGROUND_PATH + "sky.png"),
-      new CloudLayer(0, 0, BACKGROUND_PATH + "clouds-back-layer2.png"),
-      new CloudLayer(0, 0, BACKGROUND_PATH + "clouds-back-layer1.png"),
+      new CloudLayer(0, 0, BACKGROUND_PATH + "clouds-back-layer2.png", 15),
+      new CloudLayer(0, 0, BACKGROUND_PATH + "clouds-back-layer1.png", 10),
       new BackgroundLayer(0, 0, BACKGROUND_PATH + "mountains.png"),
-      new CloudLayer(0, 0, BACKGROUND_PATH + "clouds-small.png"),
+      new CloudLayer(0, 0, BACKGROUND_PATH + "clouds-small.png", 20),
       new BackgroundLayer(0, 0, BACKGROUND_PATH + "trees.png"),
     ];
     this.groundTiles = [];
