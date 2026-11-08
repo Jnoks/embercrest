@@ -10,6 +10,7 @@ export default class World {
   constructor(canvas) {
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
+    this.lastTime = 0;
     this.character = new Character(100, GROUND_Y);
     this.enemies = [
       new Enemy(832, GROUND_Y),
@@ -34,7 +35,7 @@ export default class World {
         ),
       );
     }
-    this.draw();
+    requestAnimationFrame((time) => this.loop(time));
   }
 
   draw() {
@@ -43,12 +44,18 @@ export default class World {
     this.drawObjects(this.groundTiles);
     this.character.draw(this.ctx);
     this.drawObjects(this.enemies);
-    requestAnimationFrame(() => this.draw());
   }
 
   drawObjects(objects) {
     for (let i = 0; i < objects.length; i++) {
       objects[i].draw(this.ctx);
     }
+  }
+
+  loop(time) {
+    const delta = (time - this.lastTime) / 1000;
+    this.lastTime = time;
+    this.draw();
+    requestAnimationFrame((t) => this.loop(t));
   }
 }
