@@ -6,11 +6,21 @@ export default class DrawableObject {
     this.width = width;
     this.height = height;
     this.anchorY = 0;
+    this.frames = [];
   }
 
   loadImage(path) {
     this.img = new Image();
     this.img.src = path;
+  }
+
+  loadImages(paths) {
+    for (let i = 0; i < paths.length; i++) {
+      const img = new Image();
+      img.src = paths[i];
+      this.frames.push(img);
+    }
+    this.img = this.frames[0];
   }
 
   draw(ctx) {
