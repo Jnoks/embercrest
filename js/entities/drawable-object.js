@@ -7,11 +7,9 @@ export default class DrawableObject {
     this.height = height;
     this.anchorY = 0;
     this.facingLeft = false;
-    this.frames = [];
     this.frameIndex = 0;
     this.frameTimer = 0;
-    this.frameDuration = 0.2;
-    this.loopPause = 2;
+    this.animation = null;
   }
 
   loadImage(path) {
@@ -19,22 +17,21 @@ export default class DrawableObject {
     this.img.src = path;
   }
 
-  loadImages(paths) {
-    for (let i = 0; i < paths.length; i++) {
-      const img = new Image();
-      img.src = paths[i];
-      this.frames.push(img);
-    }
-    this.img = this.frames[0];
+  setAnimation(animation) {
+    if (this.animation === animation) return;
+    this.animation = animation;
+    this.frameIndex = 0;
+    this.frameTimer = 0;
+    this.img = animation.frames[0];
   }
 
   animate(delta) {
     this.frameTimer += delta;
-    if (this.frameTimer >= this.frameDuration) {
-      this.frameTimer -= this.frameDuration;
-      this.frameIndex = (this.frameIndex + 1) % this.frames.length;
-      this.img = this.frames[this.frameIndex];
-      if (this.frameIndex === 0) this.frameTimer -= this.loopPause;
+    if (this.frameTimer >= this.animation.frameDuration) {
+      this.frameTimer -= this.animation.frameDuration;
+      this.frameIndex = (this.frameIndex + 1) % this.animation.frames.length;
+      this.img = this.animation.frames[this.frameIndex];
+      if (this.frameIndex === 0) this.frameTimer -= this.animation.loopPause;
     }
   }
 

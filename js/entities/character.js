@@ -1,4 +1,7 @@
 import MovableObject from "./movable-object.js";
+import SpriteAnimation from "../sprite-animation.js";
+
+const MAGE_PATH = "./assets/images/mage/";
 
 export default class Character extends MovableObject {
   constructor(x, y, keyboard) {
@@ -6,11 +9,9 @@ export default class Character extends MovableObject {
     this.anchorY = 111;
     this.keyboard = keyboard;
     this.speed = 150;
-    const paths = [];
-    for (let i = 1; i <= 14; i++) {
-      paths.push(`./assets/images/mage/idle/idle${i}.png`);
-    }
-    this.loadImages(paths);
+    this.idle = new SpriteAnimation(MAGE_PATH, "idle", 14, 0.2, 2);
+    this.run = new SpriteAnimation(MAGE_PATH, "run", 8, 0.08);
+    this.setAnimation(this.idle);
   }
 
   update(delta) {
@@ -22,6 +23,8 @@ export default class Character extends MovableObject {
       this.moveLeft(delta);
       this.facingLeft = true;
     }
+    if (this.keyboard.left || this.keyboard.right) this.setAnimation(this.run);
+    else this.setAnimation(this.idle);
     this.animate(delta);
   }
 }

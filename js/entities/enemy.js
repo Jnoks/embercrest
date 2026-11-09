@@ -1,18 +1,16 @@
 import MovableObject from "./movable-object.js";
+import SpriteAnimation from "../sprite-animation.js";
+
+const GOBLIN_PATH = "./assets/images/goblin/";
 
 export default class Enemy extends MovableObject {
   constructor(x, y) {
     super(x, y, 128, 128);
     this.anchorY = 89;
     this.facingLeft = true;
-    this.loopPause = 0;
     this.speed = 15 + Math.random() * 25;
-    const paths = [];
-    for (let i = 1; i <= 6; i++) {
-      paths.push(`./assets/images/goblin/walk/walk${i}.png`);
-    }
-    this.loadImages(paths);
-    this.frameTimer = -Math.random() * this.frames.length * this.frameDuration;
+    this.setAnimation(new SpriteAnimation(GOBLIN_PATH, "walk", 6, 0.2));
+    this.frameTimer = -Math.random() * this.animation.cycleDuration();
   }
 
   update(delta) {
