@@ -6,6 +6,7 @@ import CloudLayer from "./entities/cloud-layer.js";
 
 const BACKGROUND_PATH = "./assets/images/forest/background/";
 const GROUND_Y = 482;
+const LEVEL_WIDTH = 2880;
 
 export default class World {
   constructor(canvas, keyboard) {
@@ -16,9 +17,9 @@ export default class World {
     this.lastTime = 0;
     this.character = new Character(100, GROUND_Y, keyboard);
     this.enemies = [
-      new Enemy(832, GROUND_Y),
-      new Enemy(632, GROUND_Y),
-      new Enemy(432, GROUND_Y),
+      new Enemy(1200, GROUND_Y),
+      new Enemy(1800, GROUND_Y),
+      new Enemy(2400, GROUND_Y),
     ];
     this.backgroundLayers = [
       new BackgroundLayer(0, 0, BACKGROUND_PATH + "sky.png"),
@@ -29,7 +30,7 @@ export default class World {
       new BackgroundLayer(0, 0, BACKGROUND_PATH + "trees.png"),
     ];
     this.groundTiles = [];
-    for (let i = 0; i < this.canvas.width / TILE_SIZE; i++) {
+    for (let i = 0; i < LEVEL_WIDTH / TILE_SIZE; i++) {
       this.groundTiles.push(
         new Tile(
           i * TILE_SIZE,
@@ -62,7 +63,10 @@ export default class World {
     this.updateObjects(this.backgroundLayers, delta);
     this.character.update(delta);
     this.updateObjects(this.enemies, delta);
-    this.cameraX = this.character.x - 100;
+    this.cameraX = Math.min(
+      Math.max(this.character.x - 100, 0),
+      LEVEL_WIDTH - this.canvas.width,
+    );
   }
 
   updateObjects(objects, delta) {
