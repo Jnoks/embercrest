@@ -12,6 +12,7 @@ export default class World {
     this.ctx = canvas.getContext("2d");
     this.ctx.imageSmoothingEnabled = false;
     this.canvas = canvas;
+    this.cameraX = 0;
     this.lastTime = 0;
     this.character = new Character(100, GROUND_Y, keyboard);
     this.enemies = [
@@ -43,9 +44,12 @@ export default class World {
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.drawObjects(this.backgroundLayers);
+    this.ctx.save();
+    this.ctx.translate(-Math.round(this.cameraX), 0);
     this.drawObjects(this.groundTiles);
     this.character.draw(this.ctx);
     this.drawObjects(this.enemies);
+    this.ctx.restore();
   }
 
   drawObjects(objects) {
@@ -58,6 +62,7 @@ export default class World {
     this.updateObjects(this.backgroundLayers, delta);
     this.character.update(delta);
     this.updateObjects(this.enemies, delta);
+    this.cameraX = this.character.x - 100;
   }
 
   updateObjects(objects, delta) {
