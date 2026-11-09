@@ -8,12 +8,12 @@ const BACKGROUND_PATH = "./assets/images/forest/background/";
 const GROUND_Y = 482;
 
 export default class World {
-  constructor(canvas) {
+  constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
     this.ctx.imageSmoothingEnabled = false;
     this.canvas = canvas;
     this.lastTime = 0;
-    this.character = new Character(100, GROUND_Y);
+    this.character = new Character(100, GROUND_Y, keyboard);
     this.enemies = [
       new Enemy(832, GROUND_Y),
       new Enemy(632, GROUND_Y),
