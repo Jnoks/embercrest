@@ -1,21 +1,12 @@
-import MovableObject from "./movable-object.js";
+import BackgroundLayer from "./background-layer.js";
 
-export default class CloudLayer extends MovableObject {
-  constructor(x, y, imagePath, speed) {
-    super(x, y, 960, 540);
+export default class CloudLayer extends BackgroundLayer {
+  constructor(x, y, imagePath, parallax, speed) {
+    super(x, y, imagePath, parallax);
     this.speed = speed;
-    this.loadImage(imagePath);
   }
 
   update(delta) {
-    this.moveLeft(delta);
-    if (this.x <= -this.width) {
-      this.x += this.width;
-    }
-  }
-
-  draw(ctx) {
-    this.drawAt(ctx, this.x);
-    this.drawAt(ctx, this.x + this.width);
+    this.x -= this.speed * delta;
   }
 }

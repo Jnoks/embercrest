@@ -22,12 +22,18 @@ export default class World {
       new Enemy(2400, GROUND_Y),
     ];
     this.backgroundLayers = [
-      new BackgroundLayer(0, 0, BACKGROUND_PATH + "sky.png"),
-      new CloudLayer(0, 0, BACKGROUND_PATH + "clouds-back-layer2.png", 15),
-      new CloudLayer(0, 0, BACKGROUND_PATH + "clouds-back-layer1.png", 10),
-      new BackgroundLayer(0, 0, BACKGROUND_PATH + "mountains.png"),
-      new CloudLayer(0, 0, BACKGROUND_PATH + "clouds-small.png", 20),
-      new BackgroundLayer(0, 0, BACKGROUND_PATH + "trees.png"),
+      new BackgroundLayer(0, 0, BACKGROUND_PATH + "sky.png", 0),
+      new CloudLayer(0, 0, BACKGROUND_PATH + "clouds-back-layer2.png", 0.1, 15),
+      new CloudLayer(
+        0,
+        0,
+        BACKGROUND_PATH + "clouds-back-layer1.png",
+        0.15,
+        10,
+      ),
+      new BackgroundLayer(0, 0, BACKGROUND_PATH + "mountains.png", 0.3),
+      new CloudLayer(0, 0, BACKGROUND_PATH + "clouds-small.png", 0.5, 20),
+      new BackgroundLayer(0, 0, BACKGROUND_PATH + "trees.png", 0.8),
     ];
     this.groundTiles = [];
     for (let i = 0; i < LEVEL_WIDTH / TILE_SIZE; i++) {
@@ -67,6 +73,9 @@ export default class World {
       Math.max(this.character.x - 100, 0),
       LEVEL_WIDTH - this.canvas.width,
     );
+    for (let i = 0; i < this.backgroundLayers.length; i++) {
+      this.backgroundLayers[i].scrollTo(this.cameraX);
+    }
   }
 
   updateObjects(objects, delta) {
