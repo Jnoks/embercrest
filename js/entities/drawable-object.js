@@ -6,6 +6,7 @@ export default class DrawableObject {
     this.width = width;
     this.height = height;
     this.anchorY = 0;
+    this.facingLeft = false;
     this.frames = [];
     this.frameIndex = 0;
     this.frameTimer = 0;
@@ -43,13 +44,27 @@ export default class DrawableObject {
 
   drawAt(ctx, x) {
     if (!this.img) return;
-    ctx.drawImage(
-      this.img,
-      Math.round(x),
-      this.y - this.anchorY,
-      this.width,
-      this.height,
-    );
+    if (this.facingLeft) {
+      ctx.save();
+      ctx.translate(Math.round(x) + this.width, 0);
+      ctx.scale(-1, 1);
+      ctx.drawImage(
+        this.img,
+        0,
+        this.y - this.anchorY,
+        this.width,
+        this.height,
+      );
+      ctx.restore();
+    } else {
+      ctx.drawImage(
+        this.img,
+        Math.round(x),
+        this.y - this.anchorY,
+        this.width,
+        this.height,
+      );
+    }
   }
 
   update(delta) {}

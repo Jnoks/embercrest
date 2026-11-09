@@ -4,6 +4,7 @@ export default class Enemy extends MovableObject {
   constructor(x, y) {
     super(x, y, 128, 128);
     this.anchorY = 89;
+    this.facingLeft = true;
     this.loopPause = 0;
     const paths = [];
     for (let i = 1; i <= 4; i++) {
