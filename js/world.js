@@ -67,7 +67,7 @@ export default class World {
   }
 
   loop(time) {
-    const delta = (time - this.lastTime) / 1000;
+    const delta = Math.min((time - this.lastTime) / 1000, 0.1);
     this.lastTime = time;
     this.update(delta);
     this.draw();
