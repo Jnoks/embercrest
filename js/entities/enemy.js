@@ -6,6 +6,7 @@ export default class Enemy extends MovableObject {
     this.anchorY = 89;
     this.facingLeft = true;
     this.loopPause = 0;
+    this.speed = 15 + Math.random() * 25;
     const paths = [];
     for (let i = 1; i <= 4; i++) {
       paths.push(`./assets/images/goblin/idle/idle${i}.png`);
@@ -16,5 +17,6 @@ export default class Enemy extends MovableObject {
 
   update(delta) {
     this.animate(delta);
+    this.moveLeft(delta);
   }
 }
