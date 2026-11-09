@@ -5,6 +5,7 @@ export default class Character extends MovableObject {
     super(x, y, 128, 128);
     this.anchorY = 111;
     this.keyboard = keyboard;
+    this.speed = 150;
     const paths = [];
     for (let i = 1; i <= 14; i++) {
       paths.push(`./assets/images/mage/idle/idle${i}.png`);
@@ -13,6 +14,14 @@ export default class Character extends MovableObject {
   }
 
   update(delta) {
+    if (this.keyboard.right) {
+      this.moveRight(delta);
+      this.facingLeft = false;
+    }
+    if (this.keyboard.left) {
+      this.moveLeft(delta);
+      this.facingLeft = true;
+    }
     this.animate(delta);
   }
 }
