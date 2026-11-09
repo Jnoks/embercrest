@@ -1,9 +1,8 @@
 const KEY_MAP = {
   KeyA: "left",
   KeyD: "right",
-  Space: "jump",
+  Space: "attack",
   KeyW: "jump",
-  KeyF: "attack",
 };
 
 export default class Keyboard {
