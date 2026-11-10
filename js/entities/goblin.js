@@ -3,7 +3,7 @@ import SpriteAnimation from "../sprite-animation.js";
 
 const GOBLIN_PATH = "./assets/images/goblin/";
 
-export default class Enemy extends MovableObject {
+export default class Goblin extends MovableObject {
   constructor(x, y) {
     super(x, y, 128, 128);
     this.anchorY = 89;

@@ -1,5 +1,5 @@
 import Level from "../level.js";
-import Enemy from "../entities/enemy.js";
+import Goblin from "../entities/goblin.js";
 import BackgroundLayer from "../entities/background-layer.js";
 import CloudLayer from "../entities/cloud-layer.js";
 import Tile, { TILE_SIZE } from "../entities/tile.js";
@@ -39,9 +39,9 @@ export default function createLevel1() {
     ],
     tiles,
     enemies: [
-      new Enemy(1200, GROUND_Y),
-      new Enemy(1800, GROUND_Y),
-      new Enemy(2400, GROUND_Y),
+      new Goblin(1200, GROUND_Y),
+      new Goblin(1800, GROUND_Y),
+      new Goblin(2400, GROUND_Y),
     ],
   });
 }
