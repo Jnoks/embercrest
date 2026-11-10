@@ -1,61 +1,26 @@
 import Character from "./entities/character.js";
-import Enemy from "./entities/enemy.js";
-import BackgroundLayer from "./entities/background-layer.js";
-import Tile, { TILE_SIZE } from "./entities/tile.js";
-import CloudLayer from "./entities/cloud-layer.js";
-
-const BACKGROUND_PATH = "./assets/images/forest/background/";
-const GROUND_Y = 482;
-const LEVEL_WIDTH = 2880;
 
 export default class World {
-  constructor(canvas, keyboard) {
+  constructor(canvas, keyboard, level) {
     this.ctx = canvas.getContext("2d");
     this.ctx.imageSmoothingEnabled = false;
     this.canvas = canvas;
     this.cameraX = 0;
     this.lastTime = 0;
-    this.character = new Character(100, GROUND_Y, keyboard);
-    this.enemies = [
-      new Enemy(1200, GROUND_Y),
-      new Enemy(1800, GROUND_Y),
-      new Enemy(2400, GROUND_Y),
-    ];
-    this.backgroundLayers = [
-      new BackgroundLayer(0, 0, BACKGROUND_PATH + "sky.png", 0),
-      new CloudLayer(0, 0, BACKGROUND_PATH + "clouds-back-layer2.png", 0.1, 15),
-      new CloudLayer(
-        0,
-        0,
-        BACKGROUND_PATH + "clouds-back-layer1.png",
-        0.15,
-        10,
-      ),
-      new BackgroundLayer(0, 0, BACKGROUND_PATH + "mountains.png", 0.3),
-      new CloudLayer(0, 0, BACKGROUND_PATH + "clouds-small.png", 0.5, 20),
-      new BackgroundLayer(0, 0, BACKGROUND_PATH + "trees.png", 0.8),
-    ];
-    this.groundTiles = [];
-    for (let i = 0; i < LEVEL_WIDTH / TILE_SIZE; i++) {
-      this.groundTiles.push(
-        new Tile(
-          i * TILE_SIZE,
-          this.canvas.height - TILE_SIZE,
-          "./assets/images/forest/tiles/grass-top-middle.png",
-        ),
-      );
-    }
+    this.level = level;
+    this.character = new Character(100, this.level.groundY, keyboard);
+
     requestAnimationFrame((time) => this.loop(time));
   }
 
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.drawObjects(this.backgroundLayers);
+    this.drawObjects(this.level.backgroundLayers);
     this.ctx.save();
     this.ctx.translate(-Math.round(this.cameraX), 0);
-    this.drawObjects(this.groundTiles);
+    this.drawObjects(this.level.tiles);
     this.character.draw(this.ctx);
-    this.drawObjects(this.enemies);
+    this.drawObjects(this.level.enemies);
     this.ctx.restore();
   }
 
@@ -66,15 +31,15 @@ export default class World {
   }
 
   update(delta) {
-    this.updateObjects(this.backgroundLayers, delta);
+    this.updateObjects(this.level.backgroundLayers, delta);
     this.character.update(delta);
-    this.updateObjects(this.enemies, delta);
+    this.updateObjects(this.level.enemies, delta);
     this.cameraX = Math.min(
       Math.max(this.character.x - 100, 0),
-      LEVEL_WIDTH - this.canvas.width,
+      this.level.width - this.canvas.width,
     );
-    for (let i = 0; i < this.backgroundLayers.length; i++) {
-      this.backgroundLayers[i].scrollTo(this.cameraX);
+    for (let i = 0; i < this.level.backgroundLayers.length; i++) {
+      this.level.backgroundLayers[i].scrollTo(this.cameraX);
     }
   }
 
