@@ -6,6 +6,7 @@ export default class DrawableObject {
     this.width = width;
     this.height = height;
     this.anchorY = 0;
+    this.anchorX = width / 2;
     this.facingLeft = false;
     this.frameIndex = 0;
     this.frameTimer = 0;
@@ -43,7 +44,7 @@ export default class DrawableObject {
     if (!this.img) return;
     if (this.facingLeft) {
       ctx.save();
-      ctx.translate(Math.round(x) + this.width, 0);
+      ctx.translate(Math.round(x) + 2 * this.anchorX, 0);
       ctx.scale(-1, 1);
       ctx.drawImage(
         this.img,

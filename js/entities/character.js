@@ -7,6 +7,7 @@ export default class Character extends MovableObject {
   constructor(x, y, keyboard) {
     super(x, y, 128, 128);
     this.anchorY = 111;
+    this.anchorX = 47;
     this.keyboard = keyboard;
     this.speed = 150;
     this.idle = new SpriteAnimation(MAGE_PATH, "idle", 14, 0.2, 2);
