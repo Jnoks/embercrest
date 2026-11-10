@@ -33,6 +33,10 @@ export default class World {
   update(delta) {
     this.updateObjects(this.level.backgroundLayers, delta);
     this.character.update(delta);
+    this.character.x = Math.min(
+      Math.max(this.character.x, 0),
+      this.level.width - this.character.width,
+    );
     this.updateObjects(this.level.enemies, delta);
     this.cameraX = Math.min(
       Math.max(this.character.x - 100, 0),
