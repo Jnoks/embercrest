@@ -10,7 +10,6 @@ export default class Boss extends MovableObject {
     this.anchorX = 82;
     this.facingLeft = true;
     this.setAnimation(new SpriteAnimation(BOSS_PATH, "idle", 3, 0.3, 1));
-    this.loop;
   }
 
   update(delta) {
