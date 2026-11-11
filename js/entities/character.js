@@ -11,9 +11,12 @@ export default class Character extends MovableObject {
     this.keyboard = keyboard;
     this.speed = 150;
     this.jumpSpeed = 700;
-    this.idle = new SpriteAnimation(MAGE_PATH, "idle", 14, 0.2, 2);
-    this.run = new SpriteAnimation(MAGE_PATH, "run", 8, 0.08);
-    this.setAnimation(this.idle);
+    this.animations = {
+      idle: new SpriteAnimation(MAGE_PATH, "idle", 14, 0.2, 2),
+      run: new SpriteAnimation(MAGE_PATH, "run", 8, 0.08),
+    };
+
+    this.setAnimation(this.animations.idle);
   }
 
   update(delta) {
@@ -25,8 +28,9 @@ export default class Character extends MovableObject {
       this.moveLeft(delta);
       this.facingLeft = true;
     }
-    if (this.keyboard.left || this.keyboard.right) this.setAnimation(this.run);
-    else this.setAnimation(this.idle);
+    if (this.keyboard.left || this.keyboard.right)
+      this.setAnimation(this.animations.run);
+    else this.setAnimation(this.animations.idle);
     if (this.keyboard.jump) {
       this.jump();
     }
