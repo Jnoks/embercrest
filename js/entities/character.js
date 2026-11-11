@@ -14,6 +14,7 @@ export default class Character extends MovableObject {
     this.animations = {
       idle: new SpriteAnimation(MAGE_PATH, "idle", 14, 0.2, 2),
       run: new SpriteAnimation(MAGE_PATH, "run", 8, 0.08),
+      jump: new SpriteAnimation(MAGE_PATH, "jump", 7, 0.1),
     };
 
     this.setAnimation(this.animations.idle);
@@ -28,12 +29,14 @@ export default class Character extends MovableObject {
       this.moveLeft(delta);
       this.facingLeft = true;
     }
-    if (this.keyboard.left || this.keyboard.right)
-      this.setAnimation(this.animations.run);
-    else this.setAnimation(this.animations.idle);
     if (this.keyboard.jump) {
       this.jump();
     }
+    if (!this.onGround) this.setAnimation(this.animations.jump);
+    else if (this.keyboard.left || this.keyboard.right)
+      this.setAnimation(this.animations.run);
+    else this.setAnimation(this.animations.idle);
+
     this.applyGravity(delta);
     this.animate(delta);
   }
