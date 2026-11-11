@@ -10,7 +10,7 @@ export default class Goblin extends MovableObject {
     this.facingLeft = true;
     this.speed = 15 + Math.random() * 25;
     this.setAnimation(new SpriteAnimation(GOBLIN_PATH, "walk", 6, 0.2));
-    this.frameTimer = -Math.random() * this.animation.cycleDuration();
+    this.frameTimer = -Math.random() * this.currentAnimation.cycleDuration();
   }
 
   update(delta) {

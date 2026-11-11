@@ -10,7 +10,7 @@ export default class DrawableObject {
     this.facingLeft = false;
     this.frameIndex = 0;
     this.frameTimer = 0;
-    this.animation = null;
+    this.currentAnimation = null;
   }
 
   loadImage(path) {
@@ -19,8 +19,8 @@ export default class DrawableObject {
   }
 
   setAnimation(animation) {
-    if (this.animation === animation) return;
-    this.animation = animation;
+    if (this.currentAnimation === animation) return;
+    this.currentAnimation = animation;
     this.frameIndex = 0;
     this.frameTimer = 0;
     this.img = animation.frames[0];
@@ -28,11 +28,13 @@ export default class DrawableObject {
 
   animate(delta) {
     this.frameTimer += delta;
-    if (this.frameTimer >= this.animation.frameDuration) {
-      this.frameTimer -= this.animation.frameDuration;
-      this.frameIndex = (this.frameIndex + 1) % this.animation.frames.length;
-      this.img = this.animation.frames[this.frameIndex];
-      if (this.frameIndex === 0) this.frameTimer -= this.animation.loopPause;
+    if (this.frameTimer >= this.currentAnimation.frameDuration) {
+      this.frameTimer -= this.currentAnimation.frameDuration;
+      this.frameIndex =
+        (this.frameIndex + 1) % this.currentAnimation.frames.length;
+      this.img = this.currentAnimation.frames[this.frameIndex];
+      if (this.frameIndex === 0)
+        this.frameTimer -= this.currentAnimation.loopPause;
     }
   }
 
