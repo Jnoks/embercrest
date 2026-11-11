@@ -3,6 +3,7 @@ import Goblin from "../entities/goblin.js";
 import BackgroundLayer from "../entities/background-layer.js";
 import CloudLayer from "../entities/cloud-layer.js";
 import Tile, { TILE_SIZE } from "../entities/tile.js";
+import Boss from "../entities/boss.js";
 
 const BACKGROUND_PATH = "./assets/images/forest/background/";
 const GROUND_Y = 482;
@@ -42,6 +43,7 @@ export default function createLevel1() {
       new Goblin(1200, GROUND_Y),
       new Goblin(1800, GROUND_Y),
       new Goblin(2400, GROUND_Y),
+      new Boss(2600, GROUND_Y),
     ],
   });
 }
