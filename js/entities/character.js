@@ -10,6 +10,7 @@ export default class Character extends MovableObject {
     this.anchorX = 47;
     this.keyboard = keyboard;
     this.speed = 150;
+    this.jumpSpeed = 700;
     this.idle = new SpriteAnimation(MAGE_PATH, "idle", 14, 0.2, 2);
     this.run = new SpriteAnimation(MAGE_PATH, "run", 8, 0.08);
     this.setAnimation(this.idle);
@@ -26,6 +27,9 @@ export default class Character extends MovableObject {
     }
     if (this.keyboard.left || this.keyboard.right) this.setAnimation(this.run);
     else this.setAnimation(this.idle);
+    if (this.keyboard.jump) {
+      this.jump();
+    }
     this.applyGravity(delta);
     this.animate(delta);
   }

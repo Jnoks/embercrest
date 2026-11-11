@@ -7,6 +7,8 @@ export default class MovableObject extends DrawableObject {
     super(x, y, width, height);
     this.speed = 0;
     this.velocityY = 0;
+    this.jumpSpeed = 0;
+    this.onGround = false;
   }
 
   moveRight(delta) {
@@ -25,5 +27,12 @@ export default class MovableObject extends DrawableObject {
   land(groundY) {
     this.y = groundY;
     this.velocityY = 0;
+    this.onGround = true;
+  }
+
+  jump() {
+    if (!this.onGround) return;
+    this.onGround = false;
+    this.velocityY = -this.jumpSpeed;
   }
 }
