@@ -33,6 +33,9 @@ export default class World {
   update(delta) {
     this.updateObjects(this.level.backgroundLayers, delta);
     this.character.update(delta);
+    if (this.character.y >= this.level.groundY) {
+      this.character.land(this.level.groundY);
+    }
     this.character.x = Math.min(
       Math.max(this.character.x, 0),
       this.level.width - this.character.width,

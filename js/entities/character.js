@@ -26,6 +26,7 @@ export default class Character extends MovableObject {
     }
     if (this.keyboard.left || this.keyboard.right) this.setAnimation(this.run);
     else this.setAnimation(this.idle);
+    this.applyGravity(delta);
     this.animate(delta);
   }
 }
