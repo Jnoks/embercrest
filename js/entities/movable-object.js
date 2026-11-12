@@ -48,6 +48,17 @@ export default class MovableObject extends DrawableObject {
     };
   }
 
+  isColliding(other) {
+    const a = this.hitbox();
+    const b = other.hitbox();
+    return (
+      a.left < b.right &&
+      a.right > b.left &&
+      a.top < b.bottom &&
+      a.bottom > b.top
+    );
+  }
+
   draw(ctx) {
     super.draw(ctx);
     const box = this.hitbox();

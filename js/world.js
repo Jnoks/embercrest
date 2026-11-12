@@ -41,6 +41,7 @@ export default class World {
       this.level.width - this.character.width,
     );
     this.updateObjects(this.level.enemies, delta);
+    this.checkCollisions();
     this.cameraX = Math.min(
       Math.max(this.character.x - 100, 0),
       this.level.width - this.canvas.width,
@@ -53,6 +54,12 @@ export default class World {
   updateObjects(objects, delta) {
     for (let i = 0; i < objects.length; i++) {
       objects[i].update(delta);
+    }
+  }
+
+  checkCollisions() {
+    for (let i = 0; i < this.level.enemies.length; i++) {
+      if (this.character.isColliding(this.level.enemies[i])) console.log("hit");
     }
   }
 
