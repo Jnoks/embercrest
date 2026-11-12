@@ -14,7 +14,7 @@ export default class Character extends MovableObject {
     this.speed = 150;
     this.jumpSpeed = 700;
     this.animations = {
-      idle: new SpriteAnimation(MAGE_PATH, "idle", 14, 0.2, 2),
+      idle: new SpriteAnimation(MAGE_PATH, "idle", 14, 0.2, { loopPause: 2 }),
       run: new SpriteAnimation(MAGE_PATH, "run", 8, 0.08),
       jump: new SpriteAnimation(MAGE_PATH, "jump", 7, 0.1),
       hurt: new SpriteAnimation(MAGE_PATH, "hurt", 4, 0.1),

@@ -1,5 +1,5 @@
 export default class SpriteAnimation {
-  constructor(folder, name, count, frameDuration, loopPause = 0) {
+  constructor(folder, name, count, frameDuration, { loopPause = 0 } = {}) {
     this.frames = [];
     this.frameDuration = frameDuration;
     this.loopPause = loopPause;

@@ -11,7 +11,9 @@ export default class Boss extends MovableObject {
     this.hitboxWidth = 60;
     this.hitboxHeight = 100;
     this.facingLeft = true;
-    this.setAnimation(new SpriteAnimation(BOSS_PATH, "idle", 3, 0.3, 1));
+    this.setAnimation(
+      new SpriteAnimation(BOSS_PATH, "idle", 3, 0.3, { loopPause: 1 }),
+    );
   }
 
   update(delta) {
