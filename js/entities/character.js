@@ -24,6 +24,19 @@ export default class Character extends MovableObject {
   }
 
   update(delta) {
+    this.handleInput(delta);
+    if (this.isHurt()) this.setAnimation(this.animations.hurt);
+    else if (!this.onGround) this.setAnimation(this.animations.jump);
+    else if (this.keyboard.left || this.keyboard.right)
+      this.setAnimation(this.animations.run);
+    else this.setAnimation(this.animations.idle);
+
+    this.updateTimers(delta);
+    this.applyGravity(delta);
+    this.animate(delta);
+  }
+
+  handleInput(delta) {
     if (this.keyboard.right) {
       this.moveRight(delta);
       this.facingLeft = false;
@@ -35,14 +48,5 @@ export default class Character extends MovableObject {
     if (this.keyboard.jump) {
       this.jump();
     }
-    if (this.isHurt()) this.setAnimation(this.animations.hurt);
-    else if (!this.onGround) this.setAnimation(this.animations.jump);
-    else if (this.keyboard.left || this.keyboard.right)
-      this.setAnimation(this.animations.run);
-    else this.setAnimation(this.animations.idle);
-
-    this.updateTimers(delta);
-    this.applyGravity(delta);
-    this.animate(delta);
   }
 }
