@@ -2,6 +2,7 @@ import DrawableObject from "./drawable-object.js";
 
 const GRAVITY = 2000;
 const SHOW_HITBOX = true;
+const HURT_DURATION = 1;
 
 export default class MovableObject extends DrawableObject {
   constructor(x, y, width, height) {
@@ -13,6 +14,7 @@ export default class MovableObject extends DrawableObject {
     this.hitboxWidth = width;
     this.hitboxHeight = height;
     this.health = 100;
+    this.hurtTimer = 0;
   }
 
   moveRight(delta) {
@@ -62,7 +64,13 @@ export default class MovableObject extends DrawableObject {
   }
 
   takeDamage(amount) {
+    if (this.hurtTimer > 0) return;
     this.health = Math.max(this.health - amount, 0);
+    this.hurtTimer = HURT_DURATION;
+  }
+
+  updateHurtTimer(delta) {
+    this.hurtTimer = Math.max(this.hurtTimer - delta, 0);
   }
 
   draw(ctx) {

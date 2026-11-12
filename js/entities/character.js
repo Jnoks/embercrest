@@ -39,6 +39,7 @@ export default class Character extends MovableObject {
       this.setAnimation(this.animations.run);
     else this.setAnimation(this.animations.idle);
 
+    this.updateHurtTimer(delta);
     this.applyGravity(delta);
     this.animate(delta);
   }
