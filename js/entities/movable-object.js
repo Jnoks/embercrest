@@ -12,6 +12,7 @@ export default class MovableObject extends DrawableObject {
     this.onGround = false;
     this.hitboxWidth = width;
     this.hitboxHeight = height;
+    this.health = 100;
   }
 
   moveRight(delta) {
@@ -58,6 +59,10 @@ export default class MovableObject extends DrawableObject {
       a.top < b.bottom &&
       a.bottom > b.top
     );
+  }
+
+  takeDamage(amount) {
+    this.health -= amount;
   }
 
   draw(ctx) {
