@@ -8,14 +8,16 @@ export const HEROES = [
     name: "Tansy",
     role: "Feeds the fire",
     portrait: "con2",
-    description: "Apprentice mage of Embercrest. Throws fire. Wears the old mage's second-best hat. It is too big.",
+    description:
+      "Apprentice mage of Embercrest. Throws fire. Wears the old mage's second-best hat. It is too big.",
   },
   {
     id: "knight",
     name: "Bram",
     role: "Guards the door",
     portrait: "con1",
-    description: "Apprentice knight of Embercrest. Good with a sword. Wears the old knight's red scarf. It itches.",
+    description:
+      "Apprentice knight of Embercrest. Good with a sword. Wears the old knight's red scarf. It itches.",
   },
 ];
 
@@ -208,7 +210,8 @@ export const WORLDS = [
       ],
       heroLine: {
         mage: "That hat. She had that hat. But you are not her. Go home, little hat.",
-        knight: "A red scarf. I had one like it. It itched. Go home, little scarf.",
+        knight:
+          "A red scarf. I had one like it. It itched. Go home, little scarf.",
       },
       defeat: [
         "Wait. I know you. The child from the hill. You were this tall. Oh no. How long have I been standing here?",
@@ -336,7 +339,8 @@ export const WORLDS = [
       ],
       heroLine: {
         mage: "And in my second-best hat! Who gave you my hat? Home. Now. You and the hat.",
-        knight: "And in his old scarf! He always said it itched. Home. Now. You and the scarf.",
+        knight:
+          "And in his old scarf! He always said it itched. Home. Now. You and the scarf.",
       },
       defeat: [
         "You still have your colors. So the coal still burns. So someone stayed with it.",
