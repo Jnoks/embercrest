@@ -64,9 +64,17 @@ export default class MovableObject extends DrawableObject {
   }
 
   takeDamage(amount) {
-    if (this.hurtTimer > 0) return;
+    if (this.isHurt()) return;
     this.health = Math.max(this.health - amount, 0);
     this.hurtTimer = HURT_DURATION;
+  }
+
+  isHurt() {
+    return this.hurtTimer > 0;
+  }
+
+  isDead() {
+    return this.health === 0;
   }
 
   updateHurtTimer(delta) {
