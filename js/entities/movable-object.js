@@ -62,7 +62,7 @@ export default class MovableObject extends DrawableObject {
   }
 
   takeDamage(amount) {
-    this.health -= amount;
+    this.health = Math.max(this.health - amount, 0);
   }
 
   draw(ctx) {
