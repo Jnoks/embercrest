@@ -17,6 +17,7 @@ export default class Character extends MovableObject {
       idle: new SpriteAnimation(MAGE_PATH, "idle", 14, 0.2, 2),
       run: new SpriteAnimation(MAGE_PATH, "run", 8, 0.08),
       jump: new SpriteAnimation(MAGE_PATH, "jump", 7, 0.1),
+      hurt: new SpriteAnimation(MAGE_PATH, "hurt", 4, 0.25),
     };
 
     this.setAnimation(this.animations.idle);
@@ -34,7 +35,8 @@ export default class Character extends MovableObject {
     if (this.keyboard.jump) {
       this.jump();
     }
-    if (!this.onGround) this.setAnimation(this.animations.jump);
+    if (this.isHurt()) this.setAnimation(this.animations.hurt);
+    else if (!this.onGround) this.setAnimation(this.animations.jump);
     else if (this.keyboard.left || this.keyboard.right)
       this.setAnimation(this.animations.run);
     else this.setAnimation(this.animations.idle);
