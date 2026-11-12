@@ -37,6 +37,7 @@ export default class Character extends MovableObject {
   }
 
   handleInput(delta) {
+    if (this.isHurt()) return;
     if (this.keyboard.right) {
       this.moveRight(delta);
       this.facingLeft = false;
