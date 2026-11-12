@@ -66,7 +66,7 @@ export default class MovableObject extends DrawableObject {
   }
 
   takeDamage(amount) {
-    if (this.isInvincible()) return;
+    if (this.isInvincible() || this.isDead()) return;
     this.health = Math.max(this.health - amount, 0);
     this.hurtTimer = HURT_DURATION;
     this.invincibleTimer = INVINCIBLE_DURATION;
