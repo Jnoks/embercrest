@@ -1,6 +1,7 @@
 import DrawableObject from "./drawable-object.js";
 
 const GRAVITY = 2000;
+const SHOW_HITBOX = true;
 
 export default class MovableObject extends DrawableObject {
   constructor(x, y, width, height) {
@@ -61,7 +62,9 @@ export default class MovableObject extends DrawableObject {
 
   draw(ctx) {
     super.draw(ctx);
-    this.drawHitbox(ctx);
+    if (SHOW_HITBOX) {
+      this.drawHitbox(ctx);
+    }
   }
 
   drawHitbox(ctx) {
