@@ -8,6 +8,8 @@ export default class Character extends MovableObject {
     super(x, y, 128, 128);
     this.anchorY = 111;
     this.anchorX = 47;
+    this.hitboxWidth = 30;
+    this.hitboxHeight = 50;
     this.keyboard = keyboard;
     this.speed = 150;
     this.jumpSpeed = 700;

@@ -8,6 +8,8 @@ export default class Boss extends MovableObject {
     super(x, y, 256, 256);
     this.anchorY = 207;
     this.anchorX = 82;
+    this.hitboxWidth = 60;
+    this.hitboxHeight = 100;
     this.facingLeft = true;
     this.setAnimation(new SpriteAnimation(BOSS_PATH, "idle", 3, 0.3, 1));
   }

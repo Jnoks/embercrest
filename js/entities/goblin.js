@@ -7,6 +7,8 @@ export default class Goblin extends MovableObject {
   constructor(x, y) {
     super(x, y, 128, 128);
     this.anchorY = 89;
+    this.hitboxWidth = 36;
+    this.hitboxHeight = 44;
     this.facingLeft = true;
     this.speed = 15 + Math.random() * 25;
     this.setAnimation(new SpriteAnimation(GOBLIN_PATH, "walk", 6, 0.2));
