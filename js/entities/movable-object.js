@@ -61,6 +61,10 @@ export default class MovableObject extends DrawableObject {
 
   draw(ctx) {
     super.draw(ctx);
+    this.drawHitbox(ctx);
+  }
+
+  drawHitbox(ctx) {
     const box = this.hitbox();
     ctx.strokeStyle = "red";
     ctx.strokeRect(box.left, box.top, this.hitboxWidth, this.hitboxHeight);
