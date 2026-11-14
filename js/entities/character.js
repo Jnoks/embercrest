@@ -18,6 +18,10 @@ export default class Character extends MovableObject {
       run: new SpriteAnimation(MAGE_PATH, "run", 8, 0.08),
       jump: new SpriteAnimation(MAGE_PATH, "jump", 7, 0.1),
       hurt: new SpriteAnimation(MAGE_PATH, "hurt", 4, 0.1, { loop: false }),
+      death: new SpriteAnimation(MAGE_PATH, "death", 10, 0.1, {
+        loop: false,
+        padding: 64,
+      }),
     };
 
     this.setAnimation(this.animations.idle);
@@ -25,7 +29,8 @@ export default class Character extends MovableObject {
 
   update(delta) {
     this.handleInput(delta);
-    if (this.isHurt()) this.setAnimation(this.animations.hurt);
+    if (this.isDead()) this.setAnimation(this.animations.death);
+    else if (this.isHurt()) this.setAnimation(this.animations.hurt);
     else if (!this.onGround) this.setAnimation(this.animations.jump);
     else if (this.keyboard.left || this.keyboard.right)
       this.setAnimation(this.animations.run);
