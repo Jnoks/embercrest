@@ -17,7 +17,7 @@ export default class Character extends MovableObject {
       idle: new SpriteAnimation(MAGE_PATH, "idle", 14, 0.2, { loopPause: 2 }),
       run: new SpriteAnimation(MAGE_PATH, "run", 8, 0.08),
       jump: new SpriteAnimation(MAGE_PATH, "jump", 7, 0.1),
-      hurt: new SpriteAnimation(MAGE_PATH, "hurt", 4, 0.1),
+      hurt: new SpriteAnimation(MAGE_PATH, "hurt", 4, 0.1, { loop: false }),
     };
 
     this.setAnimation(this.animations.idle);
