@@ -27,6 +27,7 @@ export default class DrawableObject {
   }
 
   animate(delta) {
+    if (this.isAnimationFinished()) return;
     this.frameTimer += delta;
     if (this.frameTimer >= this.currentAnimation.frameDuration) {
       this.frameTimer -= this.currentAnimation.frameDuration;
@@ -36,6 +37,11 @@ export default class DrawableObject {
       if (this.frameIndex === 0)
         this.frameTimer -= this.currentAnimation.loopPause;
     }
+  }
+
+  isAnimationFinished() {
+    const lastIndex = this.currentAnimation.frames.length - 1;
+    return !this.currentAnimation.loop && this.frameIndex === lastIndex;
   }
 
   draw(ctx) {

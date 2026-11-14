@@ -1,8 +1,15 @@
 export default class SpriteAnimation {
-  constructor(folder, name, count, frameDuration, { loopPause = 0 } = {}) {
+  constructor(
+    folder,
+    name,
+    count,
+    frameDuration,
+    { loopPause = 0, loop = true } = {},
+  ) {
     this.frames = [];
     this.frameDuration = frameDuration;
     this.loopPause = loopPause;
+    this.loop = loop;
     for (let i = 1; i <= count; i++) {
       const img = new Image();
       img.src = `${folder}${name}/${name}${i}.png`;
