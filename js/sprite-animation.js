@@ -4,12 +4,13 @@ export default class SpriteAnimation {
     name,
     count,
     frameDuration,
-    { loopPause = 0, loop = true } = {},
+    { loopPause = 0, loop = true, padding = 0 } = {},
   ) {
     this.frames = [];
     this.frameDuration = frameDuration;
     this.loopPause = loopPause;
     this.loop = loop;
+    this.padding = padding;
     for (let i = 1; i <= count; i++) {
       const img = new Image();
       img.src = `${folder}${name}/${name}${i}.png`;

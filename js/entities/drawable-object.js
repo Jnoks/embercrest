@@ -44,32 +44,29 @@ export default class DrawableObject {
     return !this.currentAnimation.loop && this.frameIndex === lastIndex;
   }
 
+  framePadding() {
+    if (!this.currentAnimation) return 0;
+    return this.currentAnimation.padding;
+  }
+
   draw(ctx) {
     this.drawAt(ctx, this.x);
   }
 
   drawAt(ctx, x) {
     if (!this.img) return;
+    const padding = this.framePadding();
+    const top = this.y - this.anchorY - padding;
+    const width = this.width + padding * 2;
+    const height = this.height + padding * 2;
     if (this.facingLeft) {
       ctx.save();
       ctx.translate(Math.round(x) + 2 * this.anchorX, 0);
       ctx.scale(-1, 1);
-      ctx.drawImage(
-        this.img,
-        0,
-        this.y - this.anchorY,
-        this.width,
-        this.height,
-      );
+      ctx.drawImage(this.img, -padding, top, width, height);
       ctx.restore();
     } else {
-      ctx.drawImage(
-        this.img,
-        Math.round(x),
-        this.y - this.anchorY,
-        this.width,
-        this.height,
-      );
+      ctx.drawImage(this.img, Math.round(x) - padding, top, width, height);
     }
   }
 
