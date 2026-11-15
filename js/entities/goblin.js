@@ -6,6 +6,7 @@ const HIT_FRAME = 2;
 const ATTACK_REACH = 30;
 const SIGHT_RANGE = 400;
 const STOP_DISTANCE = 50;
+const ATTACK_COOLDOWN = 1.5;
 
 export default class Goblin extends Enemy {
   constructor(x, y) {
@@ -53,8 +54,9 @@ export default class Goblin extends Enemy {
   }
 
   attack() {
-    if (this.isAttacking()) return;
+    if (this.isOnCooldown()) return;
     this.attackTimer = this.animations.attack.cycleDuration();
+    this.cooldownTimer = ATTACK_COOLDOWN;
   }
 
   isHitting() {
