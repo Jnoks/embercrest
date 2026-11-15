@@ -15,4 +15,16 @@ export default class Enemy extends MovableObject {
   attackBox() {
     return this.hitbox();
   }
+
+  drawHitbox(ctx) {
+    super.drawHitbox(ctx);
+    const box = this.attackBox();
+    ctx.strokeStyle = "orange";
+    ctx.strokeRect(
+      box.left,
+      box.top,
+      box.right - box.left,
+      box.bottom - box.top,
+    );
+  }
 }
