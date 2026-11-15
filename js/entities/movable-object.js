@@ -18,6 +18,7 @@ export default class MovableObject extends DrawableObject {
     this.hurtTimer = 0;
     this.invincibleTimer = 0;
     this.attackTimer = 0;
+    this.cooldownTimer = 0;
   }
 
   moveRight(delta) {
@@ -96,10 +97,15 @@ export default class MovableObject extends DrawableObject {
     return this.attackTimer > 0;
   }
 
+  isOnCooldown() {
+    return this.cooldownTimer > 0;
+  }
+
   updateTimers(delta) {
     this.hurtTimer = Math.max(this.hurtTimer - delta, 0);
     this.invincibleTimer = Math.max(this.invincibleTimer - delta, 0);
     this.attackTimer = Math.max(this.attackTimer - delta, 0);
+    this.cooldownTimer = Math.max(this.cooldownTimer - delta, 0);
   }
 
   draw(ctx) {
