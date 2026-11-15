@@ -17,6 +17,7 @@ export default class MovableObject extends DrawableObject {
     this.health = 100;
     this.hurtTimer = 0;
     this.invincibleTimer = 0;
+    this.attackTimer = 0;
   }
 
   moveRight(delta) {
@@ -84,9 +85,14 @@ export default class MovableObject extends DrawableObject {
     return this.health === 0;
   }
 
+  isAttacking() {
+    return this.attackTimer > 0;
+  }
+
   updateTimers(delta) {
     this.hurtTimer = Math.max(this.hurtTimer - delta, 0);
     this.invincibleTimer = Math.max(this.invincibleTimer - delta, 0);
+    this.attackTimer = Math.max(this.attackTimer - delta, 0);
   }
 
   draw(ctx) {
