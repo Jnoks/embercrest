@@ -55,15 +55,18 @@ export default class MovableObject extends DrawableObject {
     };
   }
 
-  isColliding(other) {
+  overlaps(box) {
     const a = this.hitbox();
-    const b = other.hitbox();
     return (
-      a.left < b.right &&
-      a.right > b.left &&
-      a.top < b.bottom &&
-      a.bottom > b.top
+      a.left < box.right &&
+      a.right > box.left &&
+      a.top < box.bottom &&
+      a.bottom > box.top
     );
+  }
+
+  isColliding(other) {
+    return this.overlaps(other.hitbox());
   }
 
   takeDamage(amount) {
