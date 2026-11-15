@@ -59,8 +59,9 @@ export default class World {
 
   checkCollisions() {
     for (let i = 0; i < this.level.enemies.length; i++) {
-      if (this.character.isColliding(this.level.enemies[i])) {
-        this.character.takeDamage(10);
+      const enemy = this.level.enemies[i];
+      if (this.character.isColliding(enemy)) {
+        this.character.takeDamage(enemy.damage);
       }
     }
   }
