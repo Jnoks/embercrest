@@ -4,6 +4,7 @@ import SpriteAnimation from "../sprite-animation.js";
 const GOBLIN_PATH = "./assets/images/goblin/";
 const HIT_FRAME = 2;
 const ATTACK_REACH = 30;
+const SIGHT_RANGE = 400;
 
 export default class Goblin extends Enemy {
   constructor(x, y) {
@@ -18,6 +19,7 @@ export default class Goblin extends Enemy {
       attack: new SpriteAnimation(GOBLIN_PATH, "attack", 5, 0.1, {
         loop: false,
       }),
+      idle: new SpriteAnimation(GOBLIN_PATH, "idle", 4, 0.2),
     };
     this.setAnimation(this.animations.walk);
     this.frameTimer = -Math.random() * this.currentAnimation.cycleDuration();
@@ -35,6 +37,10 @@ export default class Goblin extends Enemy {
 
   chase(delta) {
     const distance = this.targetX - this.centerX();
+    if (Math.abs(distance) > SIGHT_RANGE) {
+      this.setAnimation(this.animations.idle);
+      return;
+    }
     this.facingLeft = distance < 0;
     this.setAnimation(this.animations.walk);
     if (this.facingLeft) this.moveLeft(delta);
