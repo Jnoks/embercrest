@@ -28,10 +28,14 @@ export default class Goblin extends Enemy {
     if (this.isAttacking()) {
       this.setAnimation(this.animations.attack);
     } else {
-      this.setAnimation(this.animations.walk);
-      this.moveLeft(delta);
+      this.chase(delta);
     }
     this.animate(delta);
+  }
+
+  chase(delta) {
+    this.setAnimation(this.animations.walk);
+    this.moveLeft(delta);
   }
 
   attack() {
