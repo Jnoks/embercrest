@@ -61,6 +61,7 @@ export default class World {
     for (let i = 0; i < this.level.enemies.length; i++) {
       const enemy = this.level.enemies[i];
       if (this.character.isColliding(enemy)) {
+        enemy.attack();
         this.character.takeDamage(enemy.damage);
       }
     }

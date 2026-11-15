@@ -13,13 +13,27 @@ export default class Goblin extends Enemy {
     this.speed = 15 + Math.random() * 25;
     this.animations = {
       walk: new SpriteAnimation(GOBLIN_PATH, "walk", 6, 0.2),
+      attack: new SpriteAnimation(GOBLIN_PATH, "attack", 5, 0.1, {
+        loop: false,
+      }),
     };
     this.setAnimation(this.animations.walk);
     this.frameTimer = -Math.random() * this.currentAnimation.cycleDuration();
   }
 
   update(delta) {
+    this.updateTimers(delta);
+    if (this.isAttacking()) {
+      this.setAnimation(this.animations.attack);
+    } else {
+      this.setAnimation(this.animations.walk);
+      this.moveLeft(delta);
+    }
     this.animate(delta);
-    this.moveLeft(delta);
+  }
+
+  attack() {
+    if (this.isAttacking()) return;
+    this.attackTimer = this.animations.attack.cycleDuration();
   }
 }

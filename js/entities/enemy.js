@@ -5,4 +5,6 @@ export default class Enemy extends MovableObject {
     super(x, y, width, height);
     this.damage = 10;
   }
+
+  attack() {}
 }
