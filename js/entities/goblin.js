@@ -2,6 +2,7 @@ import Enemy from "./enemy.js";
 import SpriteAnimation from "../sprite-animation.js";
 
 const GOBLIN_PATH = "./assets/images/goblin/";
+const HIT_FRAME = 2;
 
 export default class Goblin extends Enemy {
   constructor(x, y) {
@@ -35,5 +36,12 @@ export default class Goblin extends Enemy {
   attack() {
     if (this.isAttacking()) return;
     this.attackTimer = this.animations.attack.cycleDuration();
+  }
+
+  isHitting() {
+    return (
+      this.currentAnimation === this.animations.attack &&
+      this.frameIndex === HIT_FRAME
+    );
   }
 }

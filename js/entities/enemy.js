@@ -7,4 +7,8 @@ export default class Enemy extends MovableObject {
   }
 
   attack() {}
+
+  isHitting() {
+    return true;
+  }
 }
