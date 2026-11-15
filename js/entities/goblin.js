@@ -11,7 +11,10 @@ export default class Goblin extends Enemy {
     this.hitboxHeight = 44;
     this.facingLeft = true;
     this.speed = 15 + Math.random() * 25;
-    this.setAnimation(new SpriteAnimation(GOBLIN_PATH, "walk", 6, 0.2));
+    this.animations = {
+      walk: new SpriteAnimation(GOBLIN_PATH, "walk", 6, 0.2),
+    };
+    this.setAnimation(this.animations.walk);
     this.frameTimer = -Math.random() * this.currentAnimation.cycleDuration();
   }
 
