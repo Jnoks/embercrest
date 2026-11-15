@@ -34,8 +34,11 @@ export default class Goblin extends Enemy {
   }
 
   chase(delta) {
+    const distance = this.targetX - this.centerX();
+    this.facingLeft = distance < 0;
     this.setAnimation(this.animations.walk);
-    this.moveLeft(delta);
+    if (this.facingLeft) this.moveLeft(delta);
+    else this.moveRight(delta);
   }
 
   attack() {

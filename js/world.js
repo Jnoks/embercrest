@@ -40,6 +40,7 @@ export default class World {
       Math.max(this.character.x, 0),
       this.level.width - this.character.width,
     );
+    this.updateTargets();
     this.updateObjects(this.level.enemies, delta);
     this.checkCollisions();
     this.cameraX = Math.min(
@@ -54,6 +55,12 @@ export default class World {
   updateObjects(objects, delta) {
     for (let i = 0; i < objects.length; i++) {
       objects[i].update(delta);
+    }
+  }
+
+  updateTargets() {
+    for (let i = 0; i < this.level.enemies.length; i++) {
+      this.level.enemies[i].targetX = this.character.centerX();
     }
   }
 
