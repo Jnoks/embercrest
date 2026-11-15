@@ -45,8 +45,12 @@ export default class MovableObject extends DrawableObject {
     this.velocityY = -this.jumpSpeed;
   }
 
+  centerX() {
+    return this.x + this.anchorX;
+  }
+
   hitbox() {
-    const centerX = this.x + this.anchorX;
+    const centerX = this.centerX();
     return {
       left: centerX - this.hitboxWidth / 2,
       right: centerX + this.hitboxWidth / 2,
