@@ -5,6 +5,7 @@ const GOBLIN_PATH = "./assets/images/goblin/";
 const HIT_FRAME = 2;
 const ATTACK_REACH = 30;
 const SIGHT_RANGE = 400;
+const STOP_DISTANCE = 50;
 
 export default class Goblin extends Enemy {
   constructor(x, y) {
@@ -42,6 +43,10 @@ export default class Goblin extends Enemy {
       return;
     }
     this.facingLeft = distance < 0;
+    if (Math.abs(distance) < STOP_DISTANCE) {
+      this.setAnimation(this.animations.idle);
+      return;
+    }
     this.setAnimation(this.animations.walk);
     if (this.facingLeft) this.moveLeft(delta);
     else this.moveRight(delta);
