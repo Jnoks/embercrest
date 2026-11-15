@@ -1,9 +1,9 @@
-import MovableObject from "./movable-object.js";
+import Enemy from "./enemy.js";
 import SpriteAnimation from "../sprite-animation.js";
 
 const GOBLIN_PATH = "./assets/images/goblin/";
 
-export default class Goblin extends MovableObject {
+export default class Goblin extends Enemy {
   constructor(x, y) {
     super(x, y, 128, 128);
     this.anchorY = 89;

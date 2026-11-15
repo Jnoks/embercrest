@@ -1,9 +1,9 @@
-import MovableObject from "./movable-object.js";
+import Enemy from "./enemy.js";
 import SpriteAnimation from "../sprite-animation.js";
 
 const BOSS_PATH = "./assets/images/boss/";
 
-export default class Boss extends MovableObject {
+export default class Boss extends Enemy {
   constructor(x, y) {
     super(x, y, 256, 256);
     this.anchorY = 207;
