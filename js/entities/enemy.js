@@ -11,4 +11,8 @@ export default class Enemy extends MovableObject {
   isHitting() {
     return true;
   }
+
+  attackBox() {
+    return this.hitbox();
+  }
 }

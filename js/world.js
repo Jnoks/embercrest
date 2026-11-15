@@ -60,7 +60,7 @@ export default class World {
   checkCollisions() {
     for (let i = 0; i < this.level.enemies.length; i++) {
       const enemy = this.level.enemies[i];
-      if (this.character.isColliding(enemy)) {
+      if (this.character.overlaps(enemy.attackBox())) {
         enemy.attack();
         if (enemy.isHitting()) {
           this.character.takeDamage(enemy.damage);

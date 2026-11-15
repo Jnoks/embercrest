@@ -3,6 +3,7 @@ import SpriteAnimation from "../sprite-animation.js";
 
 const GOBLIN_PATH = "./assets/images/goblin/";
 const HIT_FRAME = 2;
+const ATTACK_REACH = 30;
 
 export default class Goblin extends Enemy {
   constructor(x, y) {
@@ -43,5 +44,12 @@ export default class Goblin extends Enemy {
       this.currentAnimation === this.animations.attack &&
       this.frameIndex === HIT_FRAME
     );
+  }
+
+  attackBox() {
+    const box = this.hitbox();
+    if (this.facingLeft) box.left -= ATTACK_REACH;
+    else box.right += ATTACK_REACH;
+    return box;
   }
 }
