@@ -22,6 +22,7 @@ export default class Goblin extends Enemy {
         loop: false,
       }),
       idle: new SpriteAnimation(GOBLIN_PATH, "idle", 4, 0.2),
+      hurt: new SpriteAnimation(GOBLIN_PATH, "hurt", 3, 0.1, { loop: false }),
     };
     this.setAnimation(this.animations.walk);
     this.frameTimer = -Math.random() * this.currentAnimation.cycleDuration();
@@ -29,7 +30,9 @@ export default class Goblin extends Enemy {
 
   update(delta) {
     this.updateTimers(delta);
-    if (this.isAttacking()) {
+    if (this.isHurt()) {
+      this.setAnimation(this.animations.hurt);
+    } else if (this.isAttacking()) {
       this.setAnimation(this.animations.attack);
     } else {
       this.chase(delta);
@@ -54,7 +57,7 @@ export default class Goblin extends Enemy {
   }
 
   attack() {
-    if (this.isOnCooldown()) return;
+    if (this.isOnCooldown() || this.isHurt()) return;
     this.attackTimer = this.animations.attack.cycleDuration();
     this.cooldownTimer = ATTACK_COOLDOWN;
   }
