@@ -65,6 +65,7 @@ export default class World {
   }
 
   checkCollisions() {
+    if (this.character.isDead()) return;
     for (let i = 0; i < this.level.enemies.length; i++) {
       const enemy = this.level.enemies[i];
       if (this.character.overlaps(enemy.attackBox())) {
