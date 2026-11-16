@@ -1,10 +1,13 @@
 import MovableObject from "./movable-object.js";
 import SpriteAnimation from "../sprite-animation.js";
+import Bolt from "./bolt.js";
 
 const MAGE_PATH = "./assets/images/mage/";
 const SPELL_COST = 20;
 const CAST_COOLDOWN = 0.6;
 const MANA_REGEN = 10;
+const STAFF_REACH = 41;
+const STAFF_HEIGHT = 19;
 
 export default class Character extends MovableObject {
   constructor(x, y, keyboard) {
@@ -18,6 +21,7 @@ export default class Character extends MovableObject {
     this.jumpSpeed = 700;
     this.maxMana = 100;
     this.mana = this.maxMana;
+    this.pendingBolt = null;
     this.animations = {
       idle: new SpriteAnimation(MAGE_PATH, "idle", 14, 0.2, { loopPause: 2 }),
       run: new SpriteAnimation(MAGE_PATH, "run", 8, 0.08),
@@ -72,5 +76,22 @@ export default class Character extends MovableObject {
     this.mana -= SPELL_COST;
     this.cooldownTimer = CAST_COOLDOWN;
     this.attackTimer = this.animations.attack.cycleDuration();
+    this.pendingBolt = this.createBolt();
+  }
+
+  createBolt() {
+    let reach = STAFF_REACH;
+    if (this.facingLeft) reach = -STAFF_REACH;
+    return new Bolt(
+      this.centerX() + reach,
+      this.y - STAFF_HEIGHT,
+      this.facingLeft,
+    );
+  }
+
+  takeBolt() {
+    const bolt = this.pendingBolt;
+    this.pendingBolt = null;
+    return bolt;
   }
 }

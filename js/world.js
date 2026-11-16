@@ -11,6 +11,7 @@ export default class World {
     this.level = level;
     this.character = new Character(100, this.level.groundY, keyboard);
     this.hud = new Hud();
+    this.bolts = [];
 
     requestAnimationFrame((time) => this.loop(time));
   }
@@ -23,6 +24,7 @@ export default class World {
     this.drawObjects(this.level.tiles);
     this.character.draw(this.ctx);
     this.drawObjects(this.level.enemies);
+    this.drawObjects(this.bolts);
     this.ctx.restore();
     this.hud.draw(this.ctx);
   }
@@ -46,6 +48,7 @@ export default class World {
     this.updateTargets();
     this.updateObjects(this.level.enemies, delta);
     this.checkCollisions();
+    this.updateBolts(delta);
     this.hud.update(this.character);
     this.cameraX = Math.min(
       Math.max(this.character.x - 100, 0),
@@ -54,6 +57,12 @@ export default class World {
     for (let i = 0; i < this.level.backgroundLayers.length; i++) {
       this.level.backgroundLayers[i].scrollTo(this.cameraX);
     }
+  }
+
+  updateBolts(delta) {
+    const bolt = this.character.takeBolt();
+    if (bolt) this.bolts.push(bolt);
+    this.updateObjects(this.bolts, delta);
   }
 
   updateObjects(objects, delta) {
