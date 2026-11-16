@@ -1,7 +1,7 @@
 import DrawableObject from "./drawable-object.js";
 
 const GRAVITY = 2000;
-const SHOW_HITBOX = true;
+const SHOW_HITBOX = false;
 const HURT_DURATION = 0.4;
 const INVINCIBLE_DURATION = 1;
 const BLINK_INTERVAL = 0.1;
