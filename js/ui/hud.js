@@ -18,8 +18,16 @@ export default class Hud {
       111,
       12,
       HUD_PATH + "health-fill.png",
+      "HP",
     );
-    this.manaBar = new StatusBar(86, 31, 87, 10, HUD_PATH + "mana-fill.png");
+    this.manaBar = new StatusBar(
+      86,
+      31,
+      87,
+      10,
+      HUD_PATH + "mana-fill.png",
+      "Mana",
+    );
   }
 
   update(character) {
