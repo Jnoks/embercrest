@@ -1,6 +1,6 @@
 import HudImage from "./hud-image.js";
 
-const LABEL_FONT = "8px Silkscreen, monospace";
+const LABEL_FONT = "bold 8px Silkscreen, monospace";
 
 export default class StatusBar extends HudImage {
   constructor(x, y, width, height, imagePath, name) {

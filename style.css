@@ -3,6 +3,12 @@
   src: url("./assets/fonts/silkscreen-regular.ttf") format("truetype");
 }
 
+@font-face {
+  font-family: "Silkscreen";
+  src: url("./assets/fonts/silkscreen-bold.ttf") format("truetype");
+  font-weight: 700;
+}
+
 *,
 *::before,
 *::after {
