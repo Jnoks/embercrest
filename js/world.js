@@ -1,4 +1,5 @@
 import Character from "./entities/character.js";
+import Hud from "./ui/hud.js";
 
 export default class World {
   constructor(canvas, keyboard, level) {
@@ -9,6 +10,7 @@ export default class World {
     this.lastTime = 0;
     this.level = level;
     this.character = new Character(100, this.level.groundY, keyboard);
+    this.hud = new Hud();
 
     requestAnimationFrame((time) => this.loop(time));
   }
@@ -22,6 +24,7 @@ export default class World {
     this.character.draw(this.ctx);
     this.drawObjects(this.level.enemies);
     this.ctx.restore();
+    this.hud.draw(this.ctx);
   }
 
   drawObjects(objects) {
