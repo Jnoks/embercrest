@@ -4,6 +4,7 @@ import SpriteAnimation from "../sprite-animation.js";
 const BOLT_PATH = "./assets/images/bolt/";
 const BOLT_SIZE = 32;
 const BOLT_SPEED = 400;
+const BOLT_RANGE = 400;
 
 export default class Bolt extends MovableObject {
   constructor(centerX, y, facingLeft) {
@@ -11,6 +12,8 @@ export default class Bolt extends MovableObject {
     this.anchorY = 29;
     this.facingLeft = facingLeft;
     this.speed = BOLT_SPEED;
+    this.distance = 0;
+    this.done = false;
     this.animations = {
       fly: new SpriteAnimation(BOLT_PATH, "fly", 4, 0.08),
     };
@@ -25,5 +28,7 @@ export default class Bolt extends MovableObject {
   fly(delta) {
     if (this.facingLeft) this.moveLeft(delta);
     else this.moveRight(delta);
+    this.distance += this.speed * delta;
+    if (this.distance > BOLT_RANGE) this.done = true;
   }
 }

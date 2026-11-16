@@ -63,6 +63,7 @@ export default class World {
     const bolt = this.character.takeBolt();
     if (bolt) this.bolts.push(bolt);
     this.updateObjects(this.bolts, delta);
+    this.bolts = this.bolts.filter((bolt) => !bolt.done);
   }
 
   updateObjects(objects, delta) {
