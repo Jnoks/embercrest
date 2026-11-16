@@ -4,6 +4,7 @@ const GRAVITY = 2000;
 const SHOW_HITBOX = true;
 const HURT_DURATION = 0.4;
 const INVINCIBLE_DURATION = 1;
+const BLINK_INTERVAL = 0.1;
 
 export default class MovableObject extends DrawableObject {
   constructor(x, y, width, height) {
@@ -101,6 +102,11 @@ export default class MovableObject extends DrawableObject {
     return this.cooldownTimer > 0;
   }
 
+  isVisible() {
+    if (!this.isInvincible() || this.isDead()) return true;
+    return Math.floor(this.invincibleTimer / BLINK_INTERVAL) % 2 === 1;
+  }
+
   updateTimers(delta) {
     this.hurtTimer = Math.max(this.hurtTimer - delta, 0);
     this.invincibleTimer = Math.max(this.invincibleTimer - delta, 0);
@@ -109,7 +115,7 @@ export default class MovableObject extends DrawableObject {
   }
 
   draw(ctx) {
-    super.draw(ctx);
+    if (this.isVisible()) super.draw(ctx);
     if (SHOW_HITBOX) {
       this.drawHitbox(ctx);
     }
