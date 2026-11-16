@@ -8,6 +8,7 @@ const CAST_COOLDOWN = 0.6;
 const MANA_REGEN = 10;
 const STAFF_REACH = 41;
 const STAFF_HEIGHT = 19;
+const RELEASE_FRAME = 4;
 
 export default class Character extends MovableObject {
   constructor(x, y, keyboard) {
@@ -22,6 +23,7 @@ export default class Character extends MovableObject {
     this.maxMana = 100;
     this.mana = this.maxMana;
     this.pendingBolt = null;
+    this.boltLoaded = false;
     this.animations = {
       idle: new SpriteAnimation(MAGE_PATH, "idle", 14, 0.2, { loopPause: 2 }),
       run: new SpriteAnimation(MAGE_PATH, "run", 8, 0.08),
@@ -52,6 +54,7 @@ export default class Character extends MovableObject {
     this.mana = Math.min(this.mana + MANA_REGEN * delta, this.maxMana);
     this.applyGravity(delta);
     this.animate(delta);
+    this.releaseBolt();
   }
 
   handleInput(delta) {
@@ -76,7 +79,20 @@ export default class Character extends MovableObject {
     this.mana -= SPELL_COST;
     this.cooldownTimer = CAST_COOLDOWN;
     this.attackTimer = this.animations.attack.cycleDuration();
+    this.boltLoaded = true;
+  }
+
+  isReleasing() {
+    return (
+      this.currentAnimation === this.animations.attack &&
+      this.frameIndex === RELEASE_FRAME
+    );
+  }
+
+  releaseBolt() {
+    if (!this.boltLoaded || !this.isReleasing()) return;
     this.pendingBolt = this.createBolt();
+    this.boltLoaded = false;
   }
 
   createBolt() {
