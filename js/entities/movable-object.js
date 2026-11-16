@@ -15,7 +15,8 @@ export default class MovableObject extends DrawableObject {
     this.onGround = false;
     this.hitboxWidth = width;
     this.hitboxHeight = height;
-    this.health = 100;
+    this.maxHealth = 100;
+    this.health = this.maxHealth;
     this.hurtTimer = 0;
     this.invincibleTimer = 0;
     this.attackTimer = 0;
