@@ -1,3 +1,8 @@
+@font-face {
+  font-family: "Silkscreen";
+  src: url("./assets/fonts/silkscreen-regular.ttf") format("truetype");
+}
+
 *,
 *::before,
 *::after {
