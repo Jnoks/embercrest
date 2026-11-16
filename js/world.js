@@ -63,7 +63,23 @@ export default class World {
     const bolt = this.character.takeBolt();
     if (bolt) this.bolts.push(bolt);
     this.updateObjects(this.bolts, delta);
+    this.checkBoltHits();
     this.bolts = this.bolts.filter((bolt) => !bolt.done);
+  }
+
+  checkBoltHits() {
+    for (let i = 0; i < this.bolts.length; i++) {
+      for (let j = 0; j < this.level.enemies.length; j++) {
+        this.hitEnemy(this.bolts[i], this.level.enemies[j]);
+      }
+    }
+  }
+
+  hitEnemy(bolt, enemy) {
+    if (bolt.isExploding() || enemy.isDead()) return;
+    if (!bolt.isColliding(enemy)) return;
+    enemy.takeDamage(bolt.damage);
+    bolt.explode();
   }
 
   updateObjects(objects, delta) {

@@ -10,6 +10,9 @@ export default class Bolt extends MovableObject {
   constructor(centerX, y, facingLeft) {
     super(centerX - BOLT_SIZE / 2, y, BOLT_SIZE, BOLT_SIZE);
     this.anchorY = 29;
+    this.hitboxWidth = 24;
+    this.hitboxHeight = 8;
+    this.damage = 10;
     this.facingLeft = facingLeft;
     this.speed = BOLT_SPEED;
     this.distance = 0;
