@@ -13,6 +13,8 @@ export default class Character extends MovableObject {
     this.keyboard = keyboard;
     this.speed = 150;
     this.jumpSpeed = 700;
+    this.maxMana = 100;
+    this.mana = this.maxMana;
     this.animations = {
       idle: new SpriteAnimation(MAGE_PATH, "idle", 14, 0.2, { loopPause: 2 }),
       run: new SpriteAnimation(MAGE_PATH, "run", 8, 0.08),
