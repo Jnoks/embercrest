@@ -15,6 +15,8 @@ export default class Goblin extends Enemy {
     this.hitboxWidth = 36;
     this.hitboxHeight = 44;
     this.facingLeft = true;
+    this.maxHealth = 30;
+    this.health = this.maxHealth;
     this.speed = 15 + Math.random() * 25;
     this.animations = {
       walk: new SpriteAnimation(GOBLIN_PATH, "walk", 6, 0.2),
@@ -23,6 +25,9 @@ export default class Goblin extends Enemy {
       }),
       idle: new SpriteAnimation(GOBLIN_PATH, "idle", 4, 0.2),
       hurt: new SpriteAnimation(GOBLIN_PATH, "hurt", 3, 0.1, { loop: false }),
+      death: new SpriteAnimation(GOBLIN_PATH, "death", 4, 0.15, {
+        loop: false,
+      }),
     };
     this.setAnimation(this.animations.walk);
     this.frameTimer = -Math.random() * this.currentAnimation.cycleDuration();
@@ -30,7 +35,9 @@ export default class Goblin extends Enemy {
 
   update(delta) {
     this.updateTimers(delta);
-    if (this.isHurt()) {
+    if (this.isDead()) {
+      this.setAnimation(this.animations.death);
+    } else if (this.isHurt()) {
       this.setAnimation(this.animations.hurt);
     } else if (this.isAttacking()) {
       this.setAnimation(this.animations.attack);
@@ -57,7 +64,7 @@ export default class Goblin extends Enemy {
   }
 
   attack() {
-    if (this.isOnCooldown() || this.isHurt()) return;
+    if (this.isOnCooldown() || this.isHurt() || this.isDead()) return;
     this.attackTimer = this.animations.attack.cycleDuration();
     this.cooldownTimer = ATTACK_COOLDOWN;
   }
