@@ -2,6 +2,8 @@ import MovableObject from "./movable-object.js";
 import SpriteAnimation from "../sprite-animation.js";
 
 const MAGE_PATH = "./assets/images/mage/";
+const SPELL_COST = 20;
+const CAST_COOLDOWN = 0.6;
 
 export default class Character extends MovableObject {
   constructor(x, y, keyboard) {
@@ -45,6 +47,7 @@ export default class Character extends MovableObject {
 
   handleInput(delta) {
     if (this.isHurt() || this.isDead()) return;
+    if (this.keyboard.attack) this.attack();
     if (this.keyboard.right) {
       this.moveRight(delta);
       this.facingLeft = false;
@@ -56,5 +59,11 @@ export default class Character extends MovableObject {
     if (this.keyboard.jump) {
       this.jump();
     }
+  }
+
+  attack() {
+    if (this.isOnCooldown() || this.mana < SPELL_COST) return;
+    this.mana -= SPELL_COST;
+    this.cooldownTimer = CAST_COOLDOWN;
   }
 }
