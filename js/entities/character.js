@@ -4,6 +4,7 @@ import SpriteAnimation from "../sprite-animation.js";
 const MAGE_PATH = "./assets/images/mage/";
 const SPELL_COST = 20;
 const CAST_COOLDOWN = 0.6;
+const MANA_REGEN = 10;
 
 export default class Character extends MovableObject {
   constructor(x, y, keyboard) {
@@ -43,8 +44,8 @@ export default class Character extends MovableObject {
     else if (this.keyboard.left || this.keyboard.right)
       this.setAnimation(this.animations.run);
     else this.setAnimation(this.animations.idle);
-
     this.updateTimers(delta);
+    this.mana = Math.min(this.mana + MANA_REGEN * delta, this.maxMana);
     this.applyGravity(delta);
     this.animate(delta);
   }

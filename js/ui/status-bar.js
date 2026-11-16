@@ -12,7 +12,7 @@ export default class StatusBar extends HudImage {
 
   setValue(value, max) {
     this.width = (this.fullWidth * value) / max;
-    this.label = `${value}/${max}`;
+    this.label = `${Math.floor(value)}/${max}`;
   }
 
   draw(ctx) {
