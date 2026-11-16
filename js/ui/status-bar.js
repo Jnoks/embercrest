@@ -22,7 +22,9 @@ export default class StatusBar extends HudImage {
     ctx.font = LABEL_FONT;
     ctx.fillStyle = "white";
     ctx.textBaseline = "middle";
-    ctx.textAlign = "center";
-    ctx.fillText(`${this.name} ${this.label}`, centerX, centerY);
+    const text = `${this.name} ${this.label}`;
+    const left = Math.round(centerX - ctx.measureText(text).width / 2);
+    ctx.textAlign = "left";
+    ctx.fillText(text, left, centerY);
   }
 }
