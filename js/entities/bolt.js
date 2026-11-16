@@ -16,19 +16,29 @@ export default class Bolt extends MovableObject {
     this.done = false;
     this.animations = {
       fly: new SpriteAnimation(BOLT_PATH, "fly", 4, 0.08),
+      hit: new SpriteAnimation(BOLT_PATH, "hit", 5, 0.06, { loop: false }),
     };
     this.setAnimation(this.animations.fly);
   }
 
   update(delta) {
     this.animate(delta);
-    this.fly(delta);
+    if (!this.isExploding()) this.fly(delta);
+    if (this.isExploding() && this.isAnimationFinished()) this.done = true;
   }
 
   fly(delta) {
     if (this.facingLeft) this.moveLeft(delta);
     else this.moveRight(delta);
     this.distance += this.speed * delta;
-    if (this.distance > BOLT_RANGE) this.done = true;
+    if (this.distance > BOLT_RANGE) this.explode();
+  }
+
+  explode() {
+    this.setAnimation(this.animations.hit);
+  }
+
+  isExploding() {
+    return this.currentAnimation === this.animations.hit;
   }
 }
