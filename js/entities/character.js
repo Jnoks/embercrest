@@ -22,6 +22,9 @@ export default class Character extends MovableObject {
       run: new SpriteAnimation(MAGE_PATH, "run", 8, 0.08),
       jump: new SpriteAnimation(MAGE_PATH, "jump", 7, 0.1),
       hurt: new SpriteAnimation(MAGE_PATH, "hurt", 4, 0.1, { loop: false }),
+      attack: new SpriteAnimation(MAGE_PATH, "attack", 7, 0.07, {
+        loop: false,
+      }),
       death: new SpriteAnimation(MAGE_PATH, "death", 10, 0.1, {
         loop: false,
         padding: 64,
@@ -35,6 +38,7 @@ export default class Character extends MovableObject {
     this.handleInput(delta);
     if (this.isDead()) this.setAnimation(this.animations.death);
     else if (this.isHurt()) this.setAnimation(this.animations.hurt);
+    else if (this.isAttacking()) this.setAnimation(this.animations.attack);
     else if (!this.onGround) this.setAnimation(this.animations.jump);
     else if (this.keyboard.left || this.keyboard.right)
       this.setAnimation(this.animations.run);
@@ -48,6 +52,7 @@ export default class Character extends MovableObject {
   handleInput(delta) {
     if (this.isHurt() || this.isDead()) return;
     if (this.keyboard.attack) this.attack();
+    if (this.isAttacking()) return;
     if (this.keyboard.right) {
       this.moveRight(delta);
       this.facingLeft = false;
@@ -65,5 +70,6 @@ export default class Character extends MovableObject {
     if (this.isOnCooldown() || this.mana < SPELL_COST) return;
     this.mana -= SPELL_COST;
     this.cooldownTimer = CAST_COOLDOWN;
+    this.attackTimer = this.animations.attack.cycleDuration();
   }
 }
