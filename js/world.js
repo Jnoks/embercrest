@@ -12,6 +12,7 @@ export default class World {
     this.character = new Character(100, this.level.groundY, keyboard);
     this.hud = new Hud();
     this.bolts = [];
+    this.spells = [];
 
     requestAnimationFrame((time) => this.loop(time));
   }
@@ -25,6 +26,7 @@ export default class World {
     this.character.draw(this.ctx);
     this.drawObjects(this.level.enemies);
     this.drawObjects(this.bolts);
+    this.drawObjects(this.spells);
     this.ctx.restore();
     this.hud.draw(this.ctx);
   }
@@ -49,6 +51,7 @@ export default class World {
     this.updateObjects(this.level.enemies, delta);
     this.checkCollisions();
     this.updateBolts(delta);
+    this.updateSpells(delta);
     this.hud.update(this.character, this.level.boss);
     this.cameraX = Math.min(
       Math.max(this.character.x - 100, 0),
@@ -62,9 +65,23 @@ export default class World {
   updateBolts(delta) {
     const bolt = this.character.takeBolt();
     if (bolt) this.bolts.push(bolt);
-    this.updateObjects(this.bolts, delta);
+    this.bolts = this.updateProjectiles(this.bolts, delta);
     this.checkBoltHits();
-    this.bolts = this.bolts.filter((bolt) => !bolt.done);
+  }
+
+  updateProjectiles(projectiles, delta) {
+    this.updateObjects(projectiles, delta);
+    return projectiles.filter((projectile) => !projectile.done);
+  }
+
+  updateSpells(delta) {
+    const spell = this.level.boss.takeSpell();
+    if (spell) this.spells.push(spell);
+    this.spells = this.updateProjectiles(this.spells, delta);
+    for (let i = 0; i < this.spells.length; i++) {
+      this.hitCharacter(this.spells[i]);
+      this.hitGround(this.spells[i]);
+    }
   }
 
   checkBoltHits() {
@@ -80,6 +97,17 @@ export default class World {
     if (!bolt.isColliding(enemy)) return;
     enemy.takeDamage(bolt.damage);
     bolt.explode();
+  }
+
+  hitCharacter(spell) {
+    if (spell.isExploding()) return;
+    if (!spell.isColliding(this.character)) return;
+    this.character.takeDamage(spell.damage);
+    spell.explode();
+  }
+
+  hitGround(spell) {
+    if (spell.y >= this.level.groundY) spell.explode();
   }
 
   updateObjects(objects, delta) {
