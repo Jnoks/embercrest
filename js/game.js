@@ -16,7 +16,7 @@ export default class Game {
     this.keyboard = new Keyboard();
     this.lastTime = 0;
     this.started = false;
-    this.quest = new Quest(WORLD.quest);
+    this.quest = new Quest(WORLD.quest, WORLD.boss);
     this.texts = this.createTexts();
     this.createOverlays();
     this.start();

@@ -139,6 +139,8 @@ export default class World {
   }
 
   collectShards(delta) {
+    const loot = this.level.boss.takeLoot();
+    if (loot) this.level.shards.push(loot);
     for (let i = 0; i < this.level.shards.length; i++) {
       const shard = this.level.shards[i];
       if (this.character.isColliding(shard)) {
@@ -153,11 +155,13 @@ export default class World {
     const boss = this.level.boss;
     const roomX = this.level.width - this.canvas.width;
     this.level.gate.open = boss.isGone();
+    if (boss.isGone()) this.quest.beatBoss();
     if (boss.isDead()) {
       this.leftLimit = Math.max(this.leftLimit - ROOM_OPEN_SPEED * delta, 0);
     } else if (this.cameraX === roomX) {
       this.leftLimit = roomX;
       boss.sightRange = this.canvas.width;
+      this.quest.faceBoss();
     }
   }
 

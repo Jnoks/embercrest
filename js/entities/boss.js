@@ -4,6 +4,7 @@ import IceShard from "./ice-shard.js";
 import Effect from "./effect.js";
 import Lightning from "./lightning.js";
 import Fireball from "./fireball.js";
+import EmberShard from "./ember-shard.js";
 
 const BOSS_PATH = "./assets/images/boss/";
 const LIGHTNING_PATH = "./assets/images/lightning/";
@@ -15,6 +16,7 @@ const HAND_HEIGHT = 73;
 const AIM_HEIGHT = 20;
 const FLAME_REACH = 110;
 const FLAME_HEIGHT = 52;
+const LOOT_HEIGHT = 30;
 const PHASES = 3;
 const ATTACK_COOLDOWNS = [2, 1.6, 1.2];
 const SPELL_COOLDOWNS = [3, 2.2, 1.5];
@@ -57,6 +59,7 @@ export default class Boss extends Enemy {
     this.phase = 1;
     this.rageTimer = 0;
     this.pendingEffect = null;
+    this.lootTaken = false;
     this.animations = {
       idle: new SpriteAnimation(BOSS_PATH, "idle", 3, 0.3, { loopPause: 1 }),
       walk: new SpriteAnimation(BOSS_PATH, "walk", 6, 0.15),
@@ -227,5 +230,11 @@ export default class Boss extends Enemy {
     const spell = this.pendingSpell;
     this.pendingSpell = null;
     return spell;
+  }
+
+  takeLoot() {
+    if (!this.isGone() || this.lootTaken) return null;
+    this.lootTaken = true;
+    return new EmberShard(this.centerX(), this.y - LOOT_HEIGHT);
   }
 }

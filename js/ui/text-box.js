@@ -31,6 +31,7 @@ export default class TextBox {
     this.pages = pages;
     this.page = 0;
     this.shown = 0;
+    this.seen = false;
   }
 
   createPortrait(path) {
