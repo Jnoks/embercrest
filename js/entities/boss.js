@@ -19,4 +19,14 @@ export default class Boss extends Enemy {
   update(delta) {
     this.animate(delta);
   }
+
+  attack() {}
+
+  isHitting() {
+    return true;
+  }
+
+  attackBox() {
+    return this.hitbox();
+  }
 }
