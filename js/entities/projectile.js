@@ -20,8 +20,14 @@ export default class Projectile extends MovableObject {
   fly(delta) {
     if (this.facingLeft) this.moveLeft(delta);
     else this.moveRight(delta);
+    this.y += this.velocityY * delta;
     this.distance += this.speed * delta;
     if (this.distance > this.range) this.explode();
+  }
+
+  aimAt(x, y) {
+    const time = Math.abs(x - this.centerX()) / this.speed;
+    this.velocityY = (y - this.y) / time;
   }
 
   explode() {
