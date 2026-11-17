@@ -6,6 +6,11 @@ export default class Enemy extends MovableObject {
     this.damage = 10;
     this.targetX = 0;
     this.invincibleDuration = 0;
+    this.hitFrame = 0;
+    this.attackReach = 0;
+    this.sightRange = 0;
+    this.stopDistance = 0;
+    this.attackCooldown = 0;
   }
 
   attack() {}

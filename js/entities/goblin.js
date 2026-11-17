@@ -2,11 +2,6 @@ import Enemy from "./enemy.js";
 import SpriteAnimation from "../sprite-animation.js";
 
 const GOBLIN_PATH = "./assets/images/goblin/";
-const HIT_FRAME = 2;
-const ATTACK_REACH = 30;
-const SIGHT_RANGE = 400;
-const STOP_DISTANCE = 50;
-const ATTACK_COOLDOWN = 1.5;
 
 export default class Goblin extends Enemy {
   constructor(x, y) {
@@ -18,6 +13,11 @@ export default class Goblin extends Enemy {
     this.maxHealth = 30;
     this.health = this.maxHealth;
     this.speed = 15 + Math.random() * 25;
+    this.hitFrame = 2;
+    this.attackReach = 30;
+    this.sightRange = 400;
+    this.stopDistance = 50;
+    this.attackCooldown = 1.5;
     this.animations = {
       walk: new SpriteAnimation(GOBLIN_PATH, "walk", 6, 0.2),
       attack: new SpriteAnimation(GOBLIN_PATH, "attack", 5, 0.1, {
@@ -49,12 +49,12 @@ export default class Goblin extends Enemy {
 
   chase(delta) {
     const distance = this.targetX - this.centerX();
-    if (Math.abs(distance) > SIGHT_RANGE) {
+    if (Math.abs(distance) > this.sightRange) {
       this.setAnimation(this.animations.idle);
       return;
     }
     this.facingLeft = distance < 0;
-    if (Math.abs(distance) < STOP_DISTANCE) {
+    if (Math.abs(distance) < this.stopDistance) {
       this.setAnimation(this.animations.idle);
       return;
     }
@@ -66,20 +66,20 @@ export default class Goblin extends Enemy {
   attack() {
     if (this.isOnCooldown() || this.isHurt() || this.isDead()) return;
     this.attackTimer = this.animations.attack.cycleDuration();
-    this.cooldownTimer = ATTACK_COOLDOWN;
+    this.cooldownTimer = this.attackCooldown;
   }
 
   isHitting() {
     return (
       this.currentAnimation === this.animations.attack &&
-      this.frameIndex === HIT_FRAME
+      this.frameIndex === this.hitFrame
     );
   }
 
   attackBox() {
     const box = this.hitbox();
-    if (this.facingLeft) box.left -= ATTACK_REACH;
-    else box.right += ATTACK_REACH;
+    if (this.facingLeft) box.left -= this.attackReach;
+    else box.right += this.attackReach;
     return box;
   }
 }
