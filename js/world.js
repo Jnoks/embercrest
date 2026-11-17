@@ -5,6 +5,7 @@ const SHAKE = 4;
 const PUSH_RANGE = 320;
 const PUSH_SPEED = 260;
 const ROOM_OPEN_SPEED = 300;
+const EDGE_MARGIN = 26;
 
 export default class World {
   constructor(canvas, keyboard, level) {
@@ -50,10 +51,7 @@ export default class World {
       this.character.land(this.level.groundY);
     }
     this.updateBossRoom(delta);
-    this.character.x = Math.min(
-      Math.max(this.character.x, this.leftLimit),
-      this.level.width - this.character.width,
-    );
+    this.keepInside();
     this.updateTargets();
     this.updateObjects(this.level.enemies, delta);
     this.checkCollisions();
@@ -134,6 +132,13 @@ export default class World {
       this.leftLimit = roomX;
       boss.sightRange = this.canvas.width;
     }
+  }
+
+  keepInside() {
+    const character = this.character;
+    const min = this.leftLimit + EDGE_MARGIN - character.anchorX;
+    const max = this.level.width - EDGE_MARGIN - character.anchorX;
+    character.x = Math.min(Math.max(character.x, min), max);
   }
 
   pushCharacter(delta) {
