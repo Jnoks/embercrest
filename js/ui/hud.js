@@ -1,5 +1,6 @@
 import HudImage from "./hud-image.js";
 import StatusBar from "./status-bar.js";
+import QuestTracker from "./quest-tracker.js";
 
 const HUD_PATH = "./assets/images/hud/";
 
@@ -38,14 +39,16 @@ export default class Hud {
       "Boss",
     );
     this.bossVisible = false;
+    this.tracker = new QuestTracker();
   }
 
-  update(character, boss) {
+  update(character, boss, quest) {
     this.healthBar.setValue(character.health, character.maxHealth);
     this.manaBar.setValue(character.mana, character.maxMana);
     this.bossBar.setValue(boss.health, boss.maxHealth);
     this.bossBar.name = boss.name;
     this.bossVisible = boss.seesTarget() && !boss.isDead();
+    this.tracker.update(quest);
   }
 
   draw(ctx) {
@@ -54,6 +57,7 @@ export default class Hud {
     }
     this.healthBar.draw(ctx);
     this.manaBar.draw(ctx);
+    this.tracker.draw(ctx);
     if (this.bossVisible) {
       this.bossFrame.draw(ctx);
       this.bossBar.draw(ctx);

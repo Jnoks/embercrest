@@ -47,6 +47,11 @@ export default class TextBox {
     this.shown = Math.min(this.shown + SPEED * delta, length);
   }
 
+  restart() {
+    this.page = 0;
+    this.shown = 0;
+  }
+
   isDone() {
     return this.page === this.pages.length;
   }

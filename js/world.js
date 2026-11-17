@@ -28,14 +28,19 @@ export default class World {
     this.drawObjects(this.level.backgroundLayers);
     this.ctx.save();
     this.ctx.translate(-Math.round(this.cameraX) + this.shake(), this.shake());
+    this.drawScene();
+    this.ctx.restore();
+    this.hud.draw(this.ctx);
+  }
+
+  drawScene() {
     this.drawObjects(this.level.tiles);
+    this.drawObjects(this.level.shards);
     this.character.draw(this.ctx);
     this.drawObjects(this.level.enemies);
     this.drawObjects(this.bolts);
     this.drawObjects(this.spells);
     this.drawObjects(this.effects);
-    this.ctx.restore();
-    this.hud.draw(this.ctx);
   }
 
   drawObjects(objects) {
@@ -60,7 +65,7 @@ export default class World {
     this.updateSpells(delta);
     this.updateEffects(delta);
     this.updateQuest(delta);
-    this.hud.update(this.character, this.level.boss);
+    this.hud.update(this.character, this.level.boss, this.quest);
     this.cameraX = Math.min(
       Math.max(this.character.x - 100, this.leftLimit),
       this.level.width - this.canvas.width,
@@ -130,6 +135,18 @@ export default class World {
     latch.marked = this.quest.state === "new";
     latch.near = this.character.isColliding(latch);
     if (latch.near && this.character.wantsToTalk()) this.quest.meet();
+    this.collectShards(delta);
+  }
+
+  collectShards(delta) {
+    for (let i = 0; i < this.level.shards.length; i++) {
+      const shard = this.level.shards[i];
+      if (this.character.isColliding(shard)) {
+        shard.done = true;
+        this.quest.collect();
+      }
+    }
+    this.level.shards = this.updateProjectiles(this.level.shards, delta);
   }
 
   updateBossRoom(delta) {

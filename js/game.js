@@ -45,6 +45,7 @@ export default class Game {
   }
 
   start() {
+    this.quest.restart();
     const level = createLevel1();
     this.world = new World(this.canvas, this.keyboard, level, this.quest);
   }

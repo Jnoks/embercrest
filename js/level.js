@@ -8,5 +8,6 @@ export default class Level {
     this.boss = data.boss;
     this.gate = data.gate;
     this.latch = data.latch;
+    this.shards = data.shards;
   }
 }

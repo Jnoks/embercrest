@@ -6,6 +6,7 @@ import Tile, { TILE_SIZE } from "../entities/tile.js";
 import Boss from "../entities/boss.js";
 import Gate from "../entities/gate.js";
 import Npc from "../entities/npc.js";
+import EmberShard from "../entities/ember-shard.js";
 
 const BACKGROUND_PATH = "./assets/images/forest/background/";
 const TILE_PATH = "./assets/images/forest/tiles/";
@@ -33,16 +34,26 @@ function createWall() {
   return tiles;
 }
 
+function createShards() {
+  return [
+    new EmberShard(700, GROUND_Y - 30),
+    new EmberShard(1050, GROUND_Y - 100),
+    new EmberShard(1500, GROUND_Y - 30),
+    new EmberShard(1850, GROUND_Y - 100),
+  ];
+}
+
 export default function createLevel1() {
   const gate = new Gate(2790, GROUND_Y);
   const latch = new Npc("latch", 17, 420, GROUND_Y);
   latch.facingLeft = true;
   const tiles = createWall();
-  tiles.push(gate, latch);
+  tiles.push(gate);
   for (let i = 0; i < LEVEL_WIDTH / TILE_SIZE; i++) {
     const y = LEVEL_HEIGHT - TILE_SIZE;
     tiles.push(new Tile(i * TILE_SIZE, y, TILE_PATH + "grass-top-middle.png"));
   }
+  tiles.push(latch);
   const boss = new Boss(2600, GROUND_Y);
   return new Level({
     width: LEVEL_WIDTH,
@@ -71,5 +82,6 @@ export default function createLevel1() {
     boss,
     gate,
     latch,
+    shards: createShards(),
   });
 }
