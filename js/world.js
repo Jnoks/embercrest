@@ -13,15 +13,12 @@ export default class World {
     this.canvas = canvas;
     this.cameraX = 0;
     this.leftLimit = 0;
-    this.lastTime = 0;
     this.level = level;
     this.character = new Character(100, this.level.groundY, keyboard);
     this.hud = new Hud();
     this.bolts = [];
     this.spells = [];
     this.effects = [];
-
-    requestAnimationFrame((time) => this.loop(time));
   }
 
   draw() {
@@ -147,7 +144,7 @@ export default class World {
   }
 
   shake() {
-    if (!this.level.boss.isRaging()) return 0;
+    if (!this.level.boss.isRaging() || this.isOver()) return 0;
     return Math.round((Math.random() * 2 - 1) * SHAKE);
   }
 
@@ -176,11 +173,7 @@ export default class World {
     }
   }
 
-  loop(time) {
-    const delta = Math.min((time - this.lastTime) / 1000, 0.1);
-    this.lastTime = time;
-    this.update(delta);
-    this.draw();
-    requestAnimationFrame((t) => this.loop(t));
+  isOver() {
+    return this.character.isGone();
   }
 }
