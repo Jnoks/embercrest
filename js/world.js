@@ -30,6 +30,7 @@ export default class World {
     this.ctx.translate(-Math.round(this.cameraX) + this.shake(), this.shake());
     this.drawScene();
     this.ctx.restore();
+    this.level.rain.draw(this.ctx);
     this.hud.draw(this.ctx);
   }
 
@@ -50,7 +51,7 @@ export default class World {
   }
 
   update(delta) {
-    this.updateObjects(this.level.backgroundLayers, delta);
+    this.updateScenery(delta);
     this.character.update(delta);
     this.pushCharacter(delta);
     if (this.character.y >= this.level.groundY) {
@@ -73,6 +74,11 @@ export default class World {
     for (let i = 0; i < this.level.backgroundLayers.length; i++) {
       this.level.backgroundLayers[i].scrollTo(this.cameraX);
     }
+  }
+
+  updateScenery(delta) {
+    this.updateObjects(this.level.backgroundLayers, delta);
+    this.level.rain.update(delta);
   }
 
   updateBolts(delta) {
@@ -166,7 +172,7 @@ export default class World {
     const boss = this.level.boss;
     this.level.gate.update(delta);
     this.checkGate();
-    if (boss.isGone()) this.quest.beatBoss();
+    if (boss.isGone()) this.endFight();
     if (boss.isDead()) {
       this.leftLimit = Math.max(this.leftLimit - ROOM_OPEN_SPEED * delta, 0);
     } else if (this.isInBossRoom()) {
@@ -174,6 +180,11 @@ export default class World {
       boss.sightRange = this.canvas.width;
       this.quest.faceBoss();
     }
+  }
+
+  endFight() {
+    this.quest.beatBoss();
+    this.level.rain.stop();
   }
 
   isInBossRoom() {

@@ -8,6 +8,8 @@ import Gate from "../entities/gate.js";
 import Npc from "../entities/npc.js";
 import EmberShard from "../entities/ember-shard.js";
 import GateScene from "../gate-scene.js";
+import Rain from "../entities/rain.js";
+import Sun from "../entities/sun.js";
 import { WORLDS } from "./story.js";
 
 const BACKGROUND_PATH = "./assets/images/forest/background/";
@@ -57,11 +59,13 @@ export default function createLevel1() {
   }
   tiles.push(latch);
   const boss = new Boss(2600, GROUND_Y);
+  const rain = new Rain();
   return new Level({
     width: LEVEL_WIDTH,
     groundY: GROUND_Y,
     backgroundLayers: [
       new BackgroundLayer(0, 0, BACKGROUND_PATH + "sky.png", 0),
+      new Sun(rain),
       new CloudLayer(0, 0, BACKGROUND_PATH + "clouds-back-layer2.png", 0.1, 15),
       new CloudLayer(
         0,
@@ -86,5 +90,6 @@ export default function createLevel1() {
     latch,
     shards: createShards(),
     scene: new GateScene(gate, latch, WORLDS[0].gate),
+    rain,
   });
 }

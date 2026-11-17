@@ -43,7 +43,7 @@ export const WORLDS = [
     name: "The Woodpile",
     chapter: "Through the Wood",
     arrival: [
-      "The Woodpile. The hall has always cut its firewood here. The trees have not forgotten.",
+      "The Woodpile. The hall cuts its firewood here. But it has rained since Hob walked in, and wet wood does not burn.",
     ],
     quest: {
       giver: "Latch",
@@ -87,7 +87,7 @@ export const WORLDS = [
       portrait: "con10",
       intro: [
         "Forty winters I held that hall. Fed the fire. Kept the door. Both jobs. Alone. Nobody said thank you.",
-        "Now they send a child for my one shard? No. Go home. Tell them Hob says no.",
+        "Now they send a child for my one shard? No. Go home. Tell them Hob says no. The rain says no too.",
       ],
       heroLine: null,
       defeat: [
