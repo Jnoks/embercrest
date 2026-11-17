@@ -5,7 +5,7 @@ import CloudLayer from "../entities/cloud-layer.js";
 import Tile, { TILE_SIZE } from "../entities/tile.js";
 import Boss from "../entities/boss.js";
 import Gate from "../entities/gate.js";
-import Figure from "../entities/figure.js";
+import Npc from "../entities/npc.js";
 
 const BACKGROUND_PATH = "./assets/images/forest/background/";
 const TILE_PATH = "./assets/images/forest/tiles/";
@@ -35,7 +35,7 @@ function createWall() {
 
 export default function createLevel1() {
   const gate = new Gate(2790, GROUND_Y);
-  const latch = new Figure("latch", 17, 420, GROUND_Y);
+  const latch = new Npc("latch", 17, 420, GROUND_Y);
   latch.facingLeft = true;
   const tiles = createWall();
   tiles.push(gate, latch);

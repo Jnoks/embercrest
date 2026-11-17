@@ -3,6 +3,7 @@ const KEY_MAP = {
   KeyD: "right",
   Space: "attack",
   KeyW: "jump",
+  KeyE: "talk",
   Enter: "confirm",
   Escape: "cancel",
 };
@@ -34,6 +35,7 @@ export default class Keyboard {
     this.right = false;
     this.jump = false;
     this.attack = false;
+    this.talk = false;
     this.confirm = false;
     this.cancel = false;
   }

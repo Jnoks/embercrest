@@ -105,6 +105,10 @@ export default class Character extends MovableObject {
     );
   }
 
+  wantsToTalk() {
+    return this.keyboard.take("talk");
+  }
+
   isVisible() {
     if (this.isGone()) return false;
     return super.isVisible();

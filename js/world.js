@@ -127,7 +127,9 @@ export default class World {
   updateQuest(delta) {
     const latch = this.level.latch;
     latch.update(delta);
-    if (this.character.isColliding(latch)) this.quest.meet();
+    latch.marked = this.quest.state === "new";
+    latch.near = this.character.isColliding(latch);
+    if (latch.near && this.character.wantsToTalk()) this.quest.meet();
   }
 
   updateBossRoom(delta) {
