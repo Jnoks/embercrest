@@ -1,3 +1,5 @@
+export const TITLE_COLOR = "#ffa600";
+export const SHADOW_COLOR = "#191a0c";
 const FONT = "Silkscreen, monospace";
 
 export default class Label {
