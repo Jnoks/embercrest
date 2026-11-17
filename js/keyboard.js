@@ -4,6 +4,7 @@ const KEY_MAP = {
   Space: "attack",
   KeyW: "jump",
   Enter: "confirm",
+  Escape: "cancel",
 };
 
 export default class Keyboard {
@@ -18,13 +19,22 @@ export default class Keyboard {
     const flag = KEY_MAP[e.code];
     if (!flag) return;
     e.preventDefault();
+    if (e.repeat) return;
     this[flag] = pressed;
   }
+
+  take(flag) {
+    const pressed = this[flag];
+    this[flag] = false;
+    return pressed;
+  }
+
   releaseAll() {
     this.left = false;
     this.right = false;
     this.jump = false;
     this.attack = false;
     this.confirm = false;
+    this.cancel = false;
   }
 }
