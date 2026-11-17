@@ -127,6 +127,7 @@ export default class World {
   updateBossRoom(delta) {
     const boss = this.level.boss;
     const roomX = this.level.width - this.canvas.width;
+    this.level.gate.open = boss.isGone();
     if (boss.isDead()) {
       this.leftLimit = Math.max(this.leftLimit - ROOM_OPEN_SPEED * delta, 0);
     } else if (this.cameraX === roomX) {
@@ -175,5 +176,11 @@ export default class World {
 
   isOver() {
     return this.character.isGone();
+  }
+
+  isWon() {
+    const gate = this.level.gate;
+    if (!gate.open || this.character.isDead()) return false;
+    return this.character.isColliding(gate);
   }
 }

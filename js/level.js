@@ -1,10 +1,11 @@
 export default class Level {
-  constructor({ width, groundY, backgroundLayers, tiles, enemies, boss }) {
-    this.width = width;
-    this.groundY = groundY;
-    this.backgroundLayers = backgroundLayers;
-    this.tiles = tiles;
-    this.enemies = enemies;
-    this.boss = boss;
+  constructor(data) {
+    this.width = data.width;
+    this.groundY = data.groundY;
+    this.backgroundLayers = data.backgroundLayers;
+    this.tiles = data.tiles;
+    this.enemies = data.enemies;
+    this.boss = data.boss;
+    this.gate = data.gate;
   }
 }

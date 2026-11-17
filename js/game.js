@@ -9,15 +9,24 @@ export default class Game {
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
     this.keyboard = new Keyboard();
+    this.lastTime = 0;
+    this.createOverlays();
+    this.start();
+    canvas.addEventListener("click", () => this.confirm());
+    requestAnimationFrame((time) => this.loop(time));
+  }
+
+  createOverlays() {
     this.gameOver = new Overlay(
       UI_TEXT.gameOver,
       UI_TEXT.heroDown,
       UI_TEXT.tryAgain,
     );
-    this.lastTime = 0;
-    this.start();
-    canvas.addEventListener("click", () => this.confirm());
-    requestAnimationFrame((time) => this.loop(time));
+    this.victory = new Overlay(
+      UI_TEXT.worldCleared,
+      UI_TEXT.thanks,
+      UI_TEXT.playAgain,
+    );
   }
 
   start() {
@@ -28,13 +37,20 @@ export default class Game {
     const delta = Math.min((time - this.lastTime) / 1000, 0.1);
     this.lastTime = time;
     if (this.keyboard.confirm) this.confirm();
-    if (!this.world.isOver()) this.world.update(delta);
+    const overlay = this.overlay();
+    if (!overlay) this.world.update(delta);
     this.world.draw();
-    if (this.world.isOver()) this.gameOver.draw(this.ctx);
+    if (overlay) overlay.draw(this.ctx);
     requestAnimationFrame((t) => this.loop(t));
   }
 
+  overlay() {
+    if (this.world.isOver()) return this.gameOver;
+    if (this.world.isWon()) return this.victory;
+    return null;
+  }
+
   confirm() {
-    if (this.world.isOver()) this.start();
+    if (this.overlay()) this.start();
   }
 }
