@@ -24,16 +24,16 @@ export const HEROES = [
 export const INTRO_PAGES = [
   "Come closer to the fire. This is how we almost lost it.",
   "Embercrest is a hall on a hill. Its fire is the Ember. The red banner over its door is the Crest.",
-  "A mage feeds the fire. A knight guards the door. While the Ember burns on its hill, the land keeps its colors.",
+  "A mage feeds the fire. A knight guards the door. While the Ember burns on its hill, the land stays warm.",
   "Three winters ago the old mage took the fire down the road. The old knight took the banner and followed.",
   "They left one small coal. Back by spring, they said. They did not say which spring.",
-  "Now the land is fading, like a shirt washed too often.",
+  "Now the land grows colder, like soup left on the table.",
   "Two apprentices are left. One stays with the coal. One takes the road. Tonight, that one is you.",
 ];
 
 export const INTRO_PAGES_SHORT = [
   "Embercrest is a hall on a hill. Its fire is the Ember. The red banner over its door is the Crest.",
-  "Three winters ago the old mage took the fire down the road. The old knight took the banner and followed. The land has gone pale.",
+  "Three winters ago the old mage took the fire down the road. The old knight took the banner and followed. The land has gone cold.",
   "Two apprentices are left. One stays with the last coal. You take the road.",
 ];
 
@@ -96,7 +96,7 @@ export const WORLDS = [
     },
     cleared: [
       "One night, long before your time, Hob took a torch and a sword and walked into the wood.",
-      "That is why the hall has two now: one for the fire, one for the door. Behind you, green runs back into the leaves.",
+      "That is why the hall has two now: one for the fire, one for the door. Nobody should do both alone.",
     ],
     ending: [
       "The road beyond the thorn gate is long. Too long for one day. You leave the gate open and walk home, up the hill.",
@@ -159,7 +159,7 @@ export const WORLDS = [
       ],
     },
     cleared: [
-      "The sun has been setting here for three winters. It is still not done. But now it is setting in color.",
+      "The sun has been setting here for three winters. It is still not done. But the evening feels warmer now.",
     ],
     ending: [],
   },
@@ -260,7 +260,7 @@ export const WORLDS = [
       complete: [
         "Five. I'm in his jar. He's not using it right now. A ruby key, a small pillow, one pickle. I took the key.",
         "'Let nobody follow me.' That was your old mage. The knight only got 'wait here.' Three winters for two words.",
-        "My buyer asked how you look. I said: tired. Dirty. Not pale at all. That seemed to help. I got an extra spoon.",
+        "My buyer asked how you look. I said: tired. Dirty. Still walking. That seemed to help. I got an extra spoon.",
       ],
       rewardItem: "Ruby Key",
       rewardText: "You got the Ruby Key.",
@@ -346,7 +346,7 @@ export const WORLDS = [
           "And in his old scarf! He always said it itched. Home. Now. You and the scarf.",
       },
       defeat: [
-        "You still have your colors. So the coal still burns. So someone stayed with it.",
+        "You are still warm. So the coal still burns. So someone stayed with it.",
         "We never did that. We both left. ...I would like to go home now.",
       ],
     },
@@ -358,7 +358,7 @@ export const WORLDS = [
       "Your friend stands there with the pot in both hands. Every shard you found went up this hill in a thief's pocket. The coal never went out. Not once.",
       "Marigold comes up after you with the Ember in her hat: one piece, no bigger than an apple. It is enough.",
       "The Crest hangs over the door again. Sir Rufus put it up himself. It is a little crooked. Nobody says 'I was right.'",
-      "The fire takes a deep breath. Outside, the colors run back over the land, all the way to the mountains.",
+      "The fire takes a deep breath. Outside, the warmth runs back over the land, all the way to the mountains.",
       "Hob comes last. He stands in the door for a long time. Then he asks if there is soup. There is. There are no spoons.",
       "That is how we almost lost it. Now, somebody put a log on.",
     ],
@@ -386,7 +386,7 @@ export const UI_TEXT = {
   questDone: "Quest complete",
   questLabel: "Quest",
   chapterLabel: "Chapter",
-  worldCleared: "The colors are back",
+  worldCleared: "The road is open",
   paused: "Paused",
   resume: "Continue",
   restart: "Restart",
