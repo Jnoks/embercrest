@@ -1,5 +1,6 @@
 import HudImage from "./hud-image.js";
 import Label from "./label.js";
+import Key from "./key.js";
 import { UI_TEXT } from "../data/story.js";
 
 const UI_PATH = "./assets/images/ui/";
@@ -15,7 +16,6 @@ const LIGHT_COLOR = "#ffc300";
 const DIM_COLOR = "rgba(0, 0, 0, 0.6)";
 const SPEED = 30;
 const READ_TIME = 0.5;
-const HINT = `Space ${UI_TEXT.nextPage}   Esc ${UI_TEXT.closePage}`;
 const WINDOW = [
   new HudImage(201, 90, 559, 376, UI_PATH + "window-background.png"),
   new HudImage(187, 75, 587, 405, UI_PATH + "window-border.png"),
@@ -23,11 +23,16 @@ const WINDOW = [
   new HudImage(232, 120, 495, 310, UI_PATH + "parchment.png"),
   new HudImage(688, 395, 66, 66, UI_PATH + "play-button.png"),
 ];
+const HINTS = [
+  new Key(343, 494, "Space", 72, 24),
+  new Label(UI_TEXT.nextPage, 449, 506, 16, "white", "black"),
+  new Key(499, 494, "Esc", 48, 24),
+  new Label(UI_TEXT.closePage, 586, 506, 16, "white", "black"),
+];
 
 export default class TextBox {
   constructor(title, pages, portrait) {
     this.title = new Label(title, CENTER_X, 80, 16, TITLE_COLOR, LIGHT_COLOR);
-    this.hint = new Label(HINT, CENTER_X, 506, 16, "white", "black");
     this.portrait = this.createPortrait(portrait);
     this.pages = pages;
     this.page = 0;
@@ -76,16 +81,16 @@ export default class TextBox {
   draw(ctx) {
     ctx.fillStyle = DIM_COLOR;
     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    this.drawImages(ctx, WINDOW);
-    this.drawImages(ctx, this.portrait);
+    this.drawParts(ctx, WINDOW);
+    this.drawParts(ctx, this.portrait);
+    this.drawParts(ctx, HINTS);
     this.title.draw(ctx);
-    this.hint.draw(ctx);
     this.drawText(ctx);
   }
 
-  drawImages(ctx, images) {
-    for (let i = 0; i < images.length; i++) {
-      images[i].draw(ctx);
+  drawParts(ctx, parts) {
+    for (let i = 0; i < parts.length; i++) {
+      parts[i].draw(ctx);
     }
   }
 
