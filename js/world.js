@@ -126,16 +126,27 @@ export default class World {
   updateEffects(delta) {
     const effect = this.level.boss.takeEffect();
     if (effect) this.effects.push(effect);
+    const star = this.level.gate.takeEffect();
+    if (star) this.effects.push(star);
     this.effects = this.updateProjectiles(this.effects, delta);
   }
 
   updateQuest(delta) {
     const latch = this.level.latch;
+    const scene = this.level.scene;
+    this.collectShards(delta);
+    this.updateScene();
     latch.update(delta);
     latch.marked = this.quest.state === "new";
-    latch.near = this.character.isColliding(latch);
+    latch.near = !scene.isRunning() && this.character.isColliding(latch);
     if (latch.near && this.character.wantsToTalk()) this.quest.meet();
-    this.collectShards(delta);
+  }
+
+  updateScene() {
+    const scene = this.level.scene;
+    const ready = this.quest.isComplete() && this.isInBossRoom();
+    if (ready && !scene.isRunning()) scene.start(this.character, this.quest);
+    scene.update();
   }
 
   collectShards(delta) {
@@ -153,16 +164,28 @@ export default class World {
 
   updateBossRoom(delta) {
     const boss = this.level.boss;
-    const roomX = this.level.width - this.canvas.width;
-    this.level.gate.open = boss.isGone();
+    this.level.gate.update(delta);
+    this.checkGate();
     if (boss.isGone()) this.quest.beatBoss();
     if (boss.isDead()) {
       this.leftLimit = Math.max(this.leftLimit - ROOM_OPEN_SPEED * delta, 0);
-    } else if (this.cameraX === roomX) {
-      this.leftLimit = roomX;
+    } else if (this.isInBossRoom()) {
+      this.leftLimit = this.cameraX;
       boss.sightRange = this.canvas.width;
       this.quest.faceBoss();
     }
+  }
+
+  isInBossRoom() {
+    return this.cameraX === this.level.width - this.canvas.width;
+  }
+
+  checkGate() {
+    const gate = this.level.gate;
+    const scene = this.level.scene;
+    if (gate.unlocked || scene.isRunning()) return;
+    if (!this.level.boss.isGone()) return;
+    if (this.character.isColliding(gate)) this.quest.showOnce(scene.locked);
   }
 
   keepInside() {
@@ -198,7 +221,7 @@ export default class World {
   }
 
   checkCollisions() {
-    if (this.character.isDead()) return;
+    if (this.character.isDead() || this.level.scene.isRunning()) return;
     for (let i = 0; i < this.level.enemies.length; i++) {
       const enemy = this.level.enemies[i];
       if (this.character.overlaps(enemy.attackBox())) {

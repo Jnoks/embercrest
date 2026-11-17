@@ -7,6 +7,8 @@ import Boss from "../entities/boss.js";
 import Gate from "../entities/gate.js";
 import Npc from "../entities/npc.js";
 import EmberShard from "../entities/ember-shard.js";
+import GateScene from "../gate-scene.js";
+import { WORLDS } from "./story.js";
 
 const BACKGROUND_PATH = "./assets/images/forest/background/";
 const TILE_PATH = "./assets/images/forest/tiles/";
@@ -83,5 +85,6 @@ export default function createLevel1() {
     gate,
     latch,
     shards: createShards(),
+    scene: new GateScene(gate, latch, WORLDS[0].gate),
   });
 }

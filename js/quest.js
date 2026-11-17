@@ -8,6 +8,8 @@ export default class Quest {
     const bossPortrait = PORTRAIT_PATH + boss.portrait + ".png";
     this.offer = new TextBox(data.giver, data.offer, portrait);
     this.reminder = new TextBox(data.giver, data.reminder, portrait);
+    this.complete = new TextBox(data.giver, data.complete, portrait);
+    this.farewell = new TextBox(data.giver, data.farewell, portrait);
     this.bossIntro = new TextBox(boss.name, boss.intro, bossPortrait);
     this.bossDefeat = new TextBox(boss.name, boss.defeat, bossPortrait);
     this.amount = data.amount;
@@ -41,8 +43,19 @@ export default class Quest {
     this.shards += 1;
   }
 
+  isComplete() {
+    return this.shards === this.amount;
+  }
+
+  deliver() {
+    this.shards = 0;
+    this.state = "done";
+    this.showOnce(this.complete);
+  }
+
   restart() {
     this.shards = 0;
+    if (this.state === "done") this.state = "running";
   }
 
   takeText() {

@@ -11,9 +11,11 @@ export default class Figure extends MovableObject {
     this.anchorY = 111;
     this.hitboxWidth = 80;
     this.hitboxHeight = 60;
-    const path = IMAGE_PATH + name + "/";
+    this.path = IMAGE_PATH + name + "/";
     const options = { loopPause: 2 };
-    this.setAnimation(new SpriteAnimation(path, "idle", frames, 0.2, options));
+    const idle = new SpriteAnimation(this.path, "idle", frames, 0.2, options);
+    this.animations.idle = idle;
+    this.setAnimation(idle);
   }
 
   update(delta) {

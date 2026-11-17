@@ -62,8 +62,11 @@ export const WORLDS = [
         "Found them all? No? Thought so. Meet me at the thorn gate with all five. You bring the shards, I open the lock.",
       ],
       complete: [
-        "Five. Don't look around. You won't see me. That is the point of me. My buyer pays in spoons. Don't ask.",
+        "Five. I counted from the bushes. Hand them over. My buyer pays in spoons. Don't ask.",
         "While you two were busy, I checked his belt. One copper key. I call that teamwork.",
+        "You brought the shards. Now I open the lock. Stand back and watch a master.",
+      ],
+      farewell: [
         "He turned hard out here, you know. Like the shards. Too long, too far from home. Go on. The gate is yours.",
       ],
       rewardItem: "Copper Key",
@@ -73,10 +76,10 @@ export const WORLDS = [
       name: "Thorn Gate",
       requires: "Copper Key",
       locked: [
-        "It is black inside the thorn gate. A few steps in, your hand finds a cold lock. You need a key.",
+        "A golden lock hangs in the thorns. It is cold and it will not move. You need someone who opens locks.",
       ],
       opened: [
-        "The copper key turns in the dark. Click. Behind the thorns, a road climbs toward the mountains.",
+        "The copper key turns. Click. The lock drops into the grass. Behind the thorns, a road climbs toward the mountains.",
       ],
     },
     boss: {
