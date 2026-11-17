@@ -1,6 +1,10 @@
 import Character from "./entities/character.js";
 import Hud from "./ui/hud.js";
 
+const SHAKE = 4;
+const PUSH_RANGE = 320;
+const PUSH_SPEED = 260;
+
 export default class World {
   constructor(canvas, keyboard, level) {
     this.ctx = canvas.getContext("2d");
@@ -13,6 +17,7 @@ export default class World {
     this.hud = new Hud();
     this.bolts = [];
     this.spells = [];
+    this.effects = [];
 
     requestAnimationFrame((time) => this.loop(time));
   }
@@ -21,12 +26,13 @@ export default class World {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.drawObjects(this.level.backgroundLayers);
     this.ctx.save();
-    this.ctx.translate(-Math.round(this.cameraX), 0);
+    this.ctx.translate(-Math.round(this.cameraX) + this.shake(), this.shake());
     this.drawObjects(this.level.tiles);
     this.character.draw(this.ctx);
     this.drawObjects(this.level.enemies);
     this.drawObjects(this.bolts);
     this.drawObjects(this.spells);
+    this.drawObjects(this.effects);
     this.ctx.restore();
     this.hud.draw(this.ctx);
   }
@@ -40,6 +46,7 @@ export default class World {
   update(delta) {
     this.updateObjects(this.level.backgroundLayers, delta);
     this.character.update(delta);
+    this.pushCharacter(delta);
     if (this.character.y >= this.level.groundY) {
       this.character.land(this.level.groundY);
     }
@@ -52,6 +59,7 @@ export default class World {
     this.checkCollisions();
     this.updateBolts(delta);
     this.updateSpells(delta);
+    this.updateEffects(delta);
     this.hud.update(this.character, this.level.boss);
     this.cameraX = Math.min(
       Math.max(this.character.x - 100, 0),
@@ -108,6 +116,25 @@ export default class World {
 
   hitGround(spell) {
     if (spell.y >= this.level.groundY) spell.explode();
+  }
+
+  updateEffects(delta) {
+    const effect = this.level.boss.takeEffect();
+    if (effect) this.effects.push(effect);
+    this.effects = this.updateProjectiles(this.effects, delta);
+  }
+
+  pushCharacter(delta) {
+    const boss = this.level.boss;
+    if (!boss.isRaging() || this.character.isDead()) return;
+    const distance = this.character.centerX() - boss.centerX();
+    if (Math.abs(distance) > PUSH_RANGE) return;
+    this.character.x += Math.sign(distance) * PUSH_SPEED * delta;
+  }
+
+  shake() {
+    if (!this.level.boss.isRaging()) return 0;
+    return Math.round((Math.random() * 2 - 1) * SHAKE);
   }
 
   updateObjects(objects, delta) {
