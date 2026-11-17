@@ -108,7 +108,7 @@ export default class World {
   }
 
   hitCharacter(spell) {
-    if (spell.isExploding()) return;
+    if (!spell.isHitting()) return;
     if (!spell.isColliding(this.character)) return;
     this.character.takeDamage(spell.damage);
     spell.explode();

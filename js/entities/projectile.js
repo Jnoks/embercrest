@@ -37,4 +37,8 @@ export default class Projectile extends MovableObject {
   isExploding() {
     return this.currentAnimation === this.animations.hit;
   }
+
+  isHitting() {
+    return !this.isExploding();
+  }
 }

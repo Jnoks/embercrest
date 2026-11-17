@@ -2,6 +2,7 @@ import Enemy from "./enemy.js";
 import SpriteAnimation from "../sprite-animation.js";
 import IceShard from "./ice-shard.js";
 import Effect from "./effect.js";
+import Lightning from "./lightning.js";
 
 const BOSS_PATH = "./assets/images/boss/";
 const LIGHTNING_PATH = "./assets/images/lightning/";
@@ -14,6 +15,7 @@ const AIM_HEIGHT = 20;
 const PHASES = 3;
 const ATTACK_COOLDOWNS = [2, 1.6, 1.2];
 const SPELL_COOLDOWNS = [3, 2.2, 1.5];
+const SPELLS = ["ice", "lightning"];
 const RAGE_SIZE = 512;
 const RAGE_HEIGHTS = [0, 196, 50];
 const RAGE_EFFECTS = [
@@ -45,6 +47,8 @@ export default class Boss extends Enemy {
     this.spellTimer = 0;
     this.spellLoaded = false;
     this.pendingSpell = null;
+    this.spellName = SPELLS[0];
+    this.spellCount = 0;
     this.spellCooldown = SPELL_COOLDOWNS[0];
     this.phase = 1;
     this.rageTimer = 0;
@@ -60,6 +64,9 @@ export default class Boss extends Enemy {
         loop: false,
       }),
       ice: new SpriteAnimation(BOSS_PATH, "ice", 5, 0.1, { loop: false }),
+      lightning: new SpriteAnimation(BOSS_PATH, "lightning", 5, 0.1, {
+        loop: false,
+      }),
       anger: new SpriteAnimation(BOSS_PATH, "anger", 5, 0.2, { loop: false }),
     };
     this.setAnimation(this.animations.idle);
@@ -79,7 +86,7 @@ export default class Boss extends Enemy {
 
   cast(delta) {
     this.updateTimers(delta);
-    this.setAnimation(this.animations.ice);
+    this.setAnimation(this.animations[this.spellName]);
     this.animate(delta);
     this.releaseSpell();
   }
@@ -137,9 +144,16 @@ export default class Boss extends Enemy {
 
   startCast() {
     this.facingLeft = this.targetX < this.centerX();
-    this.castTimer = this.animations.ice.cycleDuration();
+    this.chooseSpell();
+    this.castTimer = this.animations[this.spellName].cycleDuration();
     this.spellTimer = this.spellCooldown;
     this.spellLoaded = true;
+  }
+
+  chooseSpell() {
+    const known = Math.min(this.phase, SPELLS.length);
+    this.spellName = SPELLS[this.spellCount % known];
+    this.spellCount += 1;
   }
 
   canCast() {
@@ -156,15 +170,22 @@ export default class Boss extends Enemy {
 
   isReleasing() {
     return (
-      this.currentAnimation === this.animations.ice &&
+      this.currentAnimation === this.animations[this.spellName] &&
       this.frameIndex === RELEASE_FRAME
     );
   }
 
   releaseSpell() {
     if (!this.spellLoaded || !this.isReleasing()) return;
-    this.pendingSpell = this.createShard();
+    this.pendingSpell = this.createSpell();
     this.spellLoaded = false;
+  }
+
+  createSpell() {
+    if (this.spellName === "lightning") {
+      return new Lightning(this.targetX, this.y);
+    }
+    return this.createShard();
   }
 
   createShard() {
