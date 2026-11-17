@@ -20,6 +20,7 @@ export default class Boss extends Enemy {
     this.sightRange = 500;
     this.stopDistance = 90;
     this.attackCooldown = 2;
+    this.hurtDuration = 0.2;
     this.animations = {
       idle: new SpriteAnimation(BOSS_PATH, "idle", 3, 0.3, { loopPause: 1 }),
       walk: new SpriteAnimation(BOSS_PATH, "walk", 6, 0.15),
@@ -32,5 +33,10 @@ export default class Boss extends Enemy {
       }),
     };
     this.setAnimation(this.animations.idle);
+  }
+
+  takeDamage(amount) {
+    super.takeDamage(amount);
+    if (this.isAttacking()) this.hurtTimer = 0;
   }
 }

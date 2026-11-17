@@ -22,6 +22,7 @@ export default class MovableObject extends DrawableObject {
     this.attackTimer = 0;
     this.cooldownTimer = 0;
     this.invincibleDuration = INVINCIBLE_DURATION;
+    this.hurtDuration = HURT_DURATION;
   }
 
   moveRight(delta) {
@@ -80,7 +81,7 @@ export default class MovableObject extends DrawableObject {
   takeDamage(amount) {
     if (this.isInvincible() || this.isDead()) return;
     this.health = Math.max(this.health - amount, 0);
-    this.hurtTimer = HURT_DURATION;
+    this.hurtTimer = this.hurtDuration;
     this.invincibleTimer = this.invincibleDuration;
   }
 
