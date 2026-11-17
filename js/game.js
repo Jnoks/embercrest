@@ -16,10 +16,8 @@ export default class Game {
     this.keyboard = new Keyboard();
     this.lastTime = 0;
     this.started = false;
-    this.quest = new Quest(WORLD.quest, WORLD.boss);
-    this.texts = this.createTexts();
     this.createOverlays();
-    this.start();
+    this.newGame();
     canvas.addEventListener("click", () => this.confirm());
     requestAnimationFrame((time) => this.loop(time));
   }
@@ -32,16 +30,29 @@ export default class Game {
       UI_TEXT.tryAgain,
     );
     this.victory = new Overlay(
-      UI_TEXT.worldCleared,
+      UI_TEXT.endTitle,
       UI_TEXT.thanks,
       UI_TEXT.playAgain,
     );
+  }
+
+  newGame() {
+    this.quest = new Quest(WORLD.quest, WORLD.boss);
+    this.texts = this.createTexts();
+    this.finale = this.createFinale();
+    this.start();
   }
 
   createTexts() {
     const intro = new TextBox(TITLE, INTRO_PAGES);
     const arrival = new TextBox(WORLD.name, WORLD.arrival);
     return [intro, arrival];
+  }
+
+  createFinale() {
+    const cleared = new TextBox(UI_TEXT.worldCleared, WORLD.cleared);
+    const ending = new TextBox(TITLE, WORLD.ending);
+    return [cleared, ending];
   }
 
   start() {
@@ -56,12 +67,18 @@ export default class Game {
     this.handleKeys();
     const text = this.quest.takeText();
     if (text) this.texts.push(text);
+    this.checkEnding();
     const overlay = this.overlay();
     if (overlay) overlay.update(delta);
     else this.world.update(delta);
     this.world.draw();
     if (overlay) overlay.draw(this.ctx);
     requestAnimationFrame((t) => this.loop(t));
+  }
+
+  checkEnding() {
+    if (!this.world.isWon()) return;
+    while (this.finale.length > 0) this.texts.push(this.finale.shift());
   }
 
   handleKeys() {
@@ -86,6 +103,7 @@ export default class Game {
     const overlay = this.overlay();
     if (overlay === this.startScreen) this.started = true;
     else if (overlay === this.texts[0]) this.turnPage();
+    else if (overlay === this.victory) this.newGame();
     else if (overlay) this.start();
   }
 
