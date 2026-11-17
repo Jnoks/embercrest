@@ -14,7 +14,8 @@ const TITLE_COLOR = "#282c0c";
 const LIGHT_COLOR = "#ffc300";
 const DIM_COLOR = "rgba(0, 0, 0, 0.6)";
 const SPEED = 30;
-const HINT = `Enter ${UI_TEXT.nextPage}   Esc ${UI_TEXT.closePage}`;
+const READ_TIME = 0.5;
+const HINT = `Space ${UI_TEXT.nextPage}   Esc ${UI_TEXT.closePage}`;
 const WINDOW = [
   new HudImage(201, 90, 559, 376, UI_PATH + "window-background.png"),
   new HudImage(187, 75, 587, 405, UI_PATH + "window-border.png"),
@@ -31,6 +32,7 @@ export default class TextBox {
     this.pages = pages;
     this.page = 0;
     this.shown = 0;
+    this.time = 0;
     this.seen = false;
   }
 
@@ -46,11 +48,13 @@ export default class TextBox {
   update(delta) {
     const length = this.pages[this.page].length;
     this.shown = Math.min(this.shown + SPEED * delta, length);
+    this.time += delta;
   }
 
   restart() {
     this.page = 0;
     this.shown = 0;
+    this.time = 0;
   }
 
   isDone() {
@@ -58,6 +62,7 @@ export default class TextBox {
   }
 
   next() {
+    if (this.time < READ_TIME) return;
     const length = this.pages[this.page].length;
     if (this.shown < length) {
       this.shown = length;
@@ -65,6 +70,7 @@ export default class TextBox {
     }
     this.page += 1;
     this.shown = 0;
+    this.time = 0;
   }
 
   draw(ctx) {

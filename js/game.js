@@ -53,8 +53,7 @@ export default class Game {
   loop(time) {
     const delta = Math.min((time - this.lastTime) / 1000, 0.1);
     this.lastTime = time;
-    if (this.keyboard.take("confirm")) this.confirm();
-    if (this.keyboard.take("cancel")) this.cancel();
+    this.handleKeys();
     const text = this.quest.takeText();
     if (text) this.texts.push(text);
     const overlay = this.overlay();
@@ -63,6 +62,16 @@ export default class Game {
     this.world.draw();
     if (overlay) overlay.draw(this.ctx);
     requestAnimationFrame((t) => this.loop(t));
+  }
+
+  handleKeys() {
+    if (this.keyboard.take("confirm")) this.confirm();
+    if (this.keyboard.take("cancel")) this.cancel();
+    if (this.isReading() && this.keyboard.take("attack")) this.turnPage();
+  }
+
+  isReading() {
+    return this.overlay() === this.texts[0];
   }
 
   overlay() {
