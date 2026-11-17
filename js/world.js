@@ -4,6 +4,7 @@ import Hud from "./ui/hud.js";
 const SHAKE = 4;
 const PUSH_RANGE = 320;
 const PUSH_SPEED = 260;
+const ROOM_OPEN_SPEED = 300;
 
 export default class World {
   constructor(canvas, keyboard, level) {
@@ -11,6 +12,7 @@ export default class World {
     this.ctx.imageSmoothingEnabled = false;
     this.canvas = canvas;
     this.cameraX = 0;
+    this.leftLimit = 0;
     this.lastTime = 0;
     this.level = level;
     this.character = new Character(100, this.level.groundY, keyboard);
@@ -50,8 +52,9 @@ export default class World {
     if (this.character.y >= this.level.groundY) {
       this.character.land(this.level.groundY);
     }
+    this.updateBossRoom(delta);
     this.character.x = Math.min(
-      Math.max(this.character.x, 0),
+      Math.max(this.character.x, this.leftLimit),
       this.level.width - this.character.width,
     );
     this.updateTargets();
@@ -62,7 +65,7 @@ export default class World {
     this.updateEffects(delta);
     this.hud.update(this.character, this.level.boss);
     this.cameraX = Math.min(
-      Math.max(this.character.x - 100, 0),
+      Math.max(this.character.x - 100, this.leftLimit),
       this.level.width - this.canvas.width,
     );
     for (let i = 0; i < this.level.backgroundLayers.length; i++) {
@@ -122,6 +125,17 @@ export default class World {
     const effect = this.level.boss.takeEffect();
     if (effect) this.effects.push(effect);
     this.effects = this.updateProjectiles(this.effects, delta);
+  }
+
+  updateBossRoom(delta) {
+    const boss = this.level.boss;
+    const roomX = this.level.width - this.canvas.width;
+    if (boss.isDead()) {
+      this.leftLimit = Math.max(this.leftLimit - ROOM_OPEN_SPEED * delta, 0);
+    } else if (this.cameraX === roomX) {
+      this.leftLimit = roomX;
+      boss.sightRange = this.canvas.width;
+    }
   }
 
   pushCharacter(delta) {
