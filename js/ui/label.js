@@ -10,11 +10,12 @@ export default class Label {
     this.size = size;
     this.color = color;
     this.shadowColor = shadowColor;
+    this.weight = "bold";
   }
 
   draw(ctx) {
     const pixel = this.size / 8;
-    ctx.font = `bold ${this.size}px ${FONT}`;
+    ctx.font = `${this.weight} ${this.size}px ${FONT}`;
     ctx.textBaseline = "middle";
     ctx.textAlign = "left";
     const width = ctx.measureText(this.text).width;
