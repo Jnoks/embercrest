@@ -8,7 +8,6 @@ export default class Projectile extends MovableObject {
     this.range = 0;
     this.distance = 0;
     this.done = false;
-    this.animations = {};
   }
 
   update(delta) {

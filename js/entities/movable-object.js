@@ -23,6 +23,7 @@ export default class MovableObject extends DrawableObject {
     this.cooldownTimer = 0;
     this.invincibleDuration = INVINCIBLE_DURATION;
     this.hurtDuration = HURT_DURATION;
+    this.animations = {};
   }
 
   moveRight(delta) {
@@ -95,6 +96,13 @@ export default class MovableObject extends DrawableObject {
 
   isDead() {
     return this.health === 0;
+  }
+
+  isGone() {
+    return (
+      this.currentAnimation === this.animations.death &&
+      this.isAnimationFinished()
+    );
   }
 
   isAttacking() {

@@ -105,13 +105,6 @@ export default class Character extends MovableObject {
     );
   }
 
-  isGone() {
-    return (
-      this.currentAnimation === this.animations.death &&
-      this.isAnimationFinished()
-    );
-  }
-
   isVisible() {
     if (this.isGone()) return false;
     return super.isVisible();

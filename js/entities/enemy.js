@@ -11,7 +11,6 @@ export default class Enemy extends MovableObject {
     this.sightRange = 0;
     this.stopDistance = 0;
     this.attackCooldown = 0;
-    this.animations = {};
   }
 
   update(delta) {
