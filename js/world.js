@@ -8,13 +8,14 @@ const ROOM_OPEN_SPEED = 300;
 const EDGE_MARGIN = 26;
 
 export default class World {
-  constructor(canvas, keyboard, level) {
+  constructor(canvas, keyboard, level, quest) {
     this.ctx = canvas.getContext("2d");
     this.ctx.imageSmoothingEnabled = false;
     this.canvas = canvas;
     this.cameraX = 0;
     this.leftLimit = 0;
     this.level = level;
+    this.quest = quest;
     this.character = new Character(100, this.level.groundY, keyboard);
     this.hud = new Hud();
     this.bolts = [];
@@ -58,6 +59,7 @@ export default class World {
     this.updateBolts(delta);
     this.updateSpells(delta);
     this.updateEffects(delta);
+    this.updateQuest(delta);
     this.hud.update(this.character, this.level.boss);
     this.cameraX = Math.min(
       Math.max(this.character.x - 100, this.leftLimit),
@@ -120,6 +122,12 @@ export default class World {
     const effect = this.level.boss.takeEffect();
     if (effect) this.effects.push(effect);
     this.effects = this.updateProjectiles(this.effects, delta);
+  }
+
+  updateQuest(delta) {
+    const latch = this.level.latch;
+    latch.update(delta);
+    if (this.character.isColliding(latch)) this.quest.meet();
   }
 
   updateBossRoom(delta) {

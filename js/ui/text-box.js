@@ -1,7 +1,9 @@
 import HudImage from "./hud-image.js";
 import Label from "./label.js";
+import { UI_TEXT } from "../data/story.js";
 
 const UI_PATH = "./assets/images/ui/";
+const HUD_PATH = "./assets/images/hud/";
 const CENTER_X = 480;
 const CENTER_Y = 262;
 const TEXT_WIDTH = 420;
@@ -12,21 +14,32 @@ const TITLE_COLOR = "#282c0c";
 const LIGHT_COLOR = "#ffc300";
 const DIM_COLOR = "rgba(0, 0, 0, 0.6)";
 const SPEED = 30;
+const HINT = `Enter ${UI_TEXT.nextPage}   Esc ${UI_TEXT.closePage}`;
+const WINDOW = [
+  new HudImage(201, 90, 559, 376, UI_PATH + "window-background.png"),
+  new HudImage(187, 75, 587, 405, UI_PATH + "window-border.png"),
+  new HudImage(295, 50, 370, 63, UI_PATH + "window-ribbon.png"),
+  new HudImage(232, 120, 495, 310, UI_PATH + "parchment.png"),
+  new HudImage(688, 395, 66, 66, UI_PATH + "play-button.png"),
+];
 
 export default class TextBox {
-  constructor(title, pages, hint) {
-    this.images = [
-      new HudImage(201, 90, 559, 376, UI_PATH + "window-background.png"),
-      new HudImage(187, 75, 587, 405, UI_PATH + "window-border.png"),
-      new HudImage(295, 50, 370, 63, UI_PATH + "window-ribbon.png"),
-      new HudImage(232, 120, 495, 310, UI_PATH + "parchment.png"),
-      new HudImage(688, 395, 66, 66, UI_PATH + "play-button.png"),
-    ];
+  constructor(title, pages, portrait) {
     this.title = new Label(title, CENTER_X, 80, 16, TITLE_COLOR, LIGHT_COLOR);
-    this.hint = new Label(hint, CENTER_X, 506, 16, "white", "black");
+    this.hint = new Label(HINT, CENTER_X, 506, 16, "white", "black");
+    this.portrait = this.createPortrait(portrait);
     this.pages = pages;
     this.page = 0;
     this.shown = 0;
+  }
+
+  createPortrait(path) {
+    if (!path) return [];
+    return [
+      new HudImage(199, 87, 70, 66, HUD_PATH + "portrait-background.png"),
+      new HudImage(202, 88, 64, 64, path),
+      new HudImage(198, 85, 72, 71, HUD_PATH + "portrait-frame.png"),
+    ];
   }
 
   update(delta) {
@@ -48,19 +61,20 @@ export default class TextBox {
     this.shown = 0;
   }
 
-  skip() {
-    this.page = this.pages.length;
-  }
-
   draw(ctx) {
     ctx.fillStyle = DIM_COLOR;
     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    for (let i = 0; i < this.images.length; i++) {
-      this.images[i].draw(ctx);
-    }
+    this.drawImages(ctx, WINDOW);
+    this.drawImages(ctx, this.portrait);
     this.title.draw(ctx);
     this.hint.draw(ctx);
     this.drawText(ctx);
+  }
+
+  drawImages(ctx, images) {
+    for (let i = 0; i < images.length; i++) {
+      images[i].draw(ctx);
+    }
   }
 
   drawText(ctx) {

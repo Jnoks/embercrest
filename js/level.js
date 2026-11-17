@@ -7,5 +7,6 @@ export default class Level {
     this.enemies = data.enemies;
     this.boss = data.boss;
     this.gate = data.gate;
+    this.latch = data.latch;
   }
 }

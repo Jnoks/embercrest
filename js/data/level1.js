@@ -5,6 +5,7 @@ import CloudLayer from "../entities/cloud-layer.js";
 import Tile, { TILE_SIZE } from "../entities/tile.js";
 import Boss from "../entities/boss.js";
 import Gate from "../entities/gate.js";
+import Figure from "../entities/figure.js";
 
 const BACKGROUND_PATH = "./assets/images/forest/background/";
 const TILE_PATH = "./assets/images/forest/tiles/";
@@ -34,8 +35,10 @@ function createWall() {
 
 export default function createLevel1() {
   const gate = new Gate(2790, GROUND_Y);
+  const latch = new Figure("latch", 17, 420, GROUND_Y);
+  latch.facingLeft = true;
   const tiles = createWall();
-  tiles.push(gate);
+  tiles.push(gate, latch);
   for (let i = 0; i < LEVEL_WIDTH / TILE_SIZE; i++) {
     const y = LEVEL_HEIGHT - TILE_SIZE;
     tiles.push(new Tile(i * TILE_SIZE, y, TILE_PATH + "grass-top-middle.png"));
@@ -67,5 +70,6 @@ export default function createLevel1() {
     ],
     boss,
     gate,
+    latch,
   });
 }

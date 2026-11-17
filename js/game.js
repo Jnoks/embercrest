@@ -3,10 +3,11 @@ import Keyboard from "./keyboard.js";
 import Overlay from "./ui/overlay.js";
 import StartScreen from "./ui/start-screen.js";
 import TextBox from "./ui/text-box.js";
+import Quest from "./quest.js";
 import createLevel1 from "./data/level1.js";
-import { TITLE, INTRO_PAGES, UI_TEXT } from "./data/story.js";
+import { TITLE, INTRO_PAGES, WORLDS, UI_TEXT } from "./data/story.js";
 
-const INTRO_HINT = `Enter ${UI_TEXT.nextPage}   Esc ${UI_TEXT.skipIntro}`;
+const WORLD = WORLDS[0];
 
 export default class Game {
   constructor(canvas) {
@@ -15,6 +16,8 @@ export default class Game {
     this.keyboard = new Keyboard();
     this.lastTime = 0;
     this.started = false;
+    this.quest = new Quest(WORLD.quest);
+    this.texts = this.createTexts();
     this.createOverlays();
     this.start();
     canvas.addEventListener("click", () => this.confirm());
@@ -23,7 +26,6 @@ export default class Game {
 
   createOverlays() {
     this.startScreen = new StartScreen();
-    this.intro = new TextBox(TITLE, INTRO_PAGES, INTRO_HINT);
     this.gameOver = new Overlay(
       UI_TEXT.gameOver,
       UI_TEXT.heroDown,
@@ -36,8 +38,15 @@ export default class Game {
     );
   }
 
+  createTexts() {
+    const intro = new TextBox(TITLE, INTRO_PAGES);
+    const arrival = new TextBox(WORLD.name, WORLD.arrival);
+    return [intro, arrival];
+  }
+
   start() {
-    this.world = new World(this.canvas, this.keyboard, createLevel1());
+    const level = createLevel1();
+    this.world = new World(this.canvas, this.keyboard, level, this.quest);
   }
 
   loop(time) {
@@ -45,6 +54,8 @@ export default class Game {
     this.lastTime = time;
     if (this.keyboard.take("confirm")) this.confirm();
     if (this.keyboard.take("cancel")) this.cancel();
+    const text = this.quest.takeText();
+    if (text) this.texts.push(text);
     const overlay = this.overlay();
     if (overlay) overlay.update(delta);
     else this.world.update(delta);
@@ -55,7 +66,7 @@ export default class Game {
 
   overlay() {
     if (!this.started) return this.startScreen;
-    if (!this.intro.isDone()) return this.intro;
+    if (this.texts.length > 0) return this.texts[0];
     if (this.world.isOver()) return this.gameOver;
     if (this.world.isWon()) return this.victory;
     return null;
@@ -64,11 +75,16 @@ export default class Game {
   confirm() {
     const overlay = this.overlay();
     if (overlay === this.startScreen) this.started = true;
-    else if (overlay === this.intro) this.intro.next();
+    else if (overlay === this.texts[0]) this.turnPage();
     else if (overlay) this.start();
   }
 
+  turnPage() {
+    this.texts[0].next();
+    if (this.texts[0].isDone()) this.texts.shift();
+  }
+
   cancel() {
-    if (this.overlay() === this.intro) this.intro.skip();
+    if (this.overlay() === this.texts[0]) this.texts.shift();
   }
 }
