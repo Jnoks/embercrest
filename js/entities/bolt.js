@@ -3,6 +3,10 @@ import Projectile from "./projectile.js";
 
 const BOLT_PATH = "./assets/images/bolt/";
 const BOLT_SIZE = 32;
+const BOLT_ANIMATIONS = {
+  fly: new SpriteAnimation(BOLT_PATH, "fly", 4, 0.08),
+  hit: new SpriteAnimation(BOLT_PATH, "hit", 5, 0.06, { loop: false }),
+};
 
 export default class Bolt extends Projectile {
   constructor(centerX, y, facingLeft) {
@@ -13,10 +17,7 @@ export default class Bolt extends Projectile {
     this.damage = 10;
     this.speed = 400;
     this.range = 400;
-    this.animations = {
-      fly: new SpriteAnimation(BOLT_PATH, "fly", 4, 0.08),
-      hit: new SpriteAnimation(BOLT_PATH, "hit", 5, 0.06, { loop: false }),
-    };
+    this.animations = BOLT_ANIMATIONS;
     this.setAnimation(this.animations.fly);
   }
 }
