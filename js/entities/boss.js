@@ -21,6 +21,7 @@ export default class Boss extends Enemy {
     this.stopDistance = 90;
     this.attackCooldown = 2;
     this.hurtDuration = 0.2;
+    this.name = "Hob";
     this.animations = {
       idle: new SpriteAnimation(BOSS_PATH, "idle", 3, 0.3, { loopPause: 1 }),
       walk: new SpriteAnimation(BOSS_PATH, "walk", 6, 0.15),

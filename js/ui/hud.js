@@ -28,11 +28,24 @@ export default class Hud {
       HUD_PATH + "mana-fill.png",
       "Mana",
     );
+    this.bossFrame = new HudImage(308, 30, 344, 28, HUD_PATH + "boss-bar.png");
+    this.bossBar = new StatusBar(
+      319,
+      36,
+      322,
+      16,
+      HUD_PATH + "boss-fill.png",
+      "Boss",
+    );
+    this.bossVisible = false;
   }
 
-  update(character) {
+  update(character, boss) {
     this.healthBar.setValue(character.health, character.maxHealth);
     this.manaBar.setValue(character.mana, character.maxMana);
+    this.bossBar.setValue(boss.health, boss.maxHealth);
+    this.bossBar.name = boss.name;
+    this.bossVisible = boss.seesTarget() && !boss.isDead();
   }
 
   draw(ctx) {
@@ -41,5 +54,9 @@ export default class Hud {
     }
     this.healthBar.draw(ctx);
     this.manaBar.draw(ctx);
+    if (this.bossVisible) {
+      this.bossFrame.draw(ctx);
+      this.bossBar.draw(ctx);
+    }
   }
 }

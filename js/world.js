@@ -49,7 +49,7 @@ export default class World {
     this.updateObjects(this.level.enemies, delta);
     this.checkCollisions();
     this.updateBolts(delta);
-    this.hud.update(this.character);
+    this.hud.update(this.character, this.level.boss);
     this.cameraX = Math.min(
       Math.max(this.character.x - 100, 0),
       this.level.width - this.canvas.width,

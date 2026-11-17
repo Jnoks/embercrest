@@ -28,9 +28,13 @@ export default class Enemy extends MovableObject {
     this.animate(delta);
   }
 
+  seesTarget() {
+    return Math.abs(this.targetX - this.centerX()) <= this.sightRange;
+  }
+
   chase(delta) {
     const distance = this.targetX - this.centerX();
-    if (Math.abs(distance) > this.sightRange) {
+    if (!this.seesTarget()) {
       this.setAnimation(this.animations.idle);
       return;
     }

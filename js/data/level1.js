@@ -21,6 +21,7 @@ export default function createLevel1() {
       ),
     );
   }
+  const boss = new Boss(2600, GROUND_Y);
   return new Level({
     width: LEVEL_WIDTH,
     groundY: GROUND_Y,
@@ -43,7 +44,8 @@ export default function createLevel1() {
       new Goblin(1200, GROUND_Y),
       new Goblin(1800, GROUND_Y),
       new Goblin(2400, GROUND_Y),
-      new Boss(2600, GROUND_Y),
+      boss,
     ],
+    boss,
   });
 }
