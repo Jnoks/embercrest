@@ -3,6 +3,7 @@ import SpriteAnimation from "../sprite-animation.js";
 import IceShard from "./ice-shard.js";
 import Effect from "./effect.js";
 import Lightning from "./lightning.js";
+import Fireball from "./fireball.js";
 
 const BOSS_PATH = "./assets/images/boss/";
 const LIGHTNING_PATH = "./assets/images/lightning/";
@@ -12,10 +13,13 @@ const RELEASE_FRAME = 4;
 const HAND_REACH = 90;
 const HAND_HEIGHT = 73;
 const AIM_HEIGHT = 20;
+const FLAME_REACH = 110;
+const FLAME_HEIGHT = 52;
 const PHASES = 3;
 const ATTACK_COOLDOWNS = [2, 1.6, 1.2];
 const SPELL_COOLDOWNS = [3, 2.2, 1.5];
-const SPELLS = ["ice", "lightning"];
+const SPELLS = ["ice", "lightning", "fire"];
+const SPEEDS = [60, 60, 110];
 const RAGE_SIZE = 512;
 const RAGE_HEIGHTS = [0, 196, 50];
 const RAGE_EFFECTS = [
@@ -34,7 +38,7 @@ export default class Boss extends Enemy {
     this.facingLeft = true;
     this.maxHealth = 240;
     this.health = this.maxHealth;
-    this.speed = 60;
+    this.speed = SPEEDS[0];
     this.damage = 20;
     this.hitFrame = 3;
     this.attackReach = 120;
@@ -67,6 +71,8 @@ export default class Boss extends Enemy {
       lightning: new SpriteAnimation(BOSS_PATH, "lightning", 5, 0.1, {
         loop: false,
       }),
+      fire: new SpriteAnimation(BOSS_PATH, "fire", 5, 0.1, { loop: false }),
+      run: new SpriteAnimation(BOSS_PATH, "run", 6, 0.1),
       anger: new SpriteAnimation(BOSS_PATH, "anger", 5, 0.2, { loop: false }),
     };
     this.setAnimation(this.animations.idle);
@@ -120,14 +126,21 @@ export default class Boss extends Enemy {
   startRage() {
     if (this.isDead()) return;
     this.phase += 1;
-    this.attackCooldown = ATTACK_COOLDOWNS[this.phase - 1];
-    this.spellCooldown = SPELL_COOLDOWNS[this.phase - 1];
+    this.applyPhase();
     this.rageTimer = this.animations.anger.cycleDuration();
     this.hurtTimer = 0;
     this.attackTimer = 0;
     this.castTimer = 0;
     this.spellLoaded = false;
     this.pendingEffect = this.createRageEffect();
+  }
+
+  applyPhase() {
+    this.attackCooldown = ATTACK_COOLDOWNS[this.phase - 1];
+    this.spellCooldown = SPELL_COOLDOWNS[this.phase - 1];
+    this.speed = SPEEDS[this.phase - 1];
+    this.spellCount = this.phase - 1;
+    if (this.phase === PHASES) this.animations.walk = this.animations.run;
   }
 
   createRageEffect() {
@@ -182,22 +195,32 @@ export default class Boss extends Enemy {
   }
 
   createSpell() {
-    if (this.spellName === "lightning") {
-      return new Lightning(this.targetX, this.y);
-    }
+    if (this.spellName === "lightning") return this.createLightning();
+    if (this.spellName === "fire") return this.createFireball();
     return this.createShard();
   }
 
+  createLightning() {
+    return new Lightning(this.targetX, this.y);
+  }
+
+  createFireball() {
+    const x = this.frontX(FLAME_REACH);
+    const fireball = new Fireball(x, this.y - FLAME_HEIGHT, this.facingLeft);
+    fireball.aimAt(this.targetX, this.y);
+    return fireball;
+  }
+
   createShard() {
-    let reach = HAND_REACH;
-    if (this.facingLeft) reach = -HAND_REACH;
-    const shard = new IceShard(
-      this.centerX() + reach,
-      this.y - HAND_HEIGHT,
-      this.facingLeft,
-    );
+    const x = this.frontX(HAND_REACH);
+    const shard = new IceShard(x, this.y - HAND_HEIGHT, this.facingLeft);
     shard.aimAt(this.targetX, this.y - AIM_HEIGHT);
     return shard;
+  }
+
+  frontX(reach) {
+    if (this.facingLeft) return this.centerX() - reach;
+    return this.centerX() + reach;
   }
 
   takeSpell() {
