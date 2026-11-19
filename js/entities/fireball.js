@@ -31,6 +31,7 @@ export default class Fireball extends Projectile {
   }
 
   isHitting() {
-    return !this.isExploding() || this.frameIndex <= LAST_BLAST_FRAME;
+    if (this.isExploding()) return this.frameIndex <= LAST_BLAST_FRAME;
+    return super.isHitting();
   }
 }

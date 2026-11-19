@@ -143,7 +143,7 @@ export default class World {
   }
 
   hitEnemy(bolt, enemy) {
-    if (bolt.isExploding() || enemy.isDead()) return;
+    if (!bolt.isHitting() || enemy.isDead()) return;
     if (!bolt.isColliding(enemy)) return;
     enemy.takeDamage(bolt.damage);
     bolt.explode();

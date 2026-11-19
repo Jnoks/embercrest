@@ -1,5 +1,7 @@
 import MovableObject from "./movable-object.js";
 
+const FADE_TIME = 0.15;
+
 export default class Projectile extends MovableObject {
   constructor(centerX, y, width, height, facingLeft) {
     super(centerX - width / 2, y, width, height);
@@ -7,12 +9,14 @@ export default class Projectile extends MovableObject {
     this.damage = 0;
     this.range = 0;
     this.distance = 0;
+    this.alpha = 1;
     this.done = false;
   }
 
   update(delta) {
     this.animate(delta);
     if (!this.isExploding()) this.fly(delta);
+    if (this.isFading()) this.fade(delta);
     if (this.isExploding() && this.isAnimationFinished()) this.done = true;
   }
 
@@ -21,7 +25,15 @@ export default class Projectile extends MovableObject {
     else this.moveRight(delta);
     this.y += this.velocityY * delta;
     this.distance += this.speed * delta;
-    if (this.distance > this.range) this.explode();
+  }
+
+  isFading() {
+    return this.distance > this.range && !this.isExploding();
+  }
+
+  fade(delta) {
+    this.alpha = Math.max(this.alpha - delta / FADE_TIME, 0);
+    if (this.alpha === 0) this.done = true;
   }
 
   aimAt(x, y) {
@@ -30,6 +42,7 @@ export default class Projectile extends MovableObject {
   }
 
   explode() {
+    this.alpha = 1;
     this.setAnimation(this.animations.hit);
   }
 
@@ -38,6 +51,13 @@ export default class Projectile extends MovableObject {
   }
 
   isHitting() {
-    return !this.isExploding();
+    return !this.isExploding() && !this.isFading();
+  }
+
+  draw(ctx) {
+    ctx.save();
+    ctx.globalAlpha = this.alpha;
+    super.draw(ctx);
+    ctx.restore();
   }
 }
