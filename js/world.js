@@ -1,4 +1,5 @@
 import Character from "./entities/character.js";
+import Heart from "./entities/heart.js";
 import Hud from "./ui/hud.js";
 import { CHATS } from "./data/story.js";
 
@@ -8,6 +9,8 @@ const PUSH_SPEED = 260;
 const ROOM_OPEN_SPEED = 300;
 const EDGE_MARGIN = 26;
 const ANSWER_DELAY = 0.9;
+const HEART_DROP = 40;
+const HEART_GAP = 20;
 
 export default class World {
   constructor(canvas, keyboard, level, quest) {
@@ -23,6 +26,7 @@ export default class World {
     this.bolts = [];
     this.spells = [];
     this.effects = [];
+    this.bossPhase = this.level.boss.phase;
   }
 
   draw() {
@@ -39,6 +43,7 @@ export default class World {
   drawScene() {
     this.drawObjects(this.level.tiles);
     this.drawObjects(this.level.shards);
+    this.drawObjects(this.level.hearts);
     this.character.draw(this.ctx);
     this.drawObjects(this.level.enemies);
     this.drawObjects(this.bolts);
@@ -64,6 +69,7 @@ export default class World {
     this.updateSpells(delta);
     this.updateEffects(delta);
     this.updateQuest(delta);
+    this.collectHearts(delta);
     this.hud.update(this.character, this.level.boss, this.quest);
     this.cameraX = Math.min(
       Math.max(this.character.x - 100, this.leftLimit),
@@ -199,6 +205,27 @@ export default class World {
       }
     }
     this.level.shards = this.updateProjectiles(this.level.shards, delta);
+  }
+
+  dropHearts() {
+    const boss = this.level.boss;
+    const y = boss.y - HEART_DROP;
+    if (boss.phase === this.bossPhase) return;
+    this.bossPhase = boss.phase;
+    this.level.hearts.push(new Heart(boss.centerX() - HEART_GAP, y));
+    this.level.hearts.push(new Heart(boss.centerX() + HEART_GAP, y));
+  }
+
+  collectHearts(delta) {
+    this.dropHearts();
+    for (let i = 0; i < this.level.hearts.length; i++) {
+      const heart = this.level.hearts[i];
+      if (this.character.canHeal() && this.character.isColliding(heart)) {
+        this.character.heal(heart.amount);
+        heart.done = true;
+      }
+    }
+    this.level.hearts = this.updateProjectiles(this.level.hearts, delta);
   }
 
   updateBossRoom(delta) {

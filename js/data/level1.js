@@ -7,6 +7,8 @@ import Boss from "../entities/boss.js";
 import Gate from "../entities/gate.js";
 import Npc from "../entities/npc.js";
 import EmberShard from "../entities/ember-shard.js";
+import Heart from "../entities/heart.js";
+import { TILE_SIZE } from "../entities/tile.js";
 import GateScene from "../gate-scene.js";
 import Rain from "../entities/rain.js";
 import Sun from "../entities/sun.js";
@@ -18,6 +20,7 @@ const BACKGROUND_PATH = "./assets/images/forest/background/";
 const GROUND_Y = 482;
 const LEVEL_HEIGHT = 540;
 const GOBLIN = "g";
+const HEART = "h";
 
 function createTiles(map, gate, latch) {
   const backdrop = map.createTiles(BACKDROP);
@@ -38,6 +41,15 @@ function createGoblins(map) {
     goblins.push(goblin);
   }
   return goblins;
+}
+
+function createHearts(map) {
+  const hearts = [];
+  const spots = map.spots(HEART);
+  for (let i = 0; i < spots.length; i++) {
+    hearts.push(new Heart(spots[i].x, spots[i].y + TILE_SIZE / 2));
+  }
+  return hearts;
 }
 
 function createShards() {
@@ -85,6 +97,7 @@ export default function createLevel1() {
     gate,
     latch,
     shards: createShards(),
+    hearts: createHearts(map),
     scene: new GateScene(gate, latch, WORLDS[0].gate),
     rain,
   });

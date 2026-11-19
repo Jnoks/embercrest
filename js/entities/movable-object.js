@@ -90,6 +90,14 @@ export default class MovableObject extends DrawableObject {
     this.invincibleTimer = this.invincibleDuration;
   }
 
+  canHeal() {
+    return !this.isDead() && this.health < this.maxHealth;
+  }
+
+  heal(amount) {
+    this.health = Math.min(this.health + amount, this.maxHealth);
+  }
+
   isHurt() {
     return this.hurtTimer > 0;
   }
