@@ -1,6 +1,14 @@
 import Tile, { TILE_SIZE } from "./entities/tile.js";
 
 const TILE_PATH = "./assets/images/forest/tiles/";
+const CORNER_TILES = [
+  "rock-middle-tl",
+  "rock-middle-tr",
+  "rock-middle-bl",
+  "rock-middle-br",
+  "rock-middle-tl-bl",
+  "rock-middle-tr-br",
+];
 
 export const GROUND = "#";
 export const BACKDROP = "%";
@@ -35,6 +43,7 @@ export default class TileMap {
   }
 
   isKind(column, row, kind) {
+    if (row >= this.rows.length) return true;
     const char = this.cell(column, row);
     if (char === kind) return true;
     const behind = char === GROUND && this.cell(column, row - 1) === BACKDROP;
@@ -61,9 +70,43 @@ export default class TileMap {
   }
 
   tileName(column, row, kind) {
-    let name = "rock";
-    if (!this.isKind(column, row - 1, kind)) name = "grass-top";
-    if (!this.isKind(column - 1, row, kind)) return name + "-left";
-    return name + "-middle";
+    const name = this.shape(column, row, kind) + this.side(column, row, kind);
+    const corners = this.corners(column, row, kind);
+    if (CORNER_TILES.includes(name + corners)) return name + corners;
+    return name;
+  }
+
+  shape(column, row, kind) {
+    const above = this.isKind(column, row - 1, kind);
+    const below = this.isKind(column, row + 1, kind);
+    if (above && below) return "rock";
+    if (above) return "under";
+    if (below) return "grass-top";
+    return "island";
+  }
+
+  side(column, row, kind) {
+    const left = this.isKind(column - 1, row, kind);
+    const right = this.isKind(column + 1, row, kind);
+    if (left && right) return "-middle";
+    if (left) return "-right";
+    if (right) return "-left";
+    return "-single";
+  }
+
+  corners(column, row, kind) {
+    let corners = "";
+    if (this.isCorner(column, row, kind, -1, -1)) corners += "-tl";
+    if (this.isCorner(column, row, kind, 1, -1)) corners += "-tr";
+    if (this.isCorner(column, row, kind, -1, 1)) corners += "-bl";
+    if (this.isCorner(column, row, kind, 1, 1)) corners += "-br";
+    return corners;
+  }
+
+  isCorner(column, row, kind, dx, dy) {
+    const horizontal = this.isKind(column + dx, row, kind);
+    const vertical = this.isKind(column, row + dy, kind);
+    const diagonal = this.isKind(column + dx, row + dy, kind);
+    return horizontal && vertical && !diagonal;
   }
 }
