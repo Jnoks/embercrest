@@ -2,7 +2,7 @@ import Level from "../level.js";
 import Goblin from "../entities/goblin.js";
 import BackgroundLayer from "../entities/background-layer.js";
 import CloudLayer from "../entities/cloud-layer.js";
-import Tile, { TILE_SIZE } from "../entities/tile.js";
+import TileMap, { BACKDROP, GROUND } from "../tile-map.js";
 import Boss from "../entities/boss.js";
 import Gate from "../entities/gate.js";
 import Npc from "../entities/npc.js";
@@ -11,30 +11,18 @@ import GateScene from "../gate-scene.js";
 import Rain from "../entities/rain.js";
 import Sun from "../entities/sun.js";
 import { WORLDS } from "./story.js";
+import { LEVEL1_SCREENS } from "./level1-map.js";
 
 const BACKGROUND_PATH = "./assets/images/forest/background/";
-const TILE_PATH = "./assets/images/forest/tiles/";
 const GROUND_Y = 482;
-const LEVEL_WIDTH = 2880;
 const LEVEL_HEIGHT = 540;
-const WALL = [
-  ["grass-top-left", "grass-top-middle", "grass-top-middle"],
-  ["rock-left", "rock-middle", "rock-middle"],
-  ["rock-left", "rock-middle", "rock-middle"],
-  ["rock-left", "rock-middle", "rock-middle"],
-];
-const WALL_X = LEVEL_WIDTH - WALL[0].length * TILE_SIZE;
-const WALL_Y = LEVEL_HEIGHT - WALL.length * TILE_SIZE;
 
-function createWall() {
-  const tiles = [];
-  for (let row = 0; row < WALL.length; row++) {
-    for (let column = 0; column < WALL[row].length; column++) {
-      const x = WALL_X + column * TILE_SIZE;
-      const y = WALL_Y + row * TILE_SIZE;
-      tiles.push(new Tile(x, y, TILE_PATH + WALL[row][column] + ".png"));
-    }
-  }
+function createTiles(map, gate, latch) {
+  const tiles = map.createTiles(BACKDROP);
+  const ground = map.createTiles(GROUND);
+  tiles.push(gate);
+  for (let i = 0; i < ground.length; i++) tiles.push(ground[i]);
+  tiles.push(latch);
   return tiles;
 }
 
@@ -48,20 +36,14 @@ function createShards() {
 }
 
 export default function createLevel1() {
+  const map = new TileMap(LEVEL1_SCREENS, LEVEL_HEIGHT);
   const gate = new Gate(2790, GROUND_Y);
   const latch = new Npc("latch", 17, 420, GROUND_Y);
   latch.facingLeft = true;
-  const tiles = createWall();
-  tiles.push(gate);
-  for (let i = 0; i < LEVEL_WIDTH / TILE_SIZE; i++) {
-    const y = LEVEL_HEIGHT - TILE_SIZE;
-    tiles.push(new Tile(i * TILE_SIZE, y, TILE_PATH + "grass-top-middle.png"));
-  }
-  tiles.push(latch);
   const boss = new Boss(2600, GROUND_Y);
   const rain = new Rain();
   return new Level({
-    width: LEVEL_WIDTH,
+    width: map.width(),
     groundY: GROUND_Y,
     backgroundLayers: [
       new BackgroundLayer(0, 0, BACKGROUND_PATH + "sky.png", 0),
@@ -78,7 +60,7 @@ export default function createLevel1() {
       new CloudLayer(0, 0, BACKGROUND_PATH + "clouds-small.png", 0.5, 20),
       new BackgroundLayer(0, 0, BACKGROUND_PATH + "trees.png", 0.8),
     ],
-    tiles,
+    tiles: createTiles(map, gate, latch),
     enemies: [
       new Goblin(1200, GROUND_Y),
       new Goblin(1800, GROUND_Y),
