@@ -1,5 +1,4 @@
 import Level from "../level.js";
-import Goblin from "../entities/goblin.js";
 import BackgroundLayer from "../entities/background-layer.js";
 import CloudLayer from "../entities/cloud-layer.js";
 import TileMap, { BACKDROP, GROUND } from "../tile-map.js";
@@ -12,35 +11,38 @@ import Rain from "../entities/rain.js";
 import Sun from "../entities/sun.js";
 import { WORLDS } from "./story.js";
 import { LEVEL1_SCREENS } from "./level1-map.js";
+import { TREES, BUSHES, VINES, createPlants, createIvy } from "./plants.js";
 
 const BACKGROUND_PATH = "./assets/images/forest/background/";
 const GROUND_Y = 482;
 const LEVEL_HEIGHT = 540;
 
 function createTiles(map, gate, latch) {
-  const tiles = map.createTiles(BACKDROP);
+  const backdrop = map.createTiles(BACKDROP);
+  const trees = createPlants(map, TREES);
   const ground = map.createTiles(GROUND);
-  tiles.push(gate);
-  for (let i = 0; i < ground.length; i++) tiles.push(ground[i]);
-  tiles.push(latch);
-  return tiles;
+  const ivy = createIvy(map);
+  const vines = createPlants(map, VINES);
+  const bushes = createPlants(map, BUSHES);
+  return backdrop.concat([gate], trees, ground, ivy, vines, bushes, [latch]);
 }
 
 function createShards() {
   return [
-    new EmberShard(700, GROUND_Y - 30),
-    new EmberShard(1050, GROUND_Y - 100),
-    new EmberShard(1500, GROUND_Y - 30),
-    new EmberShard(1850, GROUND_Y - 100),
+    new EmberShard(1696, GROUND_Y - 30),
+    new EmberShard(4320, GROUND_Y - 286),
+    new EmberShard(6560, GROUND_Y - 222),
+    new EmberShard(8352, GROUND_Y - 158),
   ];
 }
 
 export default function createLevel1() {
   const map = new TileMap(LEVEL1_SCREENS, LEVEL_HEIGHT);
-  const gate = new Gate(2790, GROUND_Y);
-  const latch = new Npc("latch", 17, 420, GROUND_Y);
+  const gate = new Gate(9440, GROUND_Y);
+  const latch = new Npc("latch", 17, 480, GROUND_Y);
   latch.facingLeft = true;
-  const boss = new Boss(2600, GROUND_Y);
+  const boss = new Boss(9085, GROUND_Y);
+  boss.sightRange = 0;
   const rain = new Rain();
   return new Level({
     width: map.width(),
@@ -62,12 +64,7 @@ export default function createLevel1() {
       new BackgroundLayer(0, 0, BACKGROUND_PATH + "trees.png", 0.8),
     ],
     tiles: createTiles(map, gate, latch),
-    enemies: [
-      new Goblin(1200, GROUND_Y),
-      new Goblin(1800, GROUND_Y),
-      new Goblin(2400, GROUND_Y),
-      boss,
-    ],
+    enemies: [boss],
     boss,
     gate,
     latch,

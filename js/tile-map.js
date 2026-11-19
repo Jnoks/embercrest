@@ -14,6 +14,7 @@ const CORNER_TILES = [
 
 export const GROUND = "#";
 export const BACKDROP = "%";
+export const IVY = "&";
 
 export default class TileMap {
   constructor(screens, height) {
@@ -37,7 +38,9 @@ export default class TileMap {
 
   cell(column, row) {
     const line = this.rows[this.clamp(row, this.rows.length - 1)];
-    return line[this.clamp(column, line.length - 1)];
+    const char = line[this.clamp(column, line.length - 1)];
+    if (char === IVY) return GROUND;
+    return char;
   }
 
   clamp(value, max) {
@@ -87,6 +90,22 @@ export default class TileMap {
   isTop(column, row) {
     const above = this.cell(column, row - 1);
     return this.cell(column, row) === GROUND && above !== GROUND;
+  }
+
+  spots(char) {
+    const spots = [];
+    for (let row = 0; row < this.rows.length; row++) {
+      for (let column = 0; column < this.rows[row].length; column++) {
+        if (this.rows[row][column] === char) spots.push(this.spot(column, row));
+      }
+    }
+    return spots;
+  }
+
+  spot(column, row) {
+    const x = column * TILE_SIZE + TILE_SIZE / 2;
+    const y = this.top + row * TILE_SIZE;
+    return { column, row, x, y };
   }
 
   createTiles(kind) {
