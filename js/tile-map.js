@@ -71,6 +71,11 @@ export default class TileMap {
     return this.isSolid(box.left, bottom) || this.isSolid(box.right, bottom);
   }
 
+  hitsRock(box) {
+    const bottom = this.isSolid(box.left, box.bottom);
+    return this.hitsTop(box) || bottom || this.isSolid(box.right, box.bottom);
+  }
+
   floorUnder(box, lastBottom) {
     const start = lastBottom - STEP - SURFACE - this.top;
     const end = box.bottom - SURFACE - this.top;

@@ -144,10 +144,16 @@ export default class World {
 
   checkBoltHits() {
     for (let i = 0; i < this.bolts.length; i++) {
+      this.hitRock(this.bolts[i]);
       for (let j = 0; j < this.level.enemies.length; j++) {
         this.hitEnemy(this.bolts[i], this.level.enemies[j]);
       }
     }
+  }
+
+  hitRock(bolt) {
+    if (!bolt.isHitting()) return;
+    if (this.level.map.hitsRock(bolt.hitbox())) bolt.explode();
   }
 
   hitEnemy(bolt, enemy) {
