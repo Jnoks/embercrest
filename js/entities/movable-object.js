@@ -12,6 +12,8 @@ export default class MovableObject extends DrawableObject {
     this.speed = 0;
     this.velocityY = 0;
     this.jumpSpeed = 0;
+    this.maxAirJumps = 0;
+    this.airJumps = 0;
     this.onGround = false;
     this.hitboxWidth = width;
     this.hitboxHeight = height;
@@ -43,10 +45,12 @@ export default class MovableObject extends DrawableObject {
     this.y = groundY;
     this.velocityY = 0;
     this.onGround = true;
+    this.airJumps = this.maxAirJumps;
   }
 
   jump() {
-    if (!this.onGround) return;
+    if (!this.onGround && this.airJumps === 0) return;
+    if (!this.onGround) this.airJumps -= 1;
     this.onGround = false;
     this.velocityY = -this.jumpSpeed;
   }

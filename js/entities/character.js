@@ -20,6 +20,7 @@ export default class Character extends MovableObject {
     this.keyboard = keyboard;
     this.speed = 150;
     this.jumpSpeed = 700;
+    this.maxAirJumps = 1;
     this.maxMana = 100;
     this.mana = this.maxMana;
     this.pendingBolt = null;
@@ -28,6 +29,7 @@ export default class Character extends MovableObject {
       idle: new SpriteAnimation(MAGE_PATH, "idle", 14, 0.2, { loopPause: 2 }),
       run: new SpriteAnimation(MAGE_PATH, "run", 8, 0.08),
       jump: new SpriteAnimation(MAGE_PATH, "jump", 7, 0.1),
+      flip: new SpriteAnimation(MAGE_PATH, "flip", 6, 0.07, { loop: false }),
       hurt: new SpriteAnimation(MAGE_PATH, "hurt", 4, 0.1, { loop: false }),
       attack: new SpriteAnimation(MAGE_PATH, "attack", 7, 0.07, {
         loop: false,
@@ -46,7 +48,7 @@ export default class Character extends MovableObject {
     if (this.isDead()) this.setAnimation(this.animations.death);
     else if (this.isHurt()) this.setAnimation(this.animations.hurt);
     else if (this.isAttacking()) this.setAnimation(this.animations.attack);
-    else if (!this.onGround) this.setAnimation(this.animations.jump);
+    else if (!this.onGround) this.setAnimation(this.airAnimation());
     else if (this.keyboard.left || this.keyboard.right)
       this.setAnimation(this.animations.run);
     else this.setAnimation(this.animations.idle);
@@ -69,9 +71,12 @@ export default class Character extends MovableObject {
       this.moveLeft(delta);
       this.facingLeft = true;
     }
-    if (this.keyboard.jump) {
-      this.jump();
-    }
+    if (this.keyboard.take("jump")) this.jump();
+  }
+
+  airAnimation() {
+    if (this.airJumps < this.maxAirJumps) return this.animations.flip;
+    return this.animations.jump;
   }
 
   attack() {
