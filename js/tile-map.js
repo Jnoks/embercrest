@@ -105,7 +105,22 @@ export default class TileMap {
   spot(column, row) {
     const x = column * TILE_SIZE + TILE_SIZE / 2;
     const y = this.top + row * TILE_SIZE;
-    return { column, row, x, y };
+    const floor = y + TILE_SIZE + SURFACE;
+    return { column, row, x, y, floor };
+  }
+
+  zone(column, row) {
+    let first = column;
+    let last = column;
+    while (this.isStand(first - 1, row)) first -= 1;
+    while (this.isStand(last + 1, row)) last += 1;
+    return { left: first * TILE_SIZE, right: (last + 1) * TILE_SIZE };
+  }
+
+  isStand(column, row) {
+    if (column < 0 || column >= this.rows[0].length) return false;
+    const free = this.cell(column, row) !== GROUND;
+    return free && this.cell(column, row + 1) === GROUND;
   }
 
   createTiles(kind) {

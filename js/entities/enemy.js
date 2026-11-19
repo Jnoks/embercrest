@@ -11,6 +11,13 @@ export default class Enemy extends MovableObject {
     this.sightRange = 0;
     this.stopDistance = 0;
     this.attackCooldown = 0;
+    this.minX = -Infinity;
+    this.maxX = Infinity;
+  }
+
+  setZone(zone) {
+    this.minX = zone.left + this.hitboxWidth / 2;
+    this.maxX = zone.right - this.hitboxWidth / 2;
   }
 
   update(delta) {
@@ -33,15 +40,22 @@ export default class Enemy extends MovableObject {
 
   chase(delta) {
     const distance = this.targetX - this.centerX();
-    if (!this.seesTarget()) {
-      this.setAnimation(this.animations.idle);
-      return;
-    }
-    this.facingLeft = distance < 0;
-    if (Math.abs(distance) < this.stopDistance) {
-      this.setAnimation(this.animations.idle);
-      return;
-    }
+    if (this.seesTarget()) this.facingLeft = distance < 0;
+    if (this.canWalk(distance)) this.walk(delta);
+    else this.setAnimation(this.animations.idle);
+  }
+
+  canWalk(distance) {
+    if (!this.seesTarget() || this.isAtEdge()) return false;
+    return Math.abs(distance) >= this.stopDistance;
+  }
+
+  isAtEdge() {
+    if (this.facingLeft) return this.centerX() <= this.minX;
+    return this.centerX() >= this.maxX;
+  }
+
+  walk(delta) {
     this.setAnimation(this.animations.walk);
     if (this.facingLeft) this.moveLeft(delta);
     else this.moveRight(delta);

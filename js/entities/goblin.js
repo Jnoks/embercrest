@@ -2,10 +2,11 @@ import Enemy from "./enemy.js";
 import SpriteAnimation from "../sprite-animation.js";
 
 const GOBLIN_PATH = "./assets/images/goblin/";
+const GOBLIN_SIZE = 128;
 
 export default class Goblin extends Enemy {
-  constructor(x, y) {
-    super(x, y, 128, 128);
+  constructor(centerX, y) {
+    super(centerX - GOBLIN_SIZE / 2, y, GOBLIN_SIZE, GOBLIN_SIZE);
     this.anchorY = 89;
     this.hitboxWidth = 36;
     this.hitboxHeight = 44;

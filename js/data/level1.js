@@ -1,4 +1,5 @@
 import Level from "../level.js";
+import Goblin from "../entities/goblin.js";
 import BackgroundLayer from "../entities/background-layer.js";
 import CloudLayer from "../entities/cloud-layer.js";
 import TileMap, { BACKDROP, GROUND } from "../tile-map.js";
@@ -16,6 +17,7 @@ import { TREES, BUSHES, VINES, createPlants, createIvy } from "./plants.js";
 const BACKGROUND_PATH = "./assets/images/forest/background/";
 const GROUND_Y = 482;
 const LEVEL_HEIGHT = 540;
+const GOBLIN = "g";
 
 function createTiles(map, gate, latch) {
   const backdrop = map.createTiles(BACKDROP);
@@ -25,6 +27,17 @@ function createTiles(map, gate, latch) {
   const vines = createPlants(map, VINES);
   const bushes = createPlants(map, BUSHES);
   return backdrop.concat([gate], trees, ground, ivy, vines, bushes, [latch]);
+}
+
+function createGoblins(map) {
+  const goblins = [];
+  const spots = map.spots(GOBLIN);
+  for (let i = 0; i < spots.length; i++) {
+    const goblin = new Goblin(spots[i].x, spots[i].floor);
+    goblin.setZone(map.zone(spots[i].column, spots[i].row));
+    goblins.push(goblin);
+  }
+  return goblins;
 }
 
 function createShards() {
@@ -43,6 +56,8 @@ export default function createLevel1() {
   latch.facingLeft = true;
   const boss = new Boss(9085, GROUND_Y);
   boss.sightRange = 0;
+  const enemies = createGoblins(map);
+  enemies.push(boss);
   const rain = new Rain();
   return new Level({
     width: map.width(),
@@ -64,7 +79,7 @@ export default function createLevel1() {
       new BackgroundLayer(0, 0, BACKGROUND_PATH + "trees.png", 0.8),
     ],
     tiles: createTiles(map, gate, latch),
-    enemies: [boss],
+    enemies,
     boss,
     gate,
     latch,
