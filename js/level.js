@@ -11,6 +11,7 @@ export default class Level {
     this.latch = data.latch;
     this.shards = data.shards;
     this.hearts = data.hearts;
+    this.checkpoints = data.checkpoints;
     this.scene = data.scene;
     this.rain = data.rain;
   }

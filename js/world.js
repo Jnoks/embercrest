@@ -27,6 +27,28 @@ export default class World {
     this.spells = [];
     this.effects = [];
     this.bossPhase = this.level.boss.phase;
+    this.restore();
+  }
+
+  restore() {
+    const found = this.quest.found;
+    const total = this.level.shards.length;
+    this.level.shards = this.level.shards.filter(
+      (shard) => !found.includes(shard.centerX()),
+    );
+    this.quest.shards = total - this.level.shards.length;
+    this.respawn();
+  }
+
+  respawn() {
+    const spawn = this.quest.spawn;
+    if (spawn === null) return;
+    this.character.x = spawn.x - this.character.anchorX;
+    this.character.y = spawn.y;
+    for (let i = 0; i < this.level.checkpoints.length; i++) {
+      const checkpoint = this.level.checkpoints[i];
+      checkpoint.setActive(checkpoint.centerX() === spawn.x);
+    }
   }
 
   draw() {
@@ -42,6 +64,7 @@ export default class World {
 
   drawScene() {
     this.drawObjects(this.level.tiles);
+    this.drawObjects(this.level.checkpoints);
     this.drawObjects(this.level.shards);
     this.drawObjects(this.level.hearts);
     this.character.draw(this.ctx);
@@ -185,12 +208,37 @@ export default class World {
   updateQuest(delta) {
     const latch = this.level.latch;
     const scene = this.level.scene;
+    this.updateCheckpoints();
     this.collectShards(delta);
     this.updateScene();
     latch.update(delta);
     latch.marked = this.quest.state === "new";
     latch.near = !scene.isRunning() && this.character.isColliding(latch);
     if (latch.near && this.character.wantsToTalk()) this.quest.meet();
+  }
+
+  updateCheckpoints() {
+    if (this.character.isDead()) return;
+    for (let i = 0; i < this.level.checkpoints.length; i++) {
+      const checkpoint = this.level.checkpoints[i];
+      if (this.isAhead(checkpoint) && this.character.isColliding(checkpoint)) {
+        this.activate(checkpoint);
+      }
+    }
+  }
+
+  isAhead(checkpoint) {
+    const spawn = this.quest.spawn;
+    return spawn === null || checkpoint.centerX() > spawn.x;
+  }
+
+  activate(checkpoint) {
+    for (let i = 0; i < this.level.checkpoints.length; i++) {
+      this.level.checkpoints[i].setActive(false);
+    }
+    checkpoint.setActive(true);
+    this.quest.spawn = { x: checkpoint.centerX(), y: checkpoint.y };
+    this.effects.push(checkpoint.createEffect());
   }
 
   updateScene() {
@@ -207,7 +255,7 @@ export default class World {
       const shard = this.level.shards[i];
       if (this.character.isColliding(shard)) {
         shard.done = true;
-        this.quest.collect();
+        this.quest.collect(shard.centerX());
       }
     }
     this.level.shards = this.updateProjectiles(this.level.shards, delta);

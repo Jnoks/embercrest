@@ -14,6 +14,8 @@ export default class Quest {
     this.bossDefeat = new TextBox(boss.name, boss.defeat, bossPortrait);
     this.amount = data.amount;
     this.shards = 0;
+    this.found = [];
+    this.spawn = null;
     this.state = "new";
     this.pendingText = null;
   }
@@ -39,8 +41,9 @@ export default class Quest {
     this.pendingText = text;
   }
 
-  collect() {
+  collect(x) {
     this.shards += 1;
+    this.found.push(x);
   }
 
   isComplete() {

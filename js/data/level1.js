@@ -8,6 +8,7 @@ import Gate from "../entities/gate.js";
 import Npc from "../entities/npc.js";
 import EmberShard from "../entities/ember-shard.js";
 import Heart from "../entities/heart.js";
+import Checkpoint from "../entities/checkpoint.js";
 import { TILE_SIZE } from "../entities/tile.js";
 import GateScene from "../gate-scene.js";
 import Rain from "../entities/rain.js";
@@ -21,6 +22,7 @@ const GROUND_Y = 482;
 const LEVEL_HEIGHT = 540;
 const GOBLIN = "g";
 const HEART = "h";
+const CHECKPOINT = "c";
 
 function createTiles(map, gate, latch) {
   const backdrop = map.createTiles(BACKDROP);
@@ -50,6 +52,15 @@ function createHearts(map) {
     hearts.push(new Heart(spots[i].x, spots[i].y + TILE_SIZE / 2));
   }
   return hearts;
+}
+
+function createCheckpoints(map) {
+  const checkpoints = [];
+  const spots = map.spots(CHECKPOINT);
+  for (let i = 0; i < spots.length; i++) {
+    checkpoints.push(new Checkpoint(spots[i].x, spots[i].floor));
+  }
+  return checkpoints;
 }
 
 function createShards() {
@@ -98,6 +109,7 @@ export default function createLevel1() {
     latch,
     shards: createShards(),
     hearts: createHearts(map),
+    checkpoints: createCheckpoints(map),
     scene: new GateScene(gate, latch, WORLDS[0].gate),
     rain,
   });
