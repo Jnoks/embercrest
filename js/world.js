@@ -11,6 +11,7 @@ const EDGE_MARGIN = 26;
 const ANSWER_DELAY = 0.9;
 const HEART_DROP = 40;
 const HEART_GAP = 20;
+const CAMERA_OFFSET = 100;
 
 export default class World {
   constructor(canvas, keyboard, level, quest) {
@@ -85,19 +86,30 @@ export default class World {
     this.moveCharacter(delta);
     this.updateBossRoom(delta);
     this.keepInside();
-    this.updateTargets();
-    this.updateObjects(this.level.enemies, delta);
-    this.checkCollisions();
-    this.updateBolts(delta);
-    this.updateSpells(delta);
-    this.updateEffects(delta);
+    this.updateEnemies(delta);
+    this.updateMagic(delta);
     this.updateQuest(delta);
     this.collectHearts(delta);
     this.hud.update(this.character, this.level.boss, this.quest);
-    this.cameraX = Math.min(
-      Math.max(this.character.x - 100, this.leftLimit),
-      this.level.width - this.canvas.width,
-    );
+    this.updateCamera();
+  }
+
+  updateEnemies(delta) {
+    this.updateTargets();
+    this.updateObjects(this.level.enemies, delta);
+    this.checkCollisions();
+  }
+
+  updateMagic(delta) {
+    this.updateBolts(delta);
+    this.updateSpells(delta);
+    this.updateEffects(delta);
+  }
+
+  updateCamera() {
+    const max = this.level.width - this.canvas.width;
+    const x = Math.max(this.character.x - CAMERA_OFFSET, this.leftLimit);
+    this.cameraX = Math.min(x, max);
     for (let i = 0; i < this.level.backgroundLayers.length; i++) {
       this.level.backgroundLayers[i].scrollTo(this.cameraX);
     }
