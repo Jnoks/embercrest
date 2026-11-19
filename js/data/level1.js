@@ -20,9 +20,7 @@ import { TREES, BUSHES, VINES, createPlants, createIvy } from "./plants.js";
 const BACKGROUND_PATH = "./assets/images/forest/background/";
 const GROUND_Y = 482;
 const LEVEL_HEIGHT = 540;
-const GOBLIN = "g";
-const HEART = "h";
-const CHECKPOINT = "c";
+const SHARD_HEIGHT = 30;
 
 function createTiles(map, gate, latch) {
   const backdrop = map.createTiles(BACKDROP);
@@ -34,83 +32,73 @@ function createTiles(map, gate, latch) {
   return backdrop.concat([gate], trees, ground, ivy, vines, bushes, [latch]);
 }
 
-function createGoblins(map) {
-  const goblins = [];
-  const spots = map.spots(GOBLIN);
-  for (let i = 0; i < spots.length; i++) {
-    const goblin = new Goblin(spots[i].x, spots[i].floor);
-    goblin.setZone(map.zone(spots[i].column, spots[i].row));
-    goblins.push(goblin);
-  }
-  return goblins;
-}
-
-function createHearts(map) {
-  const hearts = [];
-  const spots = map.spots(HEART);
-  for (let i = 0; i < spots.length; i++) {
-    hearts.push(new Heart(spots[i].x, spots[i].y + TILE_SIZE / 2));
-  }
-  return hearts;
-}
-
-function createCheckpoints(map) {
-  const checkpoints = [];
-  const spots = map.spots(CHECKPOINT);
-  for (let i = 0; i < spots.length; i++) {
-    checkpoints.push(new Checkpoint(spots[i].x, spots[i].floor));
-  }
-  return checkpoints;
-}
-
-function createShards() {
+function createBackground(rain) {
+  const path = BACKGROUND_PATH;
   return [
-    new EmberShard(1696, GROUND_Y - 30),
-    new EmberShard(4320, GROUND_Y - 286),
-    new EmberShard(6560, GROUND_Y - 222),
-    new EmberShard(8352, GROUND_Y - 158),
+    new BackgroundLayer(0, 0, path + "sky.png", 0),
+    new Sun(rain),
+    new CloudLayer(0, 0, path + "clouds-back-layer2.png", 0.1, 15),
+    new CloudLayer(0, 0, path + "clouds-back-layer1.png", 0.15, 10),
+    new BackgroundLayer(0, 0, path + "mountains.png", 0.3),
+    new CloudLayer(0, 0, path + "clouds-small.png", 0.5, 20),
+    new BackgroundLayer(0, 0, path + "trees.png", 0.8),
   ];
 }
 
-export default function createLevel1() {
-  const map = new TileMap(LEVEL1_SCREENS, LEVEL_HEIGHT);
+function createObjects(map, char, create) {
+  const objects = [];
+  const spots = map.spots(char);
+  for (let i = 0; i < spots.length; i++) {
+    objects.push(create(spots[i], map));
+  }
+  return objects;
+}
+
+function createGoblin(spot, map) {
+  const goblin = new Goblin(spot.x, spot.floor);
+  goblin.setZone(map.zone(spot.column, spot.row));
+  return goblin;
+}
+
+function createShard(spot) {
+  return new EmberShard(spot.x, spot.floor - SHARD_HEIGHT);
+}
+
+function createHeart(spot) {
+  return new Heart(spot.x, spot.y + TILE_SIZE / 2);
+}
+
+function createCheckpoint(spot) {
+  return new Checkpoint(spot.x, spot.floor);
+}
+
+function createFigures(map) {
   const gate = new Gate(9440, GROUND_Y);
   const latch = new Npc("latch", 17, 480, GROUND_Y);
   latch.facingLeft = true;
   const boss = new Boss(9085, GROUND_Y);
   boss.sightRange = 0;
   boss.lines = SHOUTS.hob;
-  const enemies = createGoblins(map);
+  const enemies = createObjects(map, "g", createGoblin);
   enemies.push(boss);
-  const rain = new Rain();
-  return new Level({
-    width: map.width(),
-    groundY: GROUND_Y,
-    map,
-    backgroundLayers: [
-      new BackgroundLayer(0, 0, BACKGROUND_PATH + "sky.png", 0),
-      new Sun(rain),
-      new CloudLayer(0, 0, BACKGROUND_PATH + "clouds-back-layer2.png", 0.1, 15),
-      new CloudLayer(
-        0,
-        0,
-        BACKGROUND_PATH + "clouds-back-layer1.png",
-        0.15,
-        10,
-      ),
-      new BackgroundLayer(0, 0, BACKGROUND_PATH + "mountains.png", 0.3),
-      new CloudLayer(0, 0, BACKGROUND_PATH + "clouds-small.png", 0.5, 20),
-      new BackgroundLayer(0, 0, BACKGROUND_PATH + "trees.png", 0.8),
-    ],
-    tiles: createTiles(map, gate, latch),
-    enemies,
-    boss,
-    gate,
-    latch,
-    shards: createShards(),
-    hearts: createHearts(map),
-    checkpoints: createCheckpoints(map),
-    scene: new GateScene(gate, latch, WORLDS[0].gate),
-    rain,
-  });
+  return { map, gate, latch, boss, enemies };
+}
+
+function addObjects(data) {
+  data.shards = createObjects(data.map, "s", createShard);
+  data.hearts = createObjects(data.map, "h", createHeart);
+  data.checkpoints = createObjects(data.map, "c", createCheckpoint);
+}
+
+export default function createLevel1() {
+  const map = new TileMap(LEVEL1_SCREENS, LEVEL_HEIGHT);
+  const data = createFigures(map);
+  data.width = map.width();
+  data.groundY = GROUND_Y;
+  data.rain = new Rain();
+  data.backgroundLayers = createBackground(data.rain);
+  data.tiles = createTiles(map, data.gate, data.latch);
+  data.scene = new GateScene(data.gate, data.latch, WORLDS[0].gate);
+  addObjects(data);
+  return new Level(data);
 }
