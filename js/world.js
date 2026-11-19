@@ -251,6 +251,6 @@ export default class World {
   isWon() {
     const gate = this.level.gate;
     if (!gate.open || this.character.isDead()) return false;
-    return this.character.isColliding(gate);
+    return this.character.alpha === 0;
   }
 }

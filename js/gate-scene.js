@@ -18,6 +18,7 @@ const ENTRY_DISTANCE = 1000;
 const HERO_DISTANCE = 70;
 const LOCK_DISTANCE = 30;
 const SIDE_DISTANCE = 50;
+const EXIT_DISTANCE = 50;
 const TOLERANCE = 8;
 
 export default class GateScene {
@@ -47,10 +48,20 @@ export default class GateScene {
   }
 
   update() {
+    this.exit();
     if (!this.isRunning()) return;
     const step = STEPS[this.index];
     if (this[step]()) this.index += 1;
     if (!this.isRunning()) this.character.keyboard = this.keyboard;
+  }
+
+  exit() {
+    if (this.isRunning() || !this.gate.open) return;
+    const distance = this.gate.centerX() - this.character.centerX();
+    if (distance > EXIT_DISTANCE) return;
+    this.autopilot.right = true;
+    this.character.keyboard = this.autopilot;
+    this.character.alpha = Math.max(distance / EXIT_DISTANCE, 0);
   }
 
   gather() {

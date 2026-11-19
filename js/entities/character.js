@@ -25,6 +25,7 @@ export default class Character extends MovableObject {
     this.mana = this.maxMana;
     this.pendingBolt = null;
     this.boltLoaded = false;
+    this.alpha = 1;
     this.animations = {
       idle: new SpriteAnimation(MAGE_PATH, "idle", 14, 0.2, { loopPause: 2 }),
       run: new SpriteAnimation(MAGE_PATH, "run", 8, 0.08),
@@ -117,6 +118,13 @@ export default class Character extends MovableObject {
   isVisible() {
     if (this.isGone()) return false;
     return super.isVisible();
+  }
+
+  draw(ctx) {
+    ctx.save();
+    ctx.globalAlpha = this.alpha;
+    super.draw(ctx);
+    ctx.restore();
   }
 
   takeBolt() {
