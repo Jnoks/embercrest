@@ -2,6 +2,7 @@ export default class Level {
   constructor(data) {
     this.width = data.width;
     this.groundY = data.groundY;
+    this.map = data.map;
     this.backgroundLayers = data.backgroundLayers;
     this.tiles = data.tiles;
     this.enemies = data.enemies;

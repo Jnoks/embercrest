@@ -45,6 +45,7 @@ export default function createLevel1() {
   return new Level({
     width: map.width(),
     groundY: GROUND_Y,
+    map,
     backgroundLayers: [
       new BackgroundLayer(0, 0, BACKGROUND_PATH + "sky.png", 0),
       new Sun(rain),

@@ -52,11 +52,7 @@ export default class World {
 
   update(delta) {
     this.updateScenery(delta);
-    this.character.update(delta);
-    this.pushCharacter(delta);
-    if (this.character.y >= this.level.groundY) {
-      this.character.land(this.level.groundY);
-    }
+    this.moveCharacter(delta);
     this.updateBossRoom(delta);
     this.keepInside();
     this.updateTargets();
@@ -74,6 +70,38 @@ export default class World {
     for (let i = 0; i < this.level.backgroundLayers.length; i++) {
       this.level.backgroundLayers[i].scrollTo(this.cameraX);
     }
+  }
+
+  moveCharacter(delta) {
+    const character = this.character;
+    const lastX = character.x;
+    const lastY = character.y;
+    character.update(delta);
+    this.pushCharacter(delta);
+    this.stopAtWalls(lastX, lastY);
+    this.stopAtCeiling(lastY);
+    this.landOnTiles(lastY);
+  }
+
+  stopAtWalls(lastX, lastY) {
+    const box = this.character.hitbox();
+    const rise = lastY - this.character.y;
+    box.top += rise;
+    box.bottom += rise;
+    if (this.level.map.hitsWall(box)) this.character.x = lastX;
+  }
+
+  stopAtCeiling(lastY) {
+    const character = this.character;
+    if (character.velocityY >= 0) return;
+    if (this.level.map.hitsTop(character.hitbox())) character.land(lastY);
+  }
+
+  landOnTiles(lastY) {
+    const character = this.character;
+    const floor = this.level.map.floorUnder(character.hitbox(), lastY);
+    if (floor === null) character.onGround = false;
+    else character.land(floor);
   }
 
   updateScenery(delta) {

@@ -1,6 +1,8 @@
 import Tile, { TILE_SIZE } from "./entities/tile.js";
 
 const TILE_PATH = "./assets/images/forest/tiles/";
+const SURFACE = 6;
+const STEP = 8;
 const CORNER_TILES = [
   "rock-middle-tl",
   "rock-middle-tr",
@@ -48,6 +50,43 @@ export default class TileMap {
     if (char === kind) return true;
     const behind = char === GROUND && this.cell(column, row - 1) === BACKDROP;
     return kind === BACKDROP && behind;
+  }
+
+  isSolid(x, y) {
+    const column = Math.floor(x / TILE_SIZE);
+    const row = Math.floor((y - this.top) / TILE_SIZE);
+    return this.cell(column, row) === GROUND;
+  }
+
+  hitsTop(box) {
+    return this.isSolid(box.left, box.top) || this.isSolid(box.right, box.top);
+  }
+
+  hitsWall(box) {
+    const bottom = box.bottom - STEP;
+    if (this.hitsTop(box)) return true;
+    return this.isSolid(box.left, bottom) || this.isSolid(box.right, bottom);
+  }
+
+  floorUnder(box, lastBottom) {
+    const start = lastBottom - STEP - SURFACE - this.top;
+    const end = box.bottom - SURFACE - this.top;
+    const last = Math.floor(end / TILE_SIZE);
+    for (let row = Math.ceil(start / TILE_SIZE); row <= last; row++) {
+      if (this.isFloor(box, row)) return this.top + row * TILE_SIZE + SURFACE;
+    }
+    return null;
+  }
+
+  isFloor(box, row) {
+    const left = Math.floor(box.left / TILE_SIZE);
+    const right = Math.floor(box.right / TILE_SIZE);
+    return this.isTop(left, row) || this.isTop(right, row);
+  }
+
+  isTop(column, row) {
+    const above = this.cell(column, row - 1);
+    return this.cell(column, row) === GROUND && above !== GROUND;
   }
 
   createTiles(kind) {
