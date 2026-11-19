@@ -1,6 +1,6 @@
 export const TITLE = "Embercrest";
 
-export const TAGLINE = "One takes the road. One keeps the fire.";
+export const TAGLINE = "One goes out. One stays by the fire.";
 
 export const HEROES = [
   {
@@ -22,13 +22,13 @@ export const HEROES = [
 ];
 
 export const INTRO_PAGES = [
-  "Come closer to the fire. This is how we almost lost it.",
-  "Embercrest is a hall on a hill. Its fire is the Ember. The red banner over its door is the Crest.",
-  "A mage feeds the fire. A knight guards the door. While the Ember burns on its hill, the land stays warm.",
-  "Three winters ago the old mage took the fire down the road. The old knight took the banner and followed.",
-  "They left one small coal. Back by spring, they said. They did not say which spring.",
-  "Now the land grows colder, like soup left on the table.",
-  "Two apprentices are left. One stays with the coal. One takes the road. Tonight, that one is you.",
+  "Come closer to the fire. I will tell you a story.",
+  "Embercrest is a hall on a hill. Its fire is called the Ember. Its red flag is called the Crest.",
+  "A mage keeps the fire burning. A knight guards the door. The fire keeps the land warm.",
+  "Three years ago the old mage took the fire away. The old knight took the flag and went with her.",
+  "They did not come back. Now the land gets colder every day.",
+  "Only one small fire is left. And two young heroes.",
+  "One stays by the fire. One goes out to find the Ember. That one is you.",
 ];
 
 export const INTRO_PAGES_SHORT = [
@@ -43,7 +43,8 @@ export const WORLDS = [
     name: "The Woodpile",
     chapter: "Through the Wood",
     arrival: [
-      "The Woodpile. The hall cuts its firewood here. But it has rained since Hob walked in, and wet wood does not burn.",
+      "This is the Woodpile. The hall gets its firewood here.",
+      "But it has rained since Hob came. And wet wood does not burn.",
     ],
     quest: {
       giver: "Latch",
@@ -53,57 +54,59 @@ export const WORLDS = [
       amount: 5,
       objective: "Find 5 ember shards for Latch",
       offer: [
-        "Smoke. Onions. A fire that is almost out. You're from the hall on the hill. I'm Latch. I open locks.",
-        "I buy ember shards. Bits of your fire that fell on the road and turned hard. I have a buyer for them. Don't ask who.",
-        "Four lie in this wood. Hob has the fifth on his torch and the thorn gate key on his belt. Who puts a lock on a bush?",
-        "One alone stays cold. Five together wake up. Find five and I'll get you that key. You fight, I carry. Deal?",
+        "Hello. You are from the hall on the hill. I am Latch. I open locks.",
+        "I want ember shards. They are small pieces of your fire. They fell on the road and got hard.",
+        "Four shards are in this wood. Hob has number five. He is big. He is angry.",
+        "At the end of the wood is a gate of thorns. It has a lock. A lock on a bush! Who does that?",
+        "Bring me five shards. Then I open the lock for you. Deal?",
       ],
       reminder: [
-        "Found them all? No? Thought so. Meet me at the thorn gate with all five. You bring the shards, I open the lock.",
+        "Not five yet? Find all five shards. Then come to the thorn gate. I will open the lock.",
       ],
       complete: [
-        "Five. I counted from the bushes. Hand them over. My buyer pays in spoons. Don't ask.",
-        "While you two were busy, I checked his belt. One copper key. I call that teamwork.",
-        "You brought the shards. Now I open the lock. Stand back and watch a master.",
+        "Five shards! Give them to me. That was the deal.",
+        "I sell them. My buyer pays me with spoons. Do not ask why.",
+        "Now I open the lock for you. Step back and watch.",
       ],
       farewell: [
-        "He turned hard out here, you know. Like the shards. Too long, too far from home. Go on. The gate is yours.",
+        "Hob was alone out here for too long. That made him hard. Like the shards.",
+        "Go on. The gate is open.",
       ],
-      rewardItem: "Copper Key",
-      rewardText: "You got the Copper Key.",
     },
     gate: {
       name: "Thorn Gate",
-      requires: "Copper Key",
       locked: [
-        "A golden lock hangs in the thorns. It is cold and it will not move. You need someone who opens locks.",
+        "A golden lock hangs on the thorn gate. It does not move. You need someone who can open locks.",
       ],
       opened: [
-        "The copper key turns. Click. The lock drops into the grass. Behind the thorns, a road climbs toward the mountains.",
+        "Click. The lock falls into the grass. The gate is open.",
+        "Behind the gate a road goes up to the mountains.",
       ],
     },
     boss: {
       name: "Hob",
       portrait: "con10",
       intro: [
-        "Forty winters I held that hall. Fed the fire. Kept the door. Both jobs. Alone. Nobody said thank you.",
-        "Now they send a child for my one shard? No. Go home. Tell them Hob says no. The rain says no too.",
+        "Forty years I kept that hall. I kept the fire. I guarded the door. Alone. Nobody said thank you.",
+        "And now they send a child for my shard? No. Go home. Hob says no. Even the rain says no.",
       ],
       heroLine: null,
       defeat: [
-        "Enough. Take it. It was heavy, doing both. ...Is there still soup at the hall? There always was.",
+        "Stop. You win. Take the shard. I did two jobs alone. It was too much.",
+        "...Is there still soup at the hall? There was always soup.",
       ],
     },
     cleared: [
-      "One night, long before your time, Hob took a torch and a sword and walked into the wood.",
-      "That is why the hall has two now: one for the fire, one for the door. Nobody should do both alone.",
+      "The rain has stopped. The sun comes out.",
+      "Long ago Hob kept the fire and guarded the door. Alone. One night he walked away into the wood.",
+      "That is why two people keep the hall now. Nobody should do both jobs alone.",
     ],
     ending: [
-      "The road beyond the thorn gate is long. Too long for one day. You leave the gate open and walk home, up the hill.",
-      "Your friend opens the door of Embercrest before you knock. Inside, the coal is a fire again. Five shards glow in it.",
-      "On the table lies a thief's bill with your friend's name on it. It was paid in spoons. All the spoons.",
-      "Late that night Hob stands in the door for a long time. Then he asks if there is soup. There is. There are no spoons.",
-      "The road goes on, over the pass. But it is late. The rest is for another night.",
+      "The road behind the gate is long. Too long for one day. You walk home, up the hill.",
+      "Your friend opens the door. Inside, the small fire is big again. Five shards shine in it.",
+      "Latch sold the shards to your friend. Your friend paid with spoons. With all the spoons.",
+      "Late at night Hob stands at the door. He asks: Is there soup? There is. But there are no spoons.",
+      "The road goes on. But that is a story for another night.",
     ],
   },
   {
@@ -393,10 +396,10 @@ export const UI_TEXT = {
   quit: "Quit",
   fullscreen: "Fullscreen",
   gameOver: "Game Over",
-  heroDown: "You have fallen. The road waits.",
+  heroDown: "Do not give up.",
   tryAgain: "Try again",
   endTitle: "Home Again",
-  thanks: "Thank you for taking the road.",
+  thanks: "Thank you for playing.",
   playAgain: "Play again",
   soundOn: "Sound: on",
   soundOff: "Sound: off",
