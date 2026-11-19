@@ -94,7 +94,10 @@ export default class World {
   stopAtCeiling(lastY) {
     const character = this.character;
     if (character.velocityY >= 0) return;
-    if (this.level.map.hitsTop(character.hitbox())) character.land(lastY);
+    if (this.level.map.hitsTop(character.hitbox())) {
+      character.y = lastY;
+      character.velocityY = 0;
+    }
   }
 
   landOnTiles(lastY) {
