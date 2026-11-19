@@ -1,4 +1,10 @@
 import MovableObject from "./movable-object.js";
+import SpeechBubble from "../ui/speech-bubble.js";
+
+const SHOUT_CHANCE = 0.25;
+const CHAT_RANGE = 200;
+const BUBBLE_GAP = 12;
+const BUBBLE_SHIFT = 6;
 
 export default class Enemy extends MovableObject {
   constructor(x, y, width, height) {
@@ -13,6 +19,10 @@ export default class Enemy extends MovableObject {
     this.attackCooldown = 0;
     this.minX = -Infinity;
     this.maxX = Infinity;
+    this.lines = [];
+    this.greetings = [];
+    this.greeted = false;
+    this.bubble = new SpeechBubble();
   }
 
   setZone(zone) {
@@ -32,6 +42,11 @@ export default class Enemy extends MovableObject {
       this.chase(delta);
     }
     this.animate(delta);
+  }
+
+  updateTimers(delta) {
+    super.updateTimers(delta);
+    this.bubble.update(delta);
   }
 
   seesTarget() {
@@ -65,6 +80,33 @@ export default class Enemy extends MovableObject {
     if (this.isOnCooldown() || this.isHurt() || this.isDead()) return;
     this.attackTimer = this.animations.attack.cycleDuration();
     this.cooldownTimer = this.attackCooldown;
+    this.shout();
+  }
+
+  shout() {
+    if (this.lines.length === 0 || Math.random() > SHOUT_CHANCE) return;
+    this.bubble.say(this.pick(this.lines));
+  }
+
+  notices() {
+    if (this.greeted || this.isDead() || !this.seesTarget()) return false;
+    this.greeted = true;
+    return this.greetings.length > 0;
+  }
+
+  canAnswer(other) {
+    if (this.greeted || this.isDead()) return false;
+    const distance = Math.abs(this.centerX() - other.centerX());
+    const near = distance < CHAT_RANGE && this.y === other.y;
+    return near && this.greetings.length > 0;
+  }
+
+  greet() {
+    this.bubble.say(this.pick(this.greetings));
+  }
+
+  pick(lines) {
+    return lines[Math.floor(Math.random() * lines.length)];
   }
 
   isHitting() {
@@ -79,6 +121,15 @@ export default class Enemy extends MovableObject {
     if (this.facingLeft) box.left -= this.attackReach;
     else box.right += this.attackReach;
     return box;
+  }
+
+  draw(ctx) {
+    super.draw(ctx);
+    if (this.isDead()) return;
+    let x = this.centerX() + BUBBLE_SHIFT;
+    if (!this.facingLeft) x = this.centerX() - BUBBLE_SHIFT;
+    this.bubble.pointAt(x, this.hitbox().top - BUBBLE_GAP, !this.facingLeft);
+    this.bubble.draw(ctx);
   }
 
   drawHitbox(ctx) {

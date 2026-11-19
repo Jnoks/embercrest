@@ -10,7 +10,7 @@ import EmberShard from "../entities/ember-shard.js";
 import GateScene from "../gate-scene.js";
 import Rain from "../entities/rain.js";
 import Sun from "../entities/sun.js";
-import { WORLDS } from "./story.js";
+import { WORLDS, SHOUTS } from "./story.js";
 import { LEVEL1_SCREENS } from "./level1-map.js";
 import { TREES, BUSHES, VINES, createPlants, createIvy } from "./plants.js";
 
@@ -56,6 +56,7 @@ export default function createLevel1() {
   latch.facingLeft = true;
   const boss = new Boss(9085, GROUND_Y);
   boss.sightRange = 0;
+  boss.lines = SHOUTS.hob;
   const enemies = createGoblins(map);
   enemies.push(boss);
   const rain = new Rain();

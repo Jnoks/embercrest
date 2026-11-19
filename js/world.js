@@ -1,11 +1,13 @@
 import Character from "./entities/character.js";
 import Hud from "./ui/hud.js";
+import { CHATS } from "./data/story.js";
 
 const SHAKE = 4;
 const PUSH_RANGE = 320;
 const PUSH_SPEED = 260;
 const ROOM_OPEN_SPEED = 300;
 const EDGE_MARGIN = 26;
+const ANSWER_DELAY = 0.9;
 
 export default class World {
   constructor(canvas, keyboard, level, quest) {
@@ -258,8 +260,30 @@ export default class World {
 
   updateTargets() {
     for (let i = 0; i < this.level.enemies.length; i++) {
-      this.level.enemies[i].targetX = this.character.centerX();
+      const enemy = this.level.enemies[i];
+      enemy.targetX = this.character.centerX();
+      if (enemy.notices()) this.startChat(enemy);
     }
+  }
+
+  startChat(enemy) {
+    const partner = this.findPartner(enemy);
+    if (partner === null) {
+      enemy.greet();
+      return;
+    }
+    const chat = CHATS[Math.floor(Math.random() * CHATS.length)];
+    enemy.bubble.say(chat.first);
+    partner.bubble.say(chat.second, ANSWER_DELAY);
+    partner.greeted = true;
+  }
+
+  findPartner(enemy) {
+    for (let i = 0; i < this.level.enemies.length; i++) {
+      const other = this.level.enemies[i];
+      if (other !== enemy && other.canAnswer(enemy)) return other;
+    }
+    return null;
   }
 
   checkCollisions() {

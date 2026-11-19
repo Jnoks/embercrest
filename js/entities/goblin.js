@@ -1,5 +1,6 @@
 import Enemy from "./enemy.js";
 import SpriteAnimation from "../sprite-animation.js";
+import { SHOUTS } from "../data/story.js";
 
 const GOBLIN_PATH = "./assets/images/goblin/";
 const GOBLIN_SIZE = 128;
@@ -19,6 +20,7 @@ export default class Goblin extends Enemy {
     this.sightRange = 400;
     this.stopDistance = 50;
     this.attackCooldown = 1.5;
+    this.greetings = SHOUTS.goblin;
     this.animations = {
       walk: new SpriteAnimation(GOBLIN_PATH, "walk", 6, 0.2),
       attack: new SpriteAnimation(GOBLIN_PATH, "attack", 5, 0.1, {

@@ -368,6 +368,26 @@ export const WORLDS = [
   },
 ];
 
+export const SHOUTS = {
+  goblin: [["Hey!"], ["Mine!"], ["Go home!"]],
+  hob: [
+    ["Go home!"],
+    ["I said no!"],
+    ["My shard!"],
+    ["Forty", "years!"],
+    ["All alone!"],
+  ],
+};
+
+export const CHATS = [
+  { first: ["A hat!"], second: ["Get it!"] },
+  { first: ["Look!"], second: ["Lunch?"] },
+  { first: ["You go!"], second: ["No, you!"] },
+  { first: ["Wake up!"], second: ["Not now..."] },
+  { first: ["Who is it?"], second: ["Dinner!"] },
+  { first: ["Hob said", "no guests!"], second: ["Smash?"] },
+];
+
 export const UI_TEXT = {
   pressStart: "Press any key",
   newGame: "New game",
