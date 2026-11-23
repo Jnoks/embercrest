@@ -69,6 +69,7 @@ export default class World {
     this.drawObjects(this.level.shards);
     this.drawObjects(this.level.hearts);
     this.character.draw(this.ctx);
+    this.drawObjects(this.level.traps);
     this.drawObjects(this.level.enemies);
     this.drawObjects(this.bolts);
     this.drawObjects(this.spells);
@@ -90,6 +91,7 @@ export default class World {
     this.updateMagic(delta);
     this.updateQuest(delta);
     this.collectHearts(delta);
+    this.updateTraps(delta);
     this.hud.update(this.character, this.level.boss, this.quest);
     this.updateCamera();
   }
@@ -292,6 +294,19 @@ export default class World {
       }
     }
     this.level.hearts = this.updateProjectiles(this.level.hearts, delta);
+  }
+
+  updateTraps(delta) {
+    for (let i = 0; i < this.level.traps.length; i++) {
+      const trap = this.level.traps[i];
+      if (this.character.isColliding(trap)) this.touchTrap(trap);
+    }
+    this.updateObjects(this.level.traps, delta);
+  }
+
+  touchTrap(trap) {
+    trap.touch();
+    if (trap.isHitting()) this.character.takeDamage(trap.damage);
   }
 
   updateBossRoom(delta) {

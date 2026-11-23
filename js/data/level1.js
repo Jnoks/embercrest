@@ -9,6 +9,7 @@ import Npc from "../entities/npc.js";
 import EmberShard from "../entities/ember-shard.js";
 import Heart from "../entities/heart.js";
 import Checkpoint from "../entities/checkpoint.js";
+import TrapPlant from "../entities/trap-plant.js";
 import { TILE_SIZE } from "../entities/tile.js";
 import GateScene from "../gate-scene.js";
 import Rain from "../entities/rain.js";
@@ -21,6 +22,7 @@ const BACKGROUND_PATH = "./assets/images/forest/background/";
 const GROUND_Y = 482;
 const LEVEL_HEIGHT = 540;
 const SHARD_HEIGHT = 30;
+const PIT_SHIFT = 24;
 
 function createTiles(map, gate, latch) {
   const backdrop = map.createTiles(BACKDROP);
@@ -72,6 +74,14 @@ function createCheckpoint(spot) {
   return new Checkpoint(spot.x, spot.floor);
 }
 
+function createTrapPlant(spot, map) {
+  const zone = map.zone(spot.column, spot.row);
+  const middle = (zone.left + zone.right) / 2;
+  let x = spot.x + Math.sign(middle - spot.x) * PIT_SHIFT;
+  if (zone.right - zone.left === 2 * TILE_SIZE) x = middle;
+  return new TrapPlant(x, spot.floor);
+}
+
 function createFigures(map) {
   const gate = new Gate(9440, GROUND_Y);
   const latch = new Npc("latch", 17, 480, GROUND_Y);
@@ -88,6 +98,7 @@ function addObjects(data) {
   data.shards = createObjects(data.map, "s", createShard);
   data.hearts = createObjects(data.map, "h", createHeart);
   data.checkpoints = createObjects(data.map, "c", createCheckpoint);
+  data.traps = createObjects(data.map, "x", createTrapPlant);
 }
 
 export default function createLevel1() {
