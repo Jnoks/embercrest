@@ -3,6 +3,7 @@ import Tile, { TILE_SIZE } from "./entities/tile.js";
 const TILE_PATH = "./assets/images/forest/tiles/";
 const SURFACE = 6;
 const STEP = 8;
+const VIEW_STEP = 16;
 const CORNER_TILES = [
   "rock-middle-tl",
   "rock-middle-tr",
@@ -74,6 +75,19 @@ export default class TileMap {
   hitsRock(box) {
     const bottom = this.isSolid(box.left, box.bottom);
     return this.hitsTop(box) || bottom || this.isSolid(box.right, box.bottom);
+  }
+
+  blocksView(from, to) {
+    const distanceX = to.x - from.x;
+    const distanceY = to.y - from.y;
+    const longest = Math.max(Math.abs(distanceX), Math.abs(distanceY));
+    const steps = Math.ceil(longest / VIEW_STEP);
+    for (let i = 1; i < steps; i++) {
+      const x = from.x + (distanceX * i) / steps;
+      const y = from.y + (distanceY * i) / steps;
+      if (this.isSolid(x, y)) return true;
+    }
+    return false;
   }
 
   floorUnder(box, lastBottom) {

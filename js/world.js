@@ -318,7 +318,7 @@ export default class World {
     if (boss.isGone()) this.endFight();
     if (boss.isDead()) {
       this.leftLimit = Math.max(this.leftLimit - ROOM_OPEN_SPEED * delta, 0);
-    } else if (this.isInBossRoom()) {
+    } else if (this.isInBossRoom() || boss.sightRange > 0) {
       this.leftLimit = this.cameraX;
       boss.sightRange = this.canvas.width;
       this.quest.faceBoss();
@@ -372,8 +372,16 @@ export default class World {
     for (let i = 0; i < this.level.enemies.length; i++) {
       const enemy = this.level.enemies[i];
       enemy.targetX = this.character.centerX();
+      enemy.targetHidden = this.isHidden(enemy);
       if (enemy.notices()) this.startChat(enemy);
     }
+  }
+
+  isHidden(enemy) {
+    const character = this.character;
+    const eye = { x: enemy.centerX(), y: enemy.centerY() };
+    const target = { x: character.centerX(), y: character.centerY() };
+    return this.level.map.blocksView(eye, target);
   }
 
   startChat(enemy) {

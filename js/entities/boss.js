@@ -232,6 +232,8 @@ export default class Boss extends Enemy {
     return spell;
   }
 
+  drawHealth(ctx) {}
+
   takeLoot() {
     if (!this.isGone() || this.lootTaken) return null;
     this.lootTaken = true;

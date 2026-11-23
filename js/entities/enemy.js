@@ -5,12 +5,19 @@ const SHOUT_CHANCE = 0.25;
 const CHAT_RANGE = 200;
 const BUBBLE_GAP = 12;
 const BUBBLE_SHIFT = 6;
+const ALERT_RANGE = 960;
+const BAR_WIDTH = 32;
+const BAR_HEIGHT = 4;
+const BAR_GAP = 8;
+const BAR_BACK = "rgba(0, 0, 0, 0.6)";
+const BAR_COLOR = "#e0452f";
 
 export default class Enemy extends MovableObject {
   constructor(x, y, width, height) {
     super(x, y, width, height);
     this.damage = 10;
     this.targetX = 0;
+    this.targetHidden = false;
     this.invincibleDuration = 0;
     this.hitFrame = 0;
     this.attackReach = 0;
@@ -49,7 +56,13 @@ export default class Enemy extends MovableObject {
     this.bubble.update(delta);
   }
 
+  takeDamage(amount) {
+    super.takeDamage(amount);
+    this.sightRange = ALERT_RANGE;
+  }
+
   seesTarget() {
+    if (this.targetHidden) return false;
     return Math.abs(this.targetX - this.centerX()) <= this.sightRange;
   }
 
@@ -126,10 +139,22 @@ export default class Enemy extends MovableObject {
   draw(ctx) {
     super.draw(ctx);
     if (this.isDead()) return;
+    this.drawHealth(ctx);
     let x = this.centerX() + BUBBLE_SHIFT;
     if (!this.facingLeft) x = this.centerX() - BUBBLE_SHIFT;
     this.bubble.pointAt(x, this.hitbox().top - BUBBLE_GAP, !this.facingLeft);
     this.bubble.draw(ctx);
+  }
+
+  drawHealth(ctx) {
+    if (this.health === this.maxHealth) return;
+    const x = Math.round(this.centerX() - BAR_WIDTH / 2);
+    const y = this.hitbox().top - BAR_GAP;
+    const width = (BAR_WIDTH * this.health) / this.maxHealth;
+    ctx.fillStyle = BAR_BACK;
+    ctx.fillRect(x - 1, y - 1, BAR_WIDTH + 2, BAR_HEIGHT + 2);
+    ctx.fillStyle = BAR_COLOR;
+    ctx.fillRect(x, y, width, BAR_HEIGHT);
   }
 
   drawHitbox(ctx) {

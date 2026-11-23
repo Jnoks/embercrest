@@ -59,6 +59,10 @@ export default class MovableObject extends DrawableObject {
     return this.x + this.anchorX;
   }
 
+  centerY() {
+    return this.y - this.hitboxHeight / 2;
+  }
+
   hitbox() {
     const centerX = this.centerX();
     return {
