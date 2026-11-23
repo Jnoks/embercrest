@@ -1,5 +1,6 @@
 import Level from "../level.js";
 import Goblin from "../entities/goblin.js";
+import GoblinChief from "../entities/goblin-chief.js";
 import BackgroundLayer from "../entities/background-layer.js";
 import CloudLayer from "../entities/cloud-layer.js";
 import TileMap, { BACKDROP, GROUND } from "../tile-map.js";
@@ -24,6 +25,10 @@ const GROUND_Y = 482;
 const LEVEL_HEIGHT = 540;
 const SHARD_HEIGHT = 30;
 const PIT_SHIFT = 24;
+const WALKERS = [
+  { char: "g", type: Goblin },
+  { char: "k", type: GoblinChief },
+];
 
 function createTiles(map, gate, latch) {
   const backdrop = map.createTiles(BACKDROP);
@@ -57,10 +62,23 @@ function createObjects(map, char, create) {
   return objects;
 }
 
-function createGoblin(spot, map) {
-  const goblin = new Goblin(spot.x, spot.floor);
-  goblin.setZone(map.zone(spot.column, spot.row));
-  return goblin;
+function createWalkers(map, kind) {
+  const walkers = [];
+  const spots = map.spots(kind.char);
+  for (let i = 0; i < spots.length; i++) {
+    const walker = new kind.type(spots[i].x, spots[i].floor);
+    walker.setZone(map.zone(spots[i].column, spots[i].row));
+    walkers.push(walker);
+  }
+  return walkers;
+}
+
+function createEnemies(map, boss) {
+  let enemies = [];
+  for (let i = 0; i < WALKERS.length; i++) {
+    enemies = enemies.concat(createWalkers(map, WALKERS[i]));
+  }
+  return enemies.concat([boss]);
 }
 
 function createShard(spot) {
@@ -95,8 +113,7 @@ function createFigures(map) {
   const boss = new Boss(9085, GROUND_Y);
   boss.sightRange = 0;
   boss.lines = SHOUTS.hob;
-  const enemies = createObjects(map, "g", createGoblin);
-  enemies.push(boss);
+  const enemies = createEnemies(map, boss);
   return { map, gate, latch, boss, enemies };
 }
 

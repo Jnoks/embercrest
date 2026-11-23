@@ -370,6 +370,7 @@ export const WORLDS = [
 
 export const SHOUTS = {
   goblin: [["Hey!"], ["Mine!"], ["Go home!"]],
+  chief: [["Stop!"], ["Guard it!"], ["Not yours!"]],
   hob: [
     ["Go home!"],
     ["I said no!"],
