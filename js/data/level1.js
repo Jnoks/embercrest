@@ -10,6 +10,7 @@ import EmberShard from "../entities/ember-shard.js";
 import Heart from "../entities/heart.js";
 import Checkpoint from "../entities/checkpoint.js";
 import TrapPlant from "../entities/trap-plant.js";
+import FallingSpike from "../entities/falling-spike.js";
 import { TILE_SIZE } from "../entities/tile.js";
 import GateScene from "../gate-scene.js";
 import Rain from "../entities/rain.js";
@@ -82,6 +83,11 @@ function createTrapPlant(spot, map) {
   return new TrapPlant(x, spot.floor);
 }
 
+function createSpike(spot, map) {
+  const floor = map.floorBelow(spot.column, spot.row);
+  return new FallingSpike(spot.x, spot.y, floor);
+}
+
 function createFigures(map) {
   const gate = new Gate(9440, GROUND_Y);
   const latch = new Npc("latch", 17, 480, GROUND_Y);
@@ -98,7 +104,8 @@ function addObjects(data) {
   data.shards = createObjects(data.map, "s", createShard);
   data.hearts = createObjects(data.map, "h", createHeart);
   data.checkpoints = createObjects(data.map, "c", createCheckpoint);
-  data.traps = createObjects(data.map, "x", createTrapPlant);
+  const plants = createObjects(data.map, "x", createTrapPlant);
+  data.traps = plants.concat(createObjects(data.map, "!", createSpike));
 }
 
 export default function createLevel1() {

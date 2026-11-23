@@ -299,9 +299,11 @@ export default class World {
   updateTraps(delta) {
     for (let i = 0; i < this.level.traps.length; i++) {
       const trap = this.level.traps[i];
+      trap.targetX = this.character.centerX();
+      trap.targetY = this.character.y;
       if (this.character.isColliding(trap)) this.touchTrap(trap);
     }
-    this.updateObjects(this.level.traps, delta);
+    this.level.traps = this.updateProjectiles(this.level.traps, delta);
   }
 
   touchTrap(trap) {

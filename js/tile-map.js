@@ -114,6 +114,12 @@ export default class TileMap {
     return { column, row, x, y, floor };
   }
 
+  floorBelow(column, row) {
+    let last = row;
+    while (this.cell(column, last + 1) !== GROUND) last += 1;
+    return this.spot(column, last).floor;
+  }
+
   zone(column, row) {
     let first = column;
     let last = column;
