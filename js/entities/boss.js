@@ -163,6 +163,7 @@ export default class Boss extends Enemy {
     this.castTimer = this.animations[this.spellName].cycleDuration();
     this.spellTimer = this.spellCooldown;
     this.spellLoaded = true;
+    this.shout();
   }
 
   chooseSpell() {
