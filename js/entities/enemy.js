@@ -17,7 +17,12 @@ export default class Enemy extends MovableObject {
     super(x, y, width, height);
     this.damage = 10;
     this.targetX = 0;
+    this.targetY = 0;
     this.targetHidden = false;
+    this.pendingSpell = null;
+    this.shotCooldown = 0;
+    this.releaseFrame = 0;
+    this.shotLoaded = false;
     this.invincibleDuration = 0;
     this.hitFrame = 0;
     this.attackReach = 0;
@@ -49,6 +54,7 @@ export default class Enemy extends MovableObject {
       this.chase(delta);
     }
     this.animate(delta);
+    this.releaseShot();
   }
 
   updateTimers(delta) {
@@ -120,6 +126,33 @@ export default class Enemy extends MovableObject {
 
   pick(lines) {
     return lines[Math.floor(Math.random() * lines.length)];
+  }
+
+  shoot() {
+    this.attackTimer = this.animations.attack.cycleDuration();
+    this.cooldownTimer = this.shotCooldown;
+    this.shotLoaded = true;
+  }
+
+  isReleasing() {
+    const attacking = this.currentAnimation === this.animations.attack;
+    return attacking && this.frameIndex === this.releaseFrame;
+  }
+
+  releaseShot() {
+    if (!this.shotLoaded || !this.isReleasing()) return;
+    this.shotLoaded = false;
+    this.pendingSpell = this.createShot();
+  }
+
+  createShot() {
+    return null;
+  }
+
+  takeSpell() {
+    const spell = this.pendingSpell;
+    this.pendingSpell = null;
+    return spell;
   }
 
   isHitting() {

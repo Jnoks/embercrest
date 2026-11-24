@@ -1,4 +1,5 @@
 import MovableObject from "./movable-object.js";
+import DrawableObject from "./drawable-object.js";
 import SpriteAnimation from "../sprite-animation.js";
 import Bolt from "./bolt.js";
 
@@ -9,6 +10,11 @@ const MANA_REGEN = 10;
 const STAFF_REACH = 41;
 const STAFF_HEIGHT = 19;
 const RELEASE_FRAME = 4;
+const RUN_SPEED = 150;
+const SLOW_SPEED = 60;
+const WEB_IMAGE = "./assets/images/web/fly/fly3.png";
+const WEB_SIZE = 64;
+const WEB_HEIGHT = 54;
 
 export default class Character extends MovableObject {
   constructor(x, y, keyboard) {
@@ -18,14 +24,17 @@ export default class Character extends MovableObject {
     this.hitboxWidth = 30;
     this.hitboxHeight = 50;
     this.keyboard = keyboard;
-    this.speed = 150;
+    this.speed = RUN_SPEED;
     this.jumpSpeed = 700;
     this.maxAirJumps = 1;
+    this.slowTimer = 0;
     this.maxMana = 100;
     this.mana = this.maxMana;
     this.pendingBolt = null;
     this.boltLoaded = false;
     this.alpha = 1;
+    this.web = new DrawableObject(0, 0, WEB_SIZE, WEB_SIZE);
+    this.web.loadImage(WEB_IMAGE);
     this.animations = {
       idle: new SpriteAnimation(MAGE_PATH, "idle", 14, 0.2, { loopPause: 2 }),
       run: new SpriteAnimation(MAGE_PATH, "run", 8, 0.08),
@@ -58,6 +67,21 @@ export default class Character extends MovableObject {
     this.applyGravity(delta);
     this.animate(delta);
     this.releaseBolt();
+  }
+
+  updateTimers(delta) {
+    super.updateTimers(delta);
+    this.slowTimer = Math.max(this.slowTimer - delta, 0);
+    this.speed = RUN_SPEED;
+    if (this.isSlowed()) this.speed = SLOW_SPEED;
+  }
+
+  slow(time) {
+    this.slowTimer = time;
+  }
+
+  isSlowed() {
+    return this.slowTimer > 0;
   }
 
   handleInput(delta) {
@@ -121,10 +145,17 @@ export default class Character extends MovableObject {
   }
 
   draw(ctx) {
+    if (this.isSlowed()) this.drawWeb(ctx);
     ctx.save();
     ctx.globalAlpha = this.alpha;
     super.draw(ctx);
     ctx.restore();
+  }
+
+  drawWeb(ctx) {
+    this.web.x = this.centerX() - WEB_SIZE / 2;
+    this.web.y = this.y - WEB_HEIGHT;
+    this.web.draw(ctx);
   }
 
   takeBolt() {

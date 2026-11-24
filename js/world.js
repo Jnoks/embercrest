@@ -170,12 +170,18 @@ export default class World {
   }
 
   updateSpells(delta) {
-    const spell = this.level.boss.takeSpell();
-    if (spell) this.spells.push(spell);
+    this.collectSpells();
     this.spells = this.updateProjectiles(this.spells, delta);
     for (let i = 0; i < this.spells.length; i++) {
       this.hitCharacter(this.spells[i]);
-      this.hitGround(this.spells[i]);
+      this.hitRock(this.spells[i]);
+    }
+  }
+
+  collectSpells() {
+    for (let i = 0; i < this.level.enemies.length; i++) {
+      const spell = this.level.enemies[i].takeSpell();
+      if (spell) this.spells.push(spell);
     }
   }
 
@@ -188,9 +194,9 @@ export default class World {
     }
   }
 
-  hitRock(bolt) {
-    if (!bolt.isHitting()) return;
-    if (this.level.map.hitsRock(bolt.hitbox())) bolt.explode();
+  hitRock(projectile) {
+    if (!projectile.isHitting()) return;
+    if (this.level.map.hitsRock(projectile.hitbox())) projectile.explode();
   }
 
   hitEnemy(bolt, enemy) {
@@ -203,12 +209,13 @@ export default class World {
   hitCharacter(spell) {
     if (!spell.isHitting()) return;
     if (!spell.isColliding(this.character)) return;
-    this.character.takeDamage(spell.damage);
+    this.hurtBySpell(spell);
     spell.explode();
   }
 
-  hitGround(spell) {
-    if (spell.y >= this.level.groundY) spell.explode();
+  hurtBySpell(spell) {
+    this.character.takeDamage(spell.damage);
+    if (spell.slowTime > 0) this.character.slow(spell.slowTime);
   }
 
   updateEffects(delta) {
@@ -372,6 +379,7 @@ export default class World {
     for (let i = 0; i < this.level.enemies.length; i++) {
       const enemy = this.level.enemies[i];
       enemy.targetX = this.character.centerX();
+      enemy.targetY = this.character.centerY();
       enemy.targetHidden = this.isHidden(enemy);
       if (enemy.notices()) this.startChat(enemy);
     }

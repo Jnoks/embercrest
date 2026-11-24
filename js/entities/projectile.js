@@ -7,6 +7,7 @@ export default class Projectile extends MovableObject {
     super(centerX - width / 2, y, width, height);
     this.facingLeft = facingLeft;
     this.damage = 0;
+    this.slowTime = 0;
     this.range = 0;
     this.distance = 0;
     this.alpha = 1;

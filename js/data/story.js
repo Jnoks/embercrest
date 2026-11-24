@@ -373,6 +373,7 @@ export const SHOUTS = {
   chief: [["Stop!"], ["Guard it!"], ["Not yours!"]],
   ent: [["Hmmm..."], ["My wood!"], ["Go slow!"]],
   dino: [["Rawr!"], ["Snap!"], ["Run!"]],
+  spider: [["All fear", "me. Lucky!"], ["Boo!"], ["Sticky!"]],
   hob: [
     ["Go home!"],
     ["I said no!"],

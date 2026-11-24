@@ -52,7 +52,6 @@ export default class Boss extends Enemy {
     this.castTimer = 0;
     this.spellTimer = 0;
     this.spellLoaded = false;
-    this.pendingSpell = null;
     this.spellName = SPELLS[0];
     this.spellCount = 0;
     this.spellCooldown = SPELL_COOLDOWNS[0];
@@ -224,12 +223,6 @@ export default class Boss extends Enemy {
   frontX(reach) {
     if (this.facingLeft) return this.centerX() - reach;
     return this.centerX() + reach;
-  }
-
-  takeSpell() {
-    const spell = this.pendingSpell;
-    this.pendingSpell = null;
-    return spell;
   }
 
   drawHealth(ctx) {}
