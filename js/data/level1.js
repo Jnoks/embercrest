@@ -1,6 +1,8 @@
 import Level from "../level.js";
 import Goblin from "../entities/goblin.js";
 import GoblinChief from "../entities/goblin-chief.js";
+import Ent from "../entities/ent.js";
+import Dino from "../entities/dino.js";
 import BackgroundLayer from "../entities/background-layer.js";
 import CloudLayer from "../entities/cloud-layer.js";
 import TileMap, { BACKDROP, GROUND } from "../tile-map.js";
@@ -28,6 +30,8 @@ const PIT_SHIFT = 24;
 const WALKERS = [
   { char: "g", type: Goblin },
   { char: "k", type: GoblinChief },
+  { char: "e", type: Ent },
+  { char: "d", type: Dino },
 ];
 
 function createTiles(map, gate, latch) {

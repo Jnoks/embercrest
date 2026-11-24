@@ -371,6 +371,8 @@ export const WORLDS = [
 export const SHOUTS = {
   goblin: [["Hey!"], ["Mine!"], ["Go home!"]],
   chief: [["Stop!"], ["Guard it!"], ["Not yours!"]],
+  ent: [["Hmmm..."], ["My wood!"], ["Go slow!"]],
+  dino: [["Rawr!"], ["Snap!"], ["Run!"]],
   hob: [
     ["Go home!"],
     ["I said no!"],
