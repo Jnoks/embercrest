@@ -4,6 +4,8 @@ import GoblinChief from "../entities/goblin-chief.js";
 import Ent from "../entities/ent.js";
 import Dino from "../entities/dino.js";
 import Spider from "../entities/spider.js";
+import Mosquito from "../entities/mosquito.js";
+import Beholder from "../entities/beholder.js";
 import BackgroundLayer from "../entities/background-layer.js";
 import CloudLayer from "../entities/cloud-layer.js";
 import TileMap, { BACKDROP, GROUND } from "../tile-map.js";
@@ -34,6 +36,10 @@ const WALKERS = [
   { char: "e", type: Ent },
   { char: "d", type: Dino },
   { char: "p", type: Spider },
+];
+const FLYERS = [
+  { char: "m", type: Mosquito },
+  { char: "o", type: Beholder },
 ];
 
 function createTiles(map, gate, latch) {
@@ -79,10 +85,22 @@ function createWalkers(map, kind) {
   return walkers;
 }
 
+function createFlyers(map, kind) {
+  const flyers = [];
+  const spots = map.spots(kind.char);
+  for (let i = 0; i < spots.length; i++) {
+    flyers.push(new kind.type(spots[i].x, spots[i].y + TILE_SIZE / 2));
+  }
+  return flyers;
+}
+
 function createEnemies(map, boss) {
   let enemies = [];
   for (let i = 0; i < WALKERS.length; i++) {
     enemies = enemies.concat(createWalkers(map, WALKERS[i]));
+  }
+  for (let i = 0; i < FLYERS.length; i++) {
+    enemies = enemies.concat(createFlyers(map, FLYERS[i]));
   }
   return enemies.concat([boss]);
 }

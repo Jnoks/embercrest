@@ -374,6 +374,8 @@ export const SHOUTS = {
   ent: [["Hmmm..."], ["My wood!"], ["Go slow!"]],
   dino: [["Rawr!"], ["Snap!"], ["Run!"]],
   spider: [["All fear", "me. Lucky!"], ["Boo!"], ["Sticky!"]],
+  mosquito: [["Bzzz!"], ["Snack!"], ["Zzzt!"]],
+  beholder: [["I see you!"], ["Eye spy!"], ["No blink!"]],
   hob: [
     ["Go home!"],
     ["I said no!"],
