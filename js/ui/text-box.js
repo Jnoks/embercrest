@@ -4,12 +4,15 @@ import Key from "./key.js";
 import { UI_TEXT } from "../data/story.js";
 
 const UI_PATH = "./assets/images/ui/";
-const HUD_PATH = "./assets/images/hud/";
+const PORTRAIT_PATH = "./assets/images/hud/portrait-";
 const CENTER_X = 480;
-const CENTER_Y = 262;
-const TEXT_WIDTH = 420;
-const LINE_HEIGHT = 34;
-const TEXT_FONT = "24px Silkscreen, monospace";
+const LAYOUT = {
+  centerX: 480,
+  centerY: 262,
+  width: 420,
+  lineHeight: 34,
+  font: "24px Silkscreen, monospace",
+};
 const TEXT_COLOR = "#52402b";
 const TITLE_COLOR = "#282c0c";
 const LIGHT_COLOR = "#ffc300";
@@ -33,7 +36,10 @@ const HINTS = [
 export default class TextBox {
   constructor(title, pages, portrait) {
     this.title = new Label(title, CENTER_X, 80, 16, TITLE_COLOR, LIGHT_COLOR);
-    this.portrait = this.createPortrait(portrait);
+    this.portrait = this.createPortrait(portrait, 198, 85);
+    this.window = WINDOW;
+    this.layout = LAYOUT;
+    this.dimColor = DIM_COLOR;
     this.pages = pages;
     this.page = 0;
     this.shown = 0;
@@ -41,12 +47,12 @@ export default class TextBox {
     this.seen = false;
   }
 
-  createPortrait(path) {
+  createPortrait(path, x, y) {
     if (!path) return [];
     return [
-      new HudImage(199, 87, 70, 66, HUD_PATH + "portrait-background.png"),
-      new HudImage(202, 88, 64, 64, path),
-      new HudImage(198, 85, 72, 71, HUD_PATH + "portrait-frame.png"),
+      new HudImage(x + 1, y + 2, 70, 66, PORTRAIT_PATH + "background.png"),
+      new HudImage(x + 4, y + 3, 64, 64, path),
+      new HudImage(x, y, 72, 71, PORTRAIT_PATH + "frame.png"),
     ];
   }
 
@@ -79,9 +85,9 @@ export default class TextBox {
   }
 
   draw(ctx) {
-    ctx.fillStyle = DIM_COLOR;
+    ctx.fillStyle = this.dimColor;
     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    this.drawParts(ctx, WINDOW);
+    this.drawParts(ctx, this.window);
     this.drawParts(ctx, this.portrait);
     this.drawParts(ctx, HINTS);
     this.title.draw(ctx);
@@ -95,18 +101,24 @@ export default class TextBox {
   }
 
   drawText(ctx) {
-    ctx.font = TEXT_FONT;
+    const layout = this.layout;
+    ctx.font = layout.font;
     ctx.fillStyle = TEXT_COLOR;
     ctx.textBaseline = "middle";
     ctx.textAlign = "left";
     const lines = this.wrap(ctx, this.pages[this.page]);
-    const top = CENTER_Y - ((lines.length - 1) * LINE_HEIGHT) / 2;
+    const top = layout.centerY - ((lines.length - 1) * layout.lineHeight) / 2;
     let remaining = Math.floor(this.shown);
     for (let i = 0; i < lines.length && remaining > 0; i++) {
-      const x = Math.round(CENTER_X - ctx.measureText(lines[i]).width / 2);
-      ctx.fillText(lines[i].slice(0, remaining), x, top + i * LINE_HEIGHT);
+      this.drawLine(ctx, lines[i].slice(0, remaining), lines[i], top, i);
       remaining -= lines[i].length + 1;
     }
+  }
+
+  drawLine(ctx, text, line, top, i) {
+    const width = ctx.measureText(line).width;
+    const x = Math.round(this.layout.centerX - width / 2);
+    ctx.fillText(text, x, top + i * this.layout.lineHeight);
   }
 
   wrap(ctx, text) {
@@ -115,7 +127,8 @@ export default class TextBox {
     for (let i = 1; i < words.length; i++) {
       const last = lines.length - 1;
       const longer = lines[last] + " " + words[i];
-      if (ctx.measureText(longer).width > TEXT_WIDTH) lines.push(words[i]);
+      const tooLong = ctx.measureText(longer).width > this.layout.width;
+      if (tooLong) lines.push(words[i]);
       else lines[last] = longer;
     }
     return lines;
