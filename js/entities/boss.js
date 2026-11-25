@@ -18,6 +18,7 @@ const FLAME_REACH = 110;
 const FLAME_HEIGHT = 52;
 const LOOT_HEIGHT = 30;
 const PHASES = 3;
+const ONCE = { loop: false };
 const ATTACK_COOLDOWNS = [2, 1.6, 1.2];
 const SPELL_COOLDOWNS = [3, 2.2, 1.5];
 const SPELLS = ["ice", "lightning", "fire"];
@@ -59,25 +60,23 @@ export default class Boss extends Enemy {
     this.rageTimer = 0;
     this.pendingEffect = null;
     this.lootTaken = false;
-    this.animations = {
+    this.animations = this.createAnimations();
+    this.setAnimation(this.animations.idle);
+  }
+
+  createAnimations() {
+    return {
       idle: new SpriteAnimation(BOSS_PATH, "idle", 3, 0.3, { loopPause: 1 }),
       walk: new SpriteAnimation(BOSS_PATH, "walk", 6, 0.15),
-      attack: new SpriteAnimation(BOSS_PATH, "attack", 7, 0.1, {
-        loop: false,
-      }),
-      hurt: new SpriteAnimation(BOSS_PATH, "hurt", 2, 0.1, { loop: false }),
-      death: new SpriteAnimation(BOSS_PATH, "death", 6, 0.15, {
-        loop: false,
-      }),
-      ice: new SpriteAnimation(BOSS_PATH, "ice", 5, 0.1, { loop: false }),
-      lightning: new SpriteAnimation(BOSS_PATH, "lightning", 5, 0.1, {
-        loop: false,
-      }),
-      fire: new SpriteAnimation(BOSS_PATH, "fire", 5, 0.1, { loop: false }),
+      attack: new SpriteAnimation(BOSS_PATH, "attack", 7, 0.1, ONCE),
+      hurt: new SpriteAnimation(BOSS_PATH, "hurt", 2, 0.1, ONCE),
+      death: new SpriteAnimation(BOSS_PATH, "death", 6, 0.15, ONCE),
+      ice: new SpriteAnimation(BOSS_PATH, "ice", 5, 0.1, ONCE),
+      lightning: new SpriteAnimation(BOSS_PATH, "lightning", 5, 0.1, ONCE),
+      fire: new SpriteAnimation(BOSS_PATH, "fire", 5, 0.1, ONCE),
       run: new SpriteAnimation(BOSS_PATH, "run", 6, 0.1),
-      anger: new SpriteAnimation(BOSS_PATH, "anger", 5, 0.2, { loop: false }),
+      anger: new SpriteAnimation(BOSS_PATH, "anger", 5, 0.2, ONCE),
     };
-    this.setAnimation(this.animations.idle);
   }
 
   update(delta) {
