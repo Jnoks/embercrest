@@ -6,7 +6,6 @@ import Bolt from "./bolt.js";
 const MAGE_PATH = "./assets/images/mage/";
 const SPELL_COST = 20;
 const CAST_COOLDOWN = 0.6;
-const MANA_REGEN = 10;
 const STAFF_REACH = 41;
 const STAFF_HEIGHT = 19;
 const RELEASE_FRAME = 4;
@@ -28,8 +27,10 @@ export default class Character extends MovableObject {
     this.jumpSpeed = 700;
     this.maxAirJumps = 1;
     this.slowTimer = 0;
+    this.damageFactor = 1;
     this.maxMana = 100;
     this.mana = this.maxMana;
+    this.manaRegen = 10;
     this.pendingBolt = null;
     this.boltLoaded = false;
     this.alpha = 1;
@@ -63,7 +64,7 @@ export default class Character extends MovableObject {
       this.setAnimation(this.animations.run);
     else this.setAnimation(this.animations.idle);
     this.updateTimers(delta);
-    this.mana = Math.min(this.mana + MANA_REGEN * delta, this.maxMana);
+    this.mana = Math.min(this.mana + this.manaRegen * delta, this.maxMana);
     this.applyGravity(delta);
     this.animate(delta);
     this.releaseBolt();
@@ -74,6 +75,10 @@ export default class Character extends MovableObject {
     this.slowTimer = Math.max(this.slowTimer - delta, 0);
     this.speed = RUN_SPEED;
     if (this.isSlowed()) this.speed = SLOW_SPEED;
+  }
+
+  takeDamage(amount) {
+    super.takeDamage(amount * this.damageFactor);
   }
 
   slow(time) {

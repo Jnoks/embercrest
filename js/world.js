@@ -31,6 +31,13 @@ export default class World {
     this.restore();
   }
 
+  applyDifficulty(difficulty) {
+    this.character.damageFactor = difficulty.damage;
+    this.character.manaRegen = difficulty.manaRegen;
+    this.level.boss.maxHealth = difficulty.bossHealth;
+    this.level.boss.health = difficulty.bossHealth;
+  }
+
   restore() {
     const found = this.quest.found;
     const total = this.level.shards.length;

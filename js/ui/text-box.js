@@ -19,7 +19,7 @@ const LIGHT_COLOR = "#ffc300";
 const DIM_COLOR = "rgba(0, 0, 0, 0.6)";
 const SPEED = 30;
 const READ_TIME = 0.5;
-const WINDOW = [
+export const WINDOW = [
   new HudImage(201, 90, 559, 376, UI_PATH + "window-background.png"),
   new HudImage(187, 75, 587, 405, UI_PATH + "window-border.png"),
   new HudImage(295, 50, 370, 63, UI_PATH + "window-ribbon.png"),
