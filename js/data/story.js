@@ -417,6 +417,7 @@ export const UI_TEXT = {
   questNew: "New quest",
   questDone: "Quest complete",
   questLabel: "Quest",
+  soundToggle: "Sound",
   pause: "Pause",
   confirm: "Confirm",
   chooseDifficulty: "Choose difficulty",

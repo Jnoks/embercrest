@@ -1,5 +1,6 @@
 import SpriteAnimation from "../sprite-animation.js";
 import Projectile from "./projectile.js";
+import { sound } from "../sound.js";
 
 const BOLT_PATH = "./assets/images/bolt/";
 const BOLT_SIZE = 32;
@@ -19,5 +20,6 @@ export default class Bolt extends Projectile {
     this.range = 400;
     this.animations = BOLT_ANIMATIONS;
     this.setAnimation(this.animations.fly);
+    sound.play("cast");
   }
 }

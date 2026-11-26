@@ -5,6 +5,7 @@ import Effect from "./effect.js";
 import Lightning from "./lightning.js";
 import Fireball from "./fireball.js";
 import EmberShard from "./ember-shard.js";
+import { sound } from "../sound.js";
 
 const BOSS_PATH = "./assets/images/boss/";
 const LIGHTNING_PATH = "./assets/images/lightning/";
@@ -134,6 +135,7 @@ export default class Boss extends Enemy {
     this.castTimer = 0;
     this.spellLoaded = false;
     this.pendingEffect = this.createRageEffect();
+    sound.play("roar");
   }
 
   applyPhase() {

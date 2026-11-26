@@ -2,6 +2,7 @@ import MovableObject from "./movable-object.js";
 import DrawableObject from "./drawable-object.js";
 import Effect from "./effect.js";
 import SpriteAnimation from "../sprite-animation.js";
+import { sound } from "../sound.js";
 
 const GATE_PATH = "./assets/images/forest/objects/";
 const GATE_SIZE = 128;
@@ -46,6 +47,7 @@ export default class Gate extends MovableObject {
     this.unlocked = true;
     this.lock.velocityY = -LOCK_HOP;
     this.pendingEffect = new Effect(this.centerX(), centerY, STAR_SIZE, STAR);
+    sound.play("unlock");
   }
 
   takeEffect() {

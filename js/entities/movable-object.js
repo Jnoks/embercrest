@@ -48,8 +48,12 @@ export default class MovableObject extends DrawableObject {
     this.airJumps = this.maxAirJumps;
   }
 
+  canJump() {
+    return this.onGround || this.airJumps > 0;
+  }
+
   jump() {
-    if (!this.onGround && this.airJumps === 0) return;
+    if (!this.canJump()) return;
     if (!this.onGround) this.airJumps -= 1;
     this.onGround = false;
     this.velocityY = -this.jumpSpeed;

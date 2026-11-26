@@ -1,5 +1,6 @@
 import SpriteAnimation from "../sprite-animation.js";
 import Projectile from "./projectile.js";
+import { sound } from "../sound.js";
 
 const RING_PATH = "./assets/images/fire-ring/";
 const RING_SIZE = 64;
@@ -19,6 +20,7 @@ export default class FireRing extends Projectile {
     this.range = 600;
     this.animations = RING_ANIMATIONS;
     this.setAnimation(this.animations.fly);
+    sound.play("ring");
   }
 
   aimAt(x, y) {

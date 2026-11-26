@@ -1,5 +1,6 @@
 import MovableObject from "./movable-object.js";
 import SpriteAnimation from "../sprite-animation.js";
+import { sound } from "../sound.js";
 
 const LIGHTNING_PATH = "./assets/images/lightning/";
 const LIGHTNING_SIZE = 512;
@@ -31,8 +32,13 @@ export default class Lightning extends MovableObject {
   update(delta) {
     this.animate(delta);
     this.warnTimer = Math.max(this.warnTimer - delta, 0);
-    if (this.warnTimer === 0) this.setAnimation(this.animations.strike);
+    if (this.warnTimer === 0 && !this.isStriking()) this.strike();
     if (this.isStriking() && this.isAnimationFinished()) this.done = true;
+  }
+
+  strike() {
+    this.setAnimation(this.animations.strike);
+    sound.play("thunder");
   }
 
   isStriking() {

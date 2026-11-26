@@ -2,6 +2,7 @@ import Character from "./entities/character.js";
 import Heart from "./entities/heart.js";
 import Hud from "./ui/hud.js";
 import { CHATS } from "./data/story.js";
+import { sound } from "./sound.js";
 
 const SHAKE = 4;
 const PUSH_RANGE = 320;
@@ -109,6 +110,12 @@ export default class World {
     this.checkCollisions();
   }
 
+  hurtEnemy(enemy, damage) {
+    enemy.takeDamage(damage);
+    if (enemy.isDead()) sound.play("defeat");
+    else sound.play("hit");
+  }
+
   updateMagic(delta) {
     this.updateBolts(delta);
     this.updateSpells(delta);
@@ -209,7 +216,7 @@ export default class World {
   hitEnemy(bolt, enemy) {
     if (!bolt.isHitting() || enemy.isDead()) return;
     if (!bolt.isColliding(enemy)) return;
-    enemy.takeDamage(bolt.damage);
+    this.hurtEnemy(enemy, bolt.damage);
     bolt.explode();
   }
 
@@ -267,6 +274,7 @@ export default class World {
     checkpoint.setActive(true);
     this.quest.spawn = { x: checkpoint.centerX(), y: checkpoint.y };
     this.effects.push(checkpoint.createEffect());
+    sound.play("checkpoint");
   }
 
   updateScene() {
@@ -284,6 +292,7 @@ export default class World {
       if (this.character.isColliding(shard)) {
         shard.done = true;
         this.quest.collect(shard.centerX());
+        sound.play("shard");
       }
     }
     this.level.shards = this.updateProjectiles(this.level.shards, delta);
@@ -305,6 +314,7 @@ export default class World {
       if (this.character.canHeal() && this.character.isColliding(heart)) {
         this.character.heal(heart.amount);
         heart.done = true;
+        sound.play("heart");
       }
     }
     this.level.hearts = this.updateProjectiles(this.level.hearts, delta);
@@ -336,12 +346,14 @@ export default class World {
       this.leftLimit = this.cameraX;
       boss.sightRange = this.canvas.width;
       this.quest.faceBoss();
+      sound.playMusic("boss");
     }
   }
 
   endFight() {
     this.quest.beatBoss();
     this.level.rain.stop();
+    sound.playMusic("forest");
   }
 
   isInBossRoom() {

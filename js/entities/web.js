@@ -1,5 +1,6 @@
 import SpriteAnimation from "../sprite-animation.js";
 import Projectile from "./projectile.js";
+import { sound } from "../sound.js";
 
 const WEB_PATH = "./assets/images/web/";
 const WEB_SIZE = 64;
@@ -20,5 +21,6 @@ export default class Web extends Projectile {
     this.range = 512;
     this.animations = WEB_ANIMATIONS;
     this.setAnimation(this.animations.fly);
+    sound.play("web");
   }
 }

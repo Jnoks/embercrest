@@ -1,5 +1,7 @@
 import Button from "./button.js";
+import Toggle from "./toggle.js";
 import { UI_TEXT } from "../data/story.js";
+import { sound } from "../sound.js";
 
 const CENTER_X = 480;
 const BUTTON_STEP = 184;
@@ -9,6 +11,7 @@ export default class Menu {
     this.buttons = [];
     this.choices = [];
     this.selected = 0;
+    this.toggle = null;
   }
 
   select(index) {
@@ -42,6 +45,18 @@ export default class Menu {
       buttons.push(new Button(left + i * BUTTON_STEP, y, text));
     }
     return buttons;
+  }
+
+  addToggle(y) {
+    const text = UI_TEXT.soundToggle;
+    this.toggle = new Toggle(CENTER_X, y, text, !sound.muted);
+    this.buttons.push(this.toggle);
+    this.choices.push("soundToggle");
+  }
+
+  updateToggle(delta) {
+    this.toggle.on = !sound.muted;
+    this.toggle.update(delta);
   }
 
   choice() {

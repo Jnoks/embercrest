@@ -10,6 +10,8 @@ import { DIFFICULTIES } from "./data/difficulty.js";
 import DifficultyMenu from "./ui/difficulty-menu.js";
 import PauseMenu from "./ui/pause-menu.js";
 import ControlsScreen from "./ui/controls-screen.js";
+import { sound } from "./sound.js";
+import { voice } from "./voice.js";
 
 const WORLD = WORLDS[0];
 
@@ -68,11 +70,14 @@ export default class Game {
     this.quest.restart();
     this.world = new World(this.canvas, this.keyboard, level, this.quest);
     this.world.applyDifficulty(DIFFICULTIES[this.difficulty]);
+    sound.playMusic("forest");
   }
 
   chooseStart() {
     const choice = this.startScreen.choice();
+    sound.resume();
     if (choice === "controls") this.openControls();
+    else if (choice === "soundToggle") this.toggleSound();
     else this.menu = this.difficultyMenu;
   }
 
@@ -115,7 +120,8 @@ export default class Game {
   }
 
   checkEnding() {
-    if (!this.world.isWon()) return;
+    if (!this.world.isWon() || this.finale.length === 0) return;
+    sound.play("win");
     while (this.finale.length > 0) this.texts.push(this.finale.shift());
   }
 
@@ -166,6 +172,7 @@ export default class Game {
   }
 
   choose(overlay) {
+    sound.play("click");
     if (overlay === this.startScreen) this.chooseStart();
     else if (overlay === this.difficultyMenu) this.chooseDifficulty();
     else if (overlay === this.pauseMenu) this.choosePause();
@@ -185,6 +192,7 @@ export default class Game {
     const choice = this.pauseMenu.choice();
     if (choice === "resume") this.menu = null;
     else if (choice === "controls") this.openControls();
+    else if (choice === "soundToggle") this.toggleSound();
     else this.toStart();
   }
 
@@ -194,13 +202,19 @@ export default class Game {
   }
 
   turnPage() {
+    sound.play("page");
     this.texts[0].next();
-    if (this.texts[0].isDone()) this.texts.shift();
+    if (this.texts[0].isDone()) this.closeText();
+  }
+
+  closeText() {
+    this.texts.shift();
+    voice.stop();
   }
 
   cancel() {
     const overlay = this.overlay();
-    if (overlay === this.texts[0]) this.texts.shift();
+    if (overlay === this.texts[0]) this.closeText();
     else if (overlay === this.controls) this.menu = this.back;
     else if (overlay === this.difficultyMenu) this.menu = this.startScreen;
     else if (overlay === this.pauseMenu) this.menu = null;
@@ -213,7 +227,13 @@ export default class Game {
   }
 
   toStart() {
+    voice.stop();
     this.menu = this.startScreen;
     this.newGame();
+  }
+
+  toggleSound() {
+    sound.toggle();
+    if (sound.muted) voice.stop();
   }
 }

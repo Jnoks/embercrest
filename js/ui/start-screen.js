@@ -8,6 +8,7 @@ const BACKGROUND = "./assets/images/ui/start-background.png";
 const CENTER_X = 480;
 const HERO_Y = 498;
 const BUTTON_Y = 278;
+const TOGGLE_Y = 330;
 const DIM_COLOR = "rgba(0, 0, 0, 0.35)";
 
 export default class StartScreen extends Menu {
@@ -20,12 +21,14 @@ export default class StartScreen extends Menu {
     this.tagline = new Label(TAGLINE, CENTER_X, 254, 16, "white", SHADOW_COLOR);
     this.choices = ["newGame", "controls"];
     this.buttons = this.createButtons(BUTTON_Y);
+    this.addToggle(TOGGLE_Y);
     this.select(0);
   }
 
   update(delta) {
     this.mage.update(delta);
     this.knight.update(delta);
+    this.updateToggle(delta);
   }
 
   draw(ctx) {

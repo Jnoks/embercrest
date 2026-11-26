@@ -12,10 +12,13 @@ export default class PauseMenu extends Menu {
     this.title = new Label(title, CENTER_X, 222, 32, TITLE_COLOR, SHADOW_COLOR);
     this.choices = ["resume", "controls", "toStart"];
     this.buttons = this.createButtons(290);
+    this.addToggle(342);
     this.select(0);
   }
 
-  update(delta) {}
+  update(delta) {
+    this.updateToggle(delta);
+  }
 
   draw(ctx) {
     ctx.fillStyle = DIM_COLOR;

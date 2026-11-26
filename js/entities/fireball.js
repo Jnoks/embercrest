@@ -1,4 +1,5 @@
 import Projectile from "./projectile.js";
+import { sound } from "../sound.js";
 import SpriteAnimation from "../sprite-animation.js";
 
 const FIREBALL_PATH = "./assets/images/fireball/";
@@ -22,6 +23,7 @@ export default class Fireball extends Projectile {
     this.range = 900;
     this.animations = FIREBALL_ANIMATIONS;
     this.setAnimation(this.animations.fly);
+    sound.play("fire");
   }
 
   explode() {

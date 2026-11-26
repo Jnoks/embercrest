@@ -1,5 +1,6 @@
 import SpriteAnimation from "../sprite-animation.js";
 import Projectile from "./projectile.js";
+import { sound } from "../sound.js";
 
 const SHARD_PATH = "./assets/images/ice-shard/";
 const SHARD_ANIMATIONS = {
@@ -18,5 +19,6 @@ export default class IceShard extends Projectile {
     this.range = 700;
     this.animations = SHARD_ANIMATIONS;
     this.setAnimation(this.animations.fly);
+    sound.play("ice");
   }
 }

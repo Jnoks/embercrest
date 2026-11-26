@@ -2,6 +2,7 @@ import HudImage from "./hud-image.js";
 import Label from "./label.js";
 import Key from "./key.js";
 import { UI_TEXT } from "../data/story.js";
+import { voice } from "../voice.js";
 
 const UI_PATH = "./assets/images/ui/";
 const PORTRAIT_PATH = "./assets/images/hud/portrait-";
@@ -19,6 +20,7 @@ const LIGHT_COLOR = "#ffc300";
 const DIM_COLOR = "rgba(0, 0, 0, 0.6)";
 const SPEED = 30;
 const READ_TIME = 0.5;
+const VOICE_DELAY = 0.25;
 export const WINDOW = [
   new HudImage(201, 90, 559, 376, UI_PATH + "window-background.png"),
   new HudImage(187, 75, 587, 405, UI_PATH + "window-border.png"),
@@ -40,6 +42,8 @@ export default class TextBox {
     this.window = WINDOW;
     this.layout = LAYOUT;
     this.dimColor = DIM_COLOR;
+    this.speaker = title;
+    this.spoken = false;
     this.pages = pages;
     this.page = 0;
     this.shown = 0;
@@ -60,12 +64,20 @@ export default class TextBox {
     const length = this.pages[this.page].length;
     this.shown = Math.min(this.shown + SPEED * delta, length);
     this.time += delta;
+    if (!this.spoken && this.time > VOICE_DELAY) this.speak();
+  }
+
+  speak() {
+    this.spoken = true;
+    voice.speak(this.pages[this.page], this.speaker);
   }
 
   restart() {
     this.page = 0;
     this.shown = 0;
     this.time = 0;
+    this.spoken = false;
+    voice.stop();
   }
 
   isDone() {
@@ -82,6 +94,8 @@ export default class TextBox {
     this.page += 1;
     this.shown = 0;
     this.time = 0;
+    this.spoken = false;
+    voice.stop();
   }
 
   draw(ctx) {

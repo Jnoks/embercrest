@@ -1,5 +1,6 @@
 import Trap from "./trap.js";
 import SpriteAnimation from "../sprite-animation.js";
+import { sound } from "../sound.js";
 
 const SPIKE_PATH = "./assets/images/rock-spike/";
 const SPIKE_SIZE = 128;
@@ -40,6 +41,7 @@ export default class FallingSpike extends Trap {
   }
 
   shake(delta) {
+    if (!this.loose) sound.play("crack");
     this.loose = true;
     this.shakeTimer = Math.max(this.shakeTimer - delta, 0);
     this.x = this.homeX + Math.round((Math.random() * 2 - 1) * SHAKE);
@@ -52,6 +54,7 @@ export default class FallingSpike extends Trap {
     this.y = this.floor;
     this.velocityY = 0;
     this.setAnimation(this.animations.break);
+    sound.play("break");
   }
 
   crumble(delta) {

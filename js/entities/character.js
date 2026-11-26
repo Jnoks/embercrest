@@ -2,6 +2,7 @@ import MovableObject from "./movable-object.js";
 import DrawableObject from "./drawable-object.js";
 import SpriteAnimation from "../sprite-animation.js";
 import Bolt from "./bolt.js";
+import { sound } from "../sound.js";
 
 const MAGE_PATH = "./assets/images/mage/";
 const SPELL_COST = 20;
@@ -78,7 +79,17 @@ export default class Character extends MovableObject {
   }
 
   takeDamage(amount) {
+    const health = this.health;
     super.takeDamage(amount * this.damageFactor);
+    if (this.health === health) return;
+    if (this.isDead()) sound.play("death");
+    else sound.play("hurt");
+  }
+
+  jump() {
+    if (!this.canJump()) return;
+    super.jump();
+    sound.play("jump");
   }
 
   slow(time) {
