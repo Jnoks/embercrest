@@ -8,12 +8,29 @@ const KEY_MAP = {
   Escape: "cancel",
 };
 
+const TOUCH_KEYS = ["left", "right", "jump", "attack", "talk", "cancel"];
+
 export default class Keyboard {
   constructor() {
     this.releaseAll();
     window.addEventListener("keydown", (e) => this.handleKey(e, true));
     window.addEventListener("keyup", (e) => this.handleKey(e, false));
     window.addEventListener("blur", () => this.releaseAll());
+    for (let i = 0; i < TOUCH_KEYS.length; i++) {
+      this.bindTouch(TOUCH_KEYS[i]);
+    }
+  }
+
+  bindTouch(flag) {
+    const button = document.getElementById("touch-" + flag);
+    button.addEventListener("touchstart", (e) => this.touch(e, flag, true));
+    button.addEventListener("touchend", (e) => this.touch(e, flag, false));
+    button.addEventListener("touchcancel", (e) => this.touch(e, flag, false));
+  }
+
+  touch(e, flag, pressed) {
+    e.preventDefault();
+    this[flag] = pressed;
   }
 
   handleKey(e, pressed) {

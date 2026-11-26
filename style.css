@@ -48,3 +48,70 @@ canvas {
   background-color: #000;
   image-rendering: pixelated;
 }
+
+.stage {
+  position: relative;
+  width: 100%;
+  display: flex;
+}
+
+.touch-controls,
+.rotate-hint {
+  display: none;
+}
+
+.touch-group {
+  height: 100%;
+  display: flex;
+  gap: 2%;
+}
+
+.touch-button {
+  height: 100%;
+  aspect-ratio: 1;
+  border: none;
+  background: none;
+  touch-action: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.touch-button img {
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  pointer-events: none;
+}
+
+@media (pointer: coarse) {
+  .touch-controls {
+    position: absolute;
+    left: 1%;
+    right: 1%;
+    bottom: 0.5%;
+    height: 10.5%;
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+@media (pointer: coarse) and (orientation: landscape) {
+  body {
+    padding: 0;
+    overflow: hidden;
+  }
+
+  main {
+    width: min(100%, calc(100dvh * 16 / 9));
+  }
+
+  h1 {
+    display: none;
+  }
+}
+
+@media (pointer: coarse) and (orientation: portrait) {
+  .rotate-hint {
+    display: block;
+  }
+}
