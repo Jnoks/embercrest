@@ -102,6 +102,8 @@ footer a {
 }
 
 .touch-controls,
+.touch-menu,
+.touch-talk,
 .rotate-hint {
   display: none;
 }
@@ -109,7 +111,7 @@ footer a {
 .touch-group {
   height: 100%;
   display: flex;
-  gap: 2%;
+  gap: 8px;
 }
 
 .touch-button {
@@ -138,6 +140,22 @@ footer a {
     height: 10.5%;
     display: flex;
     justify-content: space-between;
+  }
+
+  .touch-menu {
+    display: block;
+    position: absolute;
+    top: 8%;
+    right: 1%;
+    height: 10.5%;
+  }
+
+  .touch-talk {
+    display: block;
+    position: absolute;
+    right: 1%;
+    bottom: 13%;
+    height: 10.5%;
   }
 }
 
