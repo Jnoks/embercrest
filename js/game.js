@@ -95,6 +95,10 @@ export default class Game {
     button.hidden = this.hero !== "knight";
   }
 
+  updateTouchButtons() {
+    document.body.classList.toggle("reading", this.isReading());
+  }
+
   chooseStart() {
     const choice = this.startScreen.choice();
     sound.resume();
@@ -161,6 +165,7 @@ export default class Game {
     this.handleKeys();
     this.collectText();
     this.checkEnding();
+    this.updateTouchButtons();
     const overlay = this.overlay();
     if (overlay) overlay.update(delta);
     else this.world.update(delta);
