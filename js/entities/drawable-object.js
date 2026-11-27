@@ -60,15 +60,16 @@ export default class DrawableObject {
     const top = this.y - this.anchorY - padding;
     const width = this.width + padding * 2;
     const height = this.height + padding * 2;
-    if (this.facingLeft) {
-      ctx.save();
-      ctx.translate(Math.round(x) + 2 * this.anchorX, 0);
-      ctx.scale(-1, 1);
-      ctx.drawImage(this.img, -padding, top, width, height);
-      ctx.restore();
-    } else {
-      ctx.drawImage(this.img, Math.round(x) - padding, top, width, height);
-    }
+    ctx.save();
+    ctx.translate(Math.round(x), 0);
+    if (this.facingLeft) this.mirror(ctx);
+    ctx.drawImage(this.img, -padding, top, width, height);
+    ctx.restore();
+  }
+
+  mirror(ctx) {
+    ctx.translate(2 * this.anchorX, 0);
+    ctx.scale(-1, 1);
   }
 
   update(delta) {}
