@@ -3,6 +3,7 @@ import Label from "./label.js";
 import Key from "./key.js";
 import { UI_TEXT } from "../data/story.js";
 import { voice } from "../voice.js";
+import { IS_TOUCH } from "../device.js";
 
 const UI_PATH = "./assets/images/ui/";
 const PORTRAIT_PATH = "./assets/images/hud/portrait-";
@@ -52,6 +53,7 @@ export default class TextBox {
   setLook() {
     this.window = WINDOW;
     this.hints = HINTS;
+    if (IS_TOUCH) this.hints = [];
     this.layout = LAYOUT;
     this.dimColor = DIM_COLOR;
   }
