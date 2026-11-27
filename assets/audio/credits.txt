@@ -1,0 +1,30 @@
+Sound and music credits
+
+Fantasy Sound Effects Library by Little Robot Sound Factory
+www.littlerobotsoundfactory.com
+License: CC BY 3.0, https://creativecommons.org/licenses/by/3.0/
+Files: sfx/cast.wav, sfx/ice.wav, sfx/thunder.wav, sfx/fire.wav,
+sfx/ring.wav, sfx/roar.wav, sfx/win.wav, sfx/goblin.wav, sfx/chief.wav
+Changes: trimmed, mixed to mono, volume adjusted
+
+RPG Sound Pack by artisticdude
+opengameart.org/content/rpg-sound-pack
+License: CC0
+Files: sfx/swing.wav, sfx/block.wav, sfx/defeat.wav, sfx/snap.wav,
+sfx/web.wav, sfx/ent.wav, sfx/dino.wav, sfx/spider.wav, sfx/beholder.wav
+
+Interface Sounds and RPG Audio by Kenney
+kenney.nl
+License: CC0
+Files: sfx/heart.wav, sfx/checkpoint.wav, sfx/click.wav, sfx/unlock.wav,
+sfx/page.wav, sfx/mosquito.wav
+
+Beautiful Forest by nene
+opengameart.org/content/beautiful-forest-orchestra
+License: CC0
+File: music/forest.m4a
+
+Epic Boss Battle by Juhani Junkala
+opengameart.org/content/boss-battle-music
+License: CC0
+File: music/boss.m4a

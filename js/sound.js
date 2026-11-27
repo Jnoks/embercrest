@@ -29,20 +29,27 @@ const EFFECTS = [
   "swing",
   "snap",
   "block",
+  "goblin",
+  "chief",
+  "ent",
+  "dino",
+  "spider",
+  "mosquito",
+  "beholder",
 ];
 
 export default class Sound {
   constructor() {
     this.muted = localStorage.getItem(MUTE_KEY) === "true";
-    this.effects = this.load(SFX_PATH, EFFECTS, EFFECT_VOLUME, false);
-    this.tracks = this.load(MUSIC_PATH, TRACKS, MUSIC_VOLUME, true);
+    this.effects = this.load(SFX_PATH, ".wav", EFFECTS, EFFECT_VOLUME, false);
+    this.tracks = this.load(MUSIC_PATH, ".m4a", TRACKS, MUSIC_VOLUME, true);
     this.track = null;
   }
 
-  load(path, names, volume, loop) {
+  load(path, type, names, volume, loop) {
     const sounds = {};
     for (let i = 0; i < names.length; i++) {
-      const audio = new Audio(path + names[i] + ".wav");
+      const audio = new Audio(path + names[i] + type);
       audio.volume = volume;
       audio.loop = loop;
       sounds[names[i]] = audio;
