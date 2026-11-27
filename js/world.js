@@ -36,10 +36,19 @@ export default class World {
   }
 
   applyDifficulty(difficulty) {
+    this.weakenEnemies(difficulty.enemyHealth);
     this.character.damageFactor = difficulty.damage;
     this.character.energyRegen = difficulty.energyRegen;
     this.level.boss.maxHealth = difficulty.bossHealth;
     this.level.boss.health = difficulty.bossHealth;
+  }
+
+  weakenEnemies(factor) {
+    for (let i = 0; i < this.level.enemies.length; i++) {
+      const enemy = this.level.enemies[i];
+      enemy.maxHealth *= factor;
+      enemy.health = enemy.maxHealth;
+    }
   }
 
   restore() {
