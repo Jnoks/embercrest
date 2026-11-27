@@ -5,11 +5,8 @@ import { SHOUTS } from "../data/story.js";
 const MOSQUITO_PATH = "./assets/images/mosquito/";
 const MOSQUITO_SIZE = 128;
 const DIVE_SPEED = 260;
-const CHARGE_SPEED = 160;
 const RETURN_SPEED = 110;
 const DIVE_PAUSE = 1.5;
-const SWOOP_DISTANCE = 100;
-const AIM_TIME = 0.5;
 
 export default class Mosquito extends Enemy {
   constructor(centerX, centerY) {
@@ -27,8 +24,6 @@ export default class Mosquito extends Enemy {
     this.diveX = 0;
     this.diveY = 0;
     this.diving = false;
-    this.charging = false;
-    this.aimTimer = 0;
     this.greetings = SHOUTS.mosquito;
     this.cry = "mosquito";
     this.animations = this.createAnimations();
@@ -58,37 +53,17 @@ export default class Mosquito extends Enemy {
   }
 
   startDive() {
-    const side = this.centerX() < this.targetX ? -1 : 1;
     this.diving = true;
-    this.charging = false;
-    this.aimTimer = AIM_TIME;
-    this.diveX = this.targetX + side * SWOOP_DISTANCE;
+    this.diveX = this.targetX;
     this.diveY = this.targetY + this.hitboxHeight / 2;
-    this.speed = DIVE_SPEED;
-    this.facingLeft = side > 0;
+    this.facingLeft = this.diveX < this.centerX();
     this.setAnimation(this.animations.dive);
   }
 
   dive(delta) {
-    if (this.targetHidden && !this.charging) this.charge();
+    this.speed = DIVE_SPEED;
     this.flyTo(this.diveX, this.diveY, delta);
-    if (!this.isAt(this.diveX, this.diveY)) return;
-    if (this.charging) this.endDive();
-    else this.aim(delta);
-  }
-
-  aim(delta) {
-    this.setAnimation(this.animations.idle);
-    this.aimTimer -= delta;
-    if (this.aimTimer <= 0) this.charge();
-  }
-
-  charge() {
-    this.charging = true;
-    this.speed = CHARGE_SPEED;
-    this.diveX = this.targetX;
-    this.facingLeft = this.diveX < this.centerX();
-    this.setAnimation(this.animations.fly);
+    if (this.isAt(this.diveX, this.diveY)) this.endDive();
   }
 
   endDive() {
