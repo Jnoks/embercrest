@@ -1,5 +1,5 @@
 import { sound } from "./sound.js";
-import { INTRO_PAGES, WORLDS } from "./data/story.js";
+import { HEROES, INTRO_PAGES, WORLDS } from "./data/story.js";
 
 const VOICE_PATH = "./assets/audio/voice/";
 const VOICE_VOLUME = 0.5;
@@ -15,7 +15,14 @@ export default class Voice {
     this.files = {};
     this.audio = null;
     this.addLines("intro", INTRO_PAGES);
+    this.addHeroes();
     this.addWorld(WORLDS[0]);
+  }
+
+  addHeroes() {
+    for (let i = 0; i < HEROES.length; i++) {
+      this.addLines(HEROES[i].id, [HEROES[i].description]);
+    }
   }
 
   addWorld(world) {
@@ -45,6 +52,7 @@ export default class Voice {
   }
 
   play(file) {
+    this.stop();
     this.audio = new Audio(file);
     this.audio.volume = VOICE_VOLUME;
     sound.start(this.audio);
