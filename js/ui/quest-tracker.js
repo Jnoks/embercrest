@@ -1,6 +1,5 @@
 import HudImage from "./hud-image.js";
 import Label from "./label.js";
-import Key from "./key.js";
 
 const PANEL = "./assets/images/hud/counter-panel.png";
 const ICON = "./assets/images/hud/shard-icon.png";
@@ -11,7 +10,6 @@ export default class QuestTracker {
     this.icon = new HudImage(887, 11, 16, 16, ICON);
     this.count = new Label("", 925, 20, 16, "white", "black");
     this.count.weight = "normal";
-    this.key = new Key(852, 8, "Q", 24, 24);
     this.visible = false;
   }
 
@@ -26,7 +24,6 @@ export default class QuestTracker {
 
   draw(ctx) {
     if (!this.visible) return;
-    this.key.draw(ctx);
     this.panel.draw(ctx);
     this.icon.draw(ctx);
     this.count.draw(ctx);
