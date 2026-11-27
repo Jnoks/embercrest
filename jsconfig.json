@@ -6,5 +6,5 @@
     "module": "ESNext",
     "moduleResolution": "bundler"
   },
-  "include": ["js/**/*.js"]
+  "include": ["js/**/*.js", "script.js"]
 }
