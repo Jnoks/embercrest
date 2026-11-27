@@ -9,9 +9,10 @@ const MARKER_IMAGE = "./assets/images/ui/quest-marker.png";
 const MARKER_WIDTH = 14;
 const MARKER_HEIGHT = 33;
 const MARKER_Y = 92;
+const MARKER_SPACE = 41;
 const KEY_SIZE = 24;
 const KEY_X = 41;
-const KEY_Y = 12;
+const KEY_Y = 83;
 const HINT_X = 15;
 const RUN_SPEED = 280;
 
@@ -43,9 +44,10 @@ export default class Npc extends Figure {
   }
 
   createPrompt(centerX, y) {
+    const top = y - KEY_Y;
     const hintX = centerX + HINT_X;
-    const hintY = y + KEY_Y + KEY_SIZE / 2;
-    this.key = new Key(centerX - KEY_X, y + KEY_Y, "E", KEY_SIZE, KEY_SIZE);
+    const hintY = top + KEY_SIZE / 2;
+    this.key = new Key(centerX - KEY_X, top, "E", KEY_SIZE, KEY_SIZE);
     this.hint = new Label(UI_TEXT.talk, hintX, hintY, 16, "white", "black");
   }
 
@@ -87,6 +89,7 @@ export default class Npc extends Figure {
   }
 
   drawPrompt(ctx) {
+    if (this.marked) ctx.translate(0, -MARKER_SPACE);
     this.key.draw(ctx);
     this.hint.draw(ctx);
   }
