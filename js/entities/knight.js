@@ -37,7 +37,6 @@ export default class Knight extends Character {
       hurt: new SpriteAnimation(KNIGHT_PATH, "hurt", 4, 0.1, ONCE),
       attack: new SpriteAnimation(KNIGHT_PATH, "attack", 4, 0.08, ONCE),
       block: new SpriteAnimation(KNIGHT_PATH, "block", 2, 0.06, ONCE),
-      brace: new SpriteAnimation(KNIGHT_PATH, "brace", 1, 0.2),
       death: new SpriteAnimation(KNIGHT_PATH, "death", 10, 0.1, DEATH),
     };
   }
@@ -75,8 +74,7 @@ export default class Knight extends Character {
   }
 
   chooseAnimation() {
-    if (this.isBracing()) this.setAnimation(this.animations.brace);
-    else if (this.isBlocking()) this.setAnimation(this.animations.block);
+    if (this.isBlocking()) this.setAnimation(this.animations.block);
     else super.chooseAnimation();
   }
 
