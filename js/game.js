@@ -9,6 +9,7 @@ import { TITLE, INTRO_PAGES, WORLDS, UI_TEXT } from "./data/story.js";
 import { DIFFICULTIES } from "./data/difficulty.js";
 import QuestLog from "./ui/quest-log.js";
 import LoadingScreen from "./ui/loading-screen.js";
+import HeroScreen from "./ui/hero-screen.js";
 import DifficultyMenu from "./ui/difficulty-menu.js";
 import PauseMenu from "./ui/pause-menu.js";
 import ControlsScreen from "./ui/controls-screen.js";
@@ -26,6 +27,7 @@ export default class Game {
     this.keyboard = new Keyboard();
     this.lastTime = 0;
     this.difficulty = "easy";
+    this.hero = "mage";
     this.saved = loadSave();
     this.createOverlays();
     this.createControls();
@@ -47,6 +49,7 @@ export default class Game {
     this.ready = false;
     this.questLog = new QuestLog(WORLD.quest);
     this.difficultyMenu = new DifficultyMenu();
+    this.heroScreen = new HeroScreen();
     this.pauseMenu = new PauseMenu();
     this.controls = new ControlsScreen();
     this.menu = this.startScreen;
@@ -76,6 +79,7 @@ export default class Game {
   start() {
     const level = createLevel1();
     this.quest.restart();
+    this.quest.hero = this.hero;
     this.world = new World(this.canvas, this.keyboard, level, this.quest);
     this.world.applyDifficulty(DIFFICULTIES[this.difficulty]);
     sound.playMusic("forest");
@@ -92,12 +96,18 @@ export default class Game {
 
   chooseDifficulty() {
     this.difficulty = this.difficultyMenu.choice();
+    this.menu = this.heroScreen;
+  }
+
+  takeRoad() {
+    this.hero = this.heroScreen.hero();
     this.menu = null;
     this.start();
   }
 
   resume() {
     this.difficulty = this.saved.difficulty;
+    this.hero = this.saved.hero || "mage";
     this.quest.resume(this.saved);
     this.texts = [];
     this.menu = null;
@@ -107,6 +117,7 @@ export default class Game {
   save() {
     const progress = this.quest.progress();
     progress.difficulty = this.difficulty;
+    progress.hero = this.hero;
     storeSave(progress);
     this.quest.changed = false;
   }
@@ -191,6 +202,7 @@ export default class Game {
     const menus = [
       this.startScreen,
       this.difficultyMenu,
+      this.heroScreen,
       this.pauseMenu,
       this.gameOver,
       this.victory,
@@ -222,6 +234,7 @@ export default class Game {
     sound.play("click");
     if (overlay === this.startScreen) this.chooseStart();
     else if (overlay === this.difficultyMenu) this.chooseDifficulty();
+    else if (overlay === this.heroScreen) this.takeRoad();
     else if (overlay === this.pauseMenu) this.choosePause();
     else if (overlay === this.controls) this.menu = this.back;
     else if (overlay === this.questLog) this.menu = null;
@@ -264,6 +277,7 @@ export default class Game {
     const overlay = this.overlay();
     if (overlay === this.texts[0]) this.closeText();
     else if (overlay === this.controls) this.menu = this.back;
+    else if (overlay === this.heroScreen) this.menu = this.difficultyMenu;
     else if (overlay === this.difficultyMenu) this.menu = this.startScreen;
     else if (overlay === this.pauseMenu) this.menu = null;
     else if (overlay === this.questLog) this.menu = null;

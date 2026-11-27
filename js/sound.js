@@ -26,6 +26,7 @@ const EFFECTS = [
   "page",
   "click",
   "win",
+  "swing",
   "snap",
 ];
 

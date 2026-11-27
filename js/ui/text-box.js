@@ -40,6 +40,7 @@ export default class TextBox {
     this.title = new Label(title, CENTER_X, 80, 16, TITLE_COLOR, LIGHT_COLOR);
     this.portrait = this.createPortrait(portrait, 198, 85);
     this.window = WINDOW;
+    this.hints = HINTS;
     this.layout = LAYOUT;
     this.dimColor = DIM_COLOR;
     this.speaker = title;
@@ -103,7 +104,7 @@ export default class TextBox {
     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     this.drawParts(ctx, this.window);
     this.drawParts(ctx, this.portrait);
-    this.drawParts(ctx, HINTS);
+    this.drawParts(ctx, this.hints);
     this.title.draw(ctx);
     this.drawText(ctx);
   }

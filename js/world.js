@@ -1,4 +1,5 @@
-import Character from "./entities/character.js";
+import Mage from "./entities/mage.js";
+import Knight from "./entities/knight.js";
 import Heart from "./entities/heart.js";
 import Hud from "./ui/hud.js";
 import { CHATS } from "./data/story.js";
@@ -13,6 +14,7 @@ const ANSWER_DELAY = 0.9;
 const HEART_DROP = 40;
 const HEART_GAP = 20;
 const CAMERA_OFFSET = 100;
+const HEROES = { mage: Mage, knight: Knight };
 
 export default class World {
   constructor(canvas, keyboard, level, quest) {
@@ -23,8 +25,9 @@ export default class World {
     this.leftLimit = 0;
     this.level = level;
     this.quest = quest;
-    this.character = new Character(100, this.level.groundY, keyboard);
-    this.hud = new Hud();
+    const Hero = HEROES[this.quest.hero];
+    this.character = new Hero(100, this.level.groundY, keyboard);
+    this.hud = new Hud(this.quest.hero);
     this.bolts = [];
     this.spells = [];
     this.effects = [];
@@ -108,6 +111,18 @@ export default class World {
     this.updateTargets();
     this.updateObjects(this.level.enemies, delta);
     this.checkCollisions();
+    this.checkSwordHits();
+  }
+
+  checkSwordHits() {
+    if (!this.character.takeSwing()) return;
+    const box = this.character.attackBox();
+    for (let i = 0; i < this.level.enemies.length; i++) {
+      const enemy = this.level.enemies[i];
+      if (!enemy.isDead() && enemy.overlaps(box)) {
+        this.hurtEnemy(enemy, this.character.damage);
+      }
+    }
   }
 
   hurtEnemy(enemy, damage) {

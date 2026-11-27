@@ -1,15 +1,7 @@
 import MovableObject from "./movable-object.js";
 import DrawableObject from "./drawable-object.js";
-import SpriteAnimation from "../sprite-animation.js";
-import Bolt from "./bolt.js";
 import { sound } from "../sound.js";
 
-const MAGE_PATH = "./assets/images/mage/";
-const SPELL_COST = 20;
-const CAST_COOLDOWN = 0.6;
-const STAFF_REACH = 41;
-const STAFF_HEIGHT = 19;
-const RELEASE_FRAME = 4;
 const RUN_SPEED = 150;
 const SLOW_SPEED = 60;
 const WEB_IMAGE = "./assets/images/web/fly/fly3.png";
@@ -29,46 +21,31 @@ export default class Character extends MovableObject {
     this.maxAirJumps = 1;
     this.slowTimer = 0;
     this.damageFactor = 1;
-    this.maxMana = 100;
-    this.mana = this.maxMana;
-    this.manaRegen = 10;
-    this.pendingBolt = null;
-    this.boltLoaded = false;
+    this.armor = 1;
+    this.maxMana = 0;
+    this.mana = 0;
+    this.manaRegen = 0;
     this.alpha = 1;
     this.web = new DrawableObject(0, 0, WEB_SIZE, WEB_SIZE);
     this.web.loadImage(WEB_IMAGE);
-    this.animations = {
-      idle: new SpriteAnimation(MAGE_PATH, "idle", 14, 0.2, { loopPause: 2 }),
-      run: new SpriteAnimation(MAGE_PATH, "run", 8, 0.08),
-      jump: new SpriteAnimation(MAGE_PATH, "jump", 7, 0.1),
-      flip: new SpriteAnimation(MAGE_PATH, "flip", 6, 0.07, { loop: false }),
-      hurt: new SpriteAnimation(MAGE_PATH, "hurt", 4, 0.1, { loop: false }),
-      attack: new SpriteAnimation(MAGE_PATH, "attack", 7, 0.07, {
-        loop: false,
-      }),
-      death: new SpriteAnimation(MAGE_PATH, "death", 10, 0.1, {
-        loop: false,
-        padding: 64,
-      }),
-    };
-
-    this.setAnimation(this.animations.idle);
   }
 
   update(delta) {
     this.handleInput(delta);
+    this.chooseAnimation();
+    this.updateTimers(delta);
+    this.applyGravity(delta);
+    this.animate(delta);
+  }
+
+  chooseAnimation() {
+    const moving = this.keyboard.left || this.keyboard.right;
     if (this.isDead()) this.setAnimation(this.animations.death);
     else if (this.isHurt()) this.setAnimation(this.animations.hurt);
     else if (this.isAttacking()) this.setAnimation(this.animations.attack);
     else if (!this.onGround) this.setAnimation(this.airAnimation());
-    else if (this.keyboard.left || this.keyboard.right)
-      this.setAnimation(this.animations.run);
+    else if (moving) this.setAnimation(this.animations.run);
     else this.setAnimation(this.animations.idle);
-    this.updateTimers(delta);
-    this.mana = Math.min(this.mana + this.manaRegen * delta, this.maxMana);
-    this.applyGravity(delta);
-    this.animate(delta);
-    this.releaseBolt();
   }
 
   updateTimers(delta) {
@@ -80,7 +57,7 @@ export default class Character extends MovableObject {
 
   takeDamage(amount) {
     const health = this.health;
-    super.takeDamage(amount * this.damageFactor);
+    super.takeDamage(amount * this.damageFactor * this.armor);
     if (this.health === health) return;
     if (this.isDead()) sound.play("death");
     else sound.play("hurt");
@@ -120,35 +97,14 @@ export default class Character extends MovableObject {
     return this.animations.jump;
   }
 
-  attack() {
-    if (this.isOnCooldown() || this.mana < SPELL_COST) return;
-    this.mana -= SPELL_COST;
-    this.cooldownTimer = CAST_COOLDOWN;
-    this.attackTimer = this.animations.attack.cycleDuration();
-    this.boltLoaded = true;
+  attack() {}
+
+  takeBolt() {
+    return null;
   }
 
-  isReleasing() {
-    return (
-      this.currentAnimation === this.animations.attack &&
-      this.frameIndex === RELEASE_FRAME
-    );
-  }
-
-  releaseBolt() {
-    if (!this.boltLoaded || !this.isReleasing()) return;
-    this.pendingBolt = this.createBolt();
-    this.boltLoaded = false;
-  }
-
-  createBolt() {
-    let reach = STAFF_REACH;
-    if (this.facingLeft) reach = -STAFF_REACH;
-    return new Bolt(
-      this.centerX() + reach,
-      this.y - STAFF_HEIGHT,
-      this.facingLeft,
-    );
+  takeSwing() {
+    return false;
   }
 
   wantsToTalk() {
@@ -172,11 +128,5 @@ export default class Character extends MovableObject {
     this.web.x = this.centerX() - WEB_SIZE / 2;
     this.web.y = this.y - WEB_HEIGHT;
     this.web.draw(ctx);
-  }
-
-  takeBolt() {
-    const bolt = this.pendingBolt;
-    this.pendingBolt = null;
-    return bolt;
   }
 }

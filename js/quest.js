@@ -16,6 +16,7 @@ export default class Quest {
     this.shards = 0;
     this.found = [];
     this.spawn = null;
+    this.hero = "mage";
     this.changed = false;
     this.state = "new";
     this.pendingText = null;
