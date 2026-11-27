@@ -25,6 +25,7 @@ export default class Spider extends Enemy {
     this.shotCooldown = 2.5;
     this.releaseFrame = 1;
     this.greetings = SHOUTS.spider;
+    this.cry = "spider";
     this.animations = this.createAnimations();
     this.setAnimation(this.animations.idle);
   }

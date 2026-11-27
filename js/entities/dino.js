@@ -26,6 +26,7 @@ export default class Dino extends Enemy {
     this.hurtDuration = 0.1;
     this.turnTimer = 0;
     this.greetings = SHOUTS.dino;
+    this.cry = "dino";
     this.animations = this.createAnimations();
     this.setAnimation(this.animations.idle);
   }

@@ -25,6 +25,7 @@ export default class Mosquito extends Enemy {
     this.diveY = 0;
     this.diving = false;
     this.greetings = SHOUTS.mosquito;
+    this.cry = "mosquito";
     this.animations = this.createAnimations();
     this.setAnimation(this.animations.idle);
   }

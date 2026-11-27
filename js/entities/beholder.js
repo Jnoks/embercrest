@@ -22,6 +22,7 @@ export default class Beholder extends Enemy {
     this.shotCooldown = 2.5;
     this.releaseFrame = 1;
     this.greetings = SHOUTS.beholder;
+    this.cry = "beholder";
     this.animations = this.createAnimations();
     this.setAnimation(this.animations.idle);
   }

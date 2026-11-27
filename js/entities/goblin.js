@@ -23,6 +23,7 @@ export default class Goblin extends Enemy {
     this.stopDistance = 50;
     this.attackCooldown = 1;
     this.greetings = SHOUTS.goblin;
+    this.cry = "goblin";
     this.animations = this.createAnimations(path);
     this.setAnimation(this.animations.walk);
     this.frameTimer = -Math.random() * this.currentAnimation.cycleDuration();

@@ -26,6 +26,7 @@ export default class Ent extends Enemy {
     this.attackCooldown = 2;
     this.hurtDuration = 0.2;
     this.greetings = SHOUTS.ent;
+    this.cry = "ent";
     this.animations = this.createAnimations();
     this.setAnimation(this.animations.idle);
   }

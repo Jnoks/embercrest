@@ -35,6 +35,7 @@ export default class Enemy extends MovableObject {
     this.lines = [];
     this.greetings = [];
     this.greeted = false;
+    this.cry = "";
     this.bubble = new SpeechBubble();
   }
 

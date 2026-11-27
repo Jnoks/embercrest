@@ -436,6 +436,7 @@ export default class World {
 
   startChat(enemy) {
     const partner = this.findPartner(enemy);
+    if (enemy.cry) sound.play(enemy.cry);
     if (partner === null) {
       enemy.greet();
       return;
