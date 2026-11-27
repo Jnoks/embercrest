@@ -2,15 +2,15 @@ import Mage from "./entities/mage.js";
 import Knight from "./entities/knight.js";
 import Heart from "./entities/heart.js";
 import Hud from "./ui/hud.js";
-import { CHATS } from "./data/story.js";
+import Battle from "./battle.js";
 import { sound } from "./sound.js";
+import { updateObjects, updateProjectiles } from "./update.js";
 
 const SHAKE = 4;
 const PUSH_RANGE = 320;
 const PUSH_SPEED = 260;
 const ROOM_OPEN_SPEED = 300;
 const EDGE_MARGIN = 26;
-const ANSWER_DELAY = 0.9;
 const HEART_DROP = 40;
 const HEART_GAP = 20;
 const CAMERA_OFFSET = 100;
@@ -18,21 +18,29 @@ const HEROES = { mage: Mage, knight: Knight };
 
 export default class World {
   constructor(canvas, keyboard, level, quest) {
-    this.ctx = canvas.getContext("2d");
-    this.ctx.imageSmoothingEnabled = false;
     this.canvas = canvas;
+    this.ctx = this.createContext();
     this.cameraX = 0;
     this.leftLimit = 0;
     this.level = level;
     this.quest = quest;
+    this.effects = [];
+    this.bossPhase = this.level.boss.phase;
+    this.createCharacter(keyboard);
+    this.restore();
+  }
+
+  createContext() {
+    const ctx = this.canvas.getContext("2d");
+    ctx.imageSmoothingEnabled = false;
+    return ctx;
+  }
+
+  createCharacter(keyboard) {
     const Hero = HEROES[this.quest.hero];
     this.character = new Hero(100, this.level.groundY, keyboard);
     this.hud = new Hud(this.quest.hero);
-    this.bolts = [];
-    this.spells = [];
-    this.effects = [];
-    this.bossPhase = this.level.boss.phase;
-    this.restore();
+    this.battle = new Battle(this.level, this.character);
   }
 
   applyDifficulty(difficulty) {
@@ -90,8 +98,8 @@ export default class World {
     this.character.draw(this.ctx);
     this.drawObjects(this.level.traps);
     this.drawObjects(this.level.enemies);
-    this.drawObjects(this.bolts);
-    this.drawObjects(this.spells);
+    this.drawObjects(this.battle.bolts);
+    this.drawObjects(this.battle.spells);
     this.drawObjects(this.effects);
   }
 
@@ -106,43 +114,13 @@ export default class World {
     this.moveCharacter(delta);
     this.updateBossRoom(delta);
     this.keepInside();
-    this.updateEnemies(delta);
-    this.updateMagic(delta);
+    this.battle.update(delta);
+    this.updateEffects(delta);
     this.updateQuest(delta);
     this.collectHearts(delta);
     this.updateTraps(delta);
     this.hud.update(this.character, this.level.boss, this.quest);
     this.updateCamera();
-  }
-
-  updateEnemies(delta) {
-    this.updateTargets();
-    this.updateObjects(this.level.enemies, delta);
-    this.checkCollisions();
-    this.checkSwordHits();
-  }
-
-  checkSwordHits() {
-    if (!this.character.takeSwing()) return;
-    const box = this.character.attackBox();
-    for (let i = 0; i < this.level.enemies.length; i++) {
-      const enemy = this.level.enemies[i];
-      if (!enemy.isDead() && enemy.overlaps(box)) {
-        this.hurtEnemy(enemy, this.character.damage);
-      }
-    }
-  }
-
-  hurtEnemy(enemy, damage) {
-    enemy.takeDamage(damage);
-    if (enemy.isDead()) sound.play("defeat");
-    else sound.play("hit");
-  }
-
-  updateMagic(delta) {
-    this.updateBolts(delta);
-    this.updateSpells(delta);
-    this.updateEffects(delta);
   }
 
   updateCamera() {
@@ -190,77 +168,8 @@ export default class World {
   }
 
   updateScenery(delta) {
-    this.updateObjects(this.level.backgroundLayers, delta);
+    updateObjects(this.level.backgroundLayers, delta);
     this.level.rain.update(delta);
-  }
-
-  updateBolts(delta) {
-    const bolt = this.character.takeBolt();
-    if (bolt) this.bolts.push(bolt);
-    this.bolts = this.updateProjectiles(this.bolts, delta);
-    this.checkBoltHits();
-  }
-
-  updateProjectiles(projectiles, delta) {
-    this.updateObjects(projectiles, delta);
-    return projectiles.filter((projectile) => !projectile.done);
-  }
-
-  updateSpells(delta) {
-    this.collectSpells();
-    this.spells = this.updateProjectiles(this.spells, delta);
-    for (let i = 0; i < this.spells.length; i++) {
-      this.hitCharacter(this.spells[i]);
-      this.hitRock(this.spells[i]);
-    }
-  }
-
-  collectSpells() {
-    for (let i = 0; i < this.level.enemies.length; i++) {
-      const spell = this.level.enemies[i].takeSpell();
-      if (spell) this.spells.push(spell);
-    }
-  }
-
-  checkBoltHits() {
-    for (let i = 0; i < this.bolts.length; i++) {
-      this.hitRock(this.bolts[i]);
-      for (let j = 0; j < this.level.enemies.length; j++) {
-        this.hitEnemy(this.bolts[i], this.level.enemies[j]);
-      }
-    }
-  }
-
-  hitRock(projectile) {
-    if (!projectile.isHitting()) return;
-    if (this.level.map.hitsRock(projectile.hitbox())) projectile.explode();
-  }
-
-  hitEnemy(bolt, enemy) {
-    if (!bolt.isHitting() || enemy.isDead()) return;
-    if (!bolt.isColliding(enemy)) return;
-    this.hurtEnemy(enemy, bolt.damage);
-    bolt.explode();
-  }
-
-  hitCharacter(spell) {
-    if (!spell.isHitting()) return;
-    if (!spell.isColliding(this.character)) return;
-    if (!this.blockHit(spell.centerX())) this.hurtBySpell(spell);
-    spell.explode();
-  }
-
-  hurtBySpell(spell) {
-    this.character.takeDamage(spell.damage);
-    if (spell.slowTime > 0) this.character.slow(spell.slowTime);
-  }
-
-  blockHit(x) {
-    const character = this.character;
-    if (character.isInvincible() || !character.blocks(x)) return false;
-    character.block();
-    sound.play("block");
-    return true;
   }
 
   updateEffects(delta) {
@@ -268,7 +177,7 @@ export default class World {
     if (effect) this.effects.push(effect);
     const star = this.level.gate.takeEffect();
     if (star) this.effects.push(star);
-    this.effects = this.updateProjectiles(this.effects, delta);
+    this.effects = updateProjectiles(this.effects, delta);
   }
 
   updateQuest(delta) {
@@ -326,7 +235,7 @@ export default class World {
         sound.play("shard");
       }
     }
-    this.level.shards = this.updateProjectiles(this.level.shards, delta);
+    this.level.shards = updateProjectiles(this.level.shards, delta);
   }
 
   dropHearts() {
@@ -348,7 +257,7 @@ export default class World {
         sound.play("heart");
       }
     }
-    this.level.hearts = this.updateProjectiles(this.level.hearts, delta);
+    this.level.hearts = updateProjectiles(this.level.hearts, delta);
   }
 
   updateTraps(delta) {
@@ -358,7 +267,7 @@ export default class World {
       trap.targetY = this.character.y;
       if (this.character.isColliding(trap)) this.touchTrap(trap);
     }
-    this.level.traps = this.updateProjectiles(this.level.traps, delta);
+    this.level.traps = updateProjectiles(this.level.traps, delta);
   }
 
   touchTrap(trap) {
@@ -417,66 +326,6 @@ export default class World {
   shake() {
     if (!this.level.boss.isRaging() || this.isOver()) return 0;
     return Math.round((Math.random() * 2 - 1) * SHAKE);
-  }
-
-  updateObjects(objects, delta) {
-    for (let i = 0; i < objects.length; i++) {
-      objects[i].update(delta);
-    }
-  }
-
-  updateTargets() {
-    for (let i = 0; i < this.level.enemies.length; i++) {
-      const enemy = this.level.enemies[i];
-      enemy.targetX = this.character.centerX();
-      enemy.targetY = this.character.centerY();
-      enemy.targetHidden = this.isHidden(enemy);
-      if (enemy.notices()) this.startChat(enemy);
-    }
-  }
-
-  isHidden(enemy) {
-    const character = this.character;
-    const eye = { x: enemy.centerX(), y: enemy.centerY() };
-    const target = { x: character.centerX(), y: character.centerY() };
-    return this.level.map.blocksView(eye, target);
-  }
-
-  startChat(enemy) {
-    const partner = this.findPartner(enemy);
-    if (enemy.cry) sound.play(enemy.cry);
-    if (partner === null) {
-      enemy.greet();
-      return;
-    }
-    const chat = CHATS[Math.floor(Math.random() * CHATS.length)];
-    enemy.bubble.say(chat.first);
-    partner.bubble.say(chat.second, ANSWER_DELAY);
-    partner.greeted = true;
-  }
-
-  findPartner(enemy) {
-    for (let i = 0; i < this.level.enemies.length; i++) {
-      const other = this.level.enemies[i];
-      if (other !== enemy && other.canAnswer(enemy)) return other;
-    }
-    return null;
-  }
-
-  checkCollisions() {
-    if (this.character.isDead() || this.level.scene.isRunning()) return;
-    for (let i = 0; i < this.level.enemies.length; i++) {
-      const enemy = this.level.enemies[i];
-      if (this.character.overlaps(enemy.attackBox())) {
-        enemy.attack();
-        if (enemy.isHitting()) this.strikeCharacter(enemy);
-      }
-    }
-  }
-
-  strikeCharacter(enemy) {
-    if (this.blockHit(enemy.centerX())) enemy.recoil();
-    else this.character.takeDamage(enemy.damage);
   }
 
   isOver() {
