@@ -19,6 +19,7 @@ import { loader } from "./loader.js";
 import { sound } from "./sound.js";
 import { voice } from "./voice.js";
 import { loadSave, storeSave, clearSave } from "./save.js";
+import { toggleFullscreen } from "./fullscreen.js";
 
 const WORLD = WORLDS[0];
 
@@ -93,6 +94,7 @@ export default class Game {
     if (choice === "resume") this.resume();
     else if (choice === "controls") this.openControls();
     else if (choice === "soundToggle") this.toggleSound();
+    else if (choice === "fullscreen") toggleFullscreen();
     else this.menu = this.difficultyMenu;
   }
 
@@ -257,6 +259,7 @@ export default class Game {
     if (choice === "resume") this.menu = null;
     else if (choice === "controls") this.openControls();
     else if (choice === "soundToggle") this.toggleSound();
+    else if (choice === "fullscreen") toggleFullscreen();
     else this.toStart();
   }
 

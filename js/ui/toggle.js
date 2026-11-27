@@ -13,12 +13,13 @@ const PADDING = 8;
 const SLIDE_TIME = 0.1;
 
 export default class Toggle {
-  constructor(centerX, y, text, on) {
+  constructor(centerX, y, text, on, width = WIDTH) {
     const labelX = centerX - LABEL_SHIFT;
     const centerY = y + HEIGHT / 2;
-    this.x = centerX - WIDTH / 2;
+    this.x = centerX - width / 2;
     this.y = y;
-    this.trackX = this.x + WIDTH - TRACK_WIDTH;
+    this.width = width;
+    this.trackX = this.x + width - TRACK_WIDTH;
     this.on = on;
     this.selected = false;
     this.slide = 0;
@@ -36,7 +37,7 @@ export default class Toggle {
   }
 
   contains(x, y) {
-    const inside = x >= this.x - PADDING && x <= this.x + WIDTH + PADDING;
+    const inside = x >= this.x - PADDING && x <= this.x + this.width + PADDING;
     return inside && y >= this.y - PADDING && y <= this.y + HEIGHT + PADDING;
   }
 

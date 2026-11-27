@@ -2,9 +2,13 @@ import Button from "./button.js";
 import Toggle from "./toggle.js";
 import { UI_TEXT } from "../data/story.js";
 import { sound } from "../sound.js";
+import { CAN_FULLSCREEN, isFullscreen } from "../fullscreen.js";
 
 const CENTER_X = 480;
 const BUTTON_STEP = 184;
+const SOUND_X = 372;
+const SCREEN_X = 556;
+const SCREEN_WIDTH = 192;
 
 export default class Menu {
   constructor() {
@@ -12,6 +16,7 @@ export default class Menu {
     this.choices = [];
     this.selected = 0;
     this.toggle = null;
+    this.screenToggle = null;
   }
 
   select(index) {
@@ -49,14 +54,30 @@ export default class Menu {
 
   addToggle(y) {
     const text = UI_TEXT.soundToggle;
-    this.toggle = new Toggle(CENTER_X, y, text, !sound.muted);
+    let x = CENTER_X;
+    if (CAN_FULLSCREEN) x = SOUND_X;
+    this.toggle = new Toggle(x, y, text, !sound.muted);
     this.buttons.push(this.toggle);
     this.choices.push("soundToggle");
+    if (CAN_FULLSCREEN) this.addScreenToggle(y);
+  }
+
+  addScreenToggle(y) {
+    const text = UI_TEXT.fullscreen;
+    this.screenToggle = new Toggle(SCREEN_X, y, text, false, SCREEN_WIDTH);
+    this.buttons.push(this.screenToggle);
+    this.choices.push("fullscreen");
   }
 
   updateToggle(delta) {
     this.toggle.on = !sound.muted;
     this.toggle.update(delta);
+    if (this.screenToggle) this.updateScreenToggle(delta);
+  }
+
+  updateScreenToggle(delta) {
+    this.screenToggle.on = isFullscreen();
+    this.screenToggle.update(delta);
   }
 
   choice() {
