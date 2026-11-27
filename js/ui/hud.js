@@ -3,16 +3,21 @@ import StatusBar from "./status-bar.js";
 import QuestTracker from "./quest-tracker.js";
 
 const HUD_PATH = "./assets/images/hud/";
+const ENERGY = {
+  mage: { fill: "mana", label: "Mana" },
+  knight: { fill: "stamina", label: "Stamina" },
+};
 
 export default class Hud {
   constructor(hero) {
+    const energy = ENERGY[hero];
+    const frame = HUD_PATH + "small-bar.png";
     this.images = this.createImages(hero);
     this.healthBar = this.createBar(87, 12, 111, 12, "health", "HP");
-    this.manaBar = this.createBar(86, 31, 87, 10, "mana", "Mana");
+    this.energyBar = this.createBar(86, 31, 87, 10, energy.fill, energy.label);
     this.bossBar = this.createBar(319, 36, 322, 16, "boss", "Boss");
     this.bossFrame = new HudImage(308, 30, 344, 28, HUD_PATH + "boss-bar.png");
-    this.manaFrame = new HudImage(79, 27, 102, 18, HUD_PATH + "small-bar.png");
-    this.manaVisible = false;
+    this.energyFrame = new HudImage(79, 27, 102, 18, frame);
     this.bossVisible = false;
     this.tracker = new QuestTracker();
   }
@@ -26,11 +31,6 @@ export default class Hud {
     ];
   }
 
-  drawMana(ctx) {
-    this.manaFrame.draw(ctx);
-    this.manaBar.draw(ctx);
-  }
-
   createBar(x, y, width, height, name, label) {
     const path = HUD_PATH + name + "-fill.png";
     return new StatusBar(x, y, width, height, path, label);
@@ -38,8 +38,7 @@ export default class Hud {
 
   update(character, boss, quest) {
     this.healthBar.setValue(character.health, character.maxHealth);
-    this.manaBar.setValue(character.mana, character.maxMana);
-    this.manaVisible = character.maxMana > 0;
+    this.energyBar.setValue(character.energy, character.maxEnergy);
     this.bossBar.setValue(boss.health, boss.maxHealth);
     this.bossBar.name = boss.name;
     this.bossVisible = boss.seesTarget() && !boss.isDead();
@@ -51,7 +50,8 @@ export default class Hud {
       this.images[i].draw(ctx);
     }
     this.healthBar.draw(ctx);
-    if (this.manaVisible) this.drawMana(ctx);
+    this.energyFrame.draw(ctx);
+    this.energyBar.draw(ctx);
     this.tracker.draw(ctx);
     if (this.bossVisible) {
       this.bossFrame.draw(ctx);

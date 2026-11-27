@@ -22,9 +22,9 @@ export default class Character extends MovableObject {
     this.slowTimer = 0;
     this.damageFactor = 1;
     this.armor = 1;
-    this.maxMana = 0;
-    this.mana = 0;
-    this.manaRegen = 0;
+    this.maxEnergy = 0;
+    this.energy = 0;
+    this.energyRegen = 0;
     this.alpha = 1;
     this.web = new DrawableObject(0, 0, WEB_SIZE, WEB_SIZE);
     this.web.loadImage(WEB_IMAGE);
@@ -34,8 +34,14 @@ export default class Character extends MovableObject {
     this.handleInput(delta);
     this.chooseAnimation();
     this.updateTimers(delta);
+    this.regenerate(delta);
     this.applyGravity(delta);
     this.animate(delta);
+  }
+
+  regenerate(delta) {
+    const energy = this.energy + this.energyRegen * delta;
+    this.energy = Math.min(energy, this.maxEnergy);
   }
 
   chooseAnimation() {
@@ -98,6 +104,12 @@ export default class Character extends MovableObject {
   }
 
   attack() {}
+
+  blocks(x) {
+    return false;
+  }
+
+  block() {}
 
   takeBolt() {
     return null;

@@ -413,6 +413,7 @@ export const UI_TEXT = {
   attack: "Attack",
   talk: "Talk",
   doubleJump: "Double jump",
+  block: "Block (knight)",
   acceptQuest: "Deal.",
   questNew: "New quest",
   questDone: "Quest complete",

@@ -28,6 +28,7 @@ const EFFECTS = [
   "win",
   "swing",
   "snap",
+  "block",
 ];
 
 export default class Sound {

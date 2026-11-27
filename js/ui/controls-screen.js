@@ -8,15 +8,16 @@ const ROWS = [
   { keys: ["W"], text: UI_TEXT.jump },
   { keys: ["W", "W"], text: UI_TEXT.doubleJump },
   { keys: ["Space"], text: UI_TEXT.attack },
+  { keys: ["S"], text: UI_TEXT.block },
   { keys: ["E"], text: UI_TEXT.talk },
   { keys: ["Q"], text: UI_TEXT.questLog },
   { keys: ["Esc"], text: UI_TEXT.pause },
   { keys: ["Enter"], text: UI_TEXT.confirm },
 ];
 const KEY_WIDTHS = { Space: 72, Enter: 72, Esc: 48 };
-const ROWS_PER_COLUMN = 4;
+const ROWS_PER_COLUMN = 5;
 const FIRST_X = 264;
-const FIRST_Y = 188;
+const FIRST_Y = 162;
 const COLUMN_STEP = 250;
 const ROW_STEP = 50;
 const KEY_SIZE = 24;

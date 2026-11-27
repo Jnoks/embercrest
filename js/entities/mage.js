@@ -14,9 +14,9 @@ const DEATH = { loop: false, padding: 64 };
 export default class Mage extends Character {
   constructor(x, y, keyboard) {
     super(x, y, keyboard);
-    this.maxMana = 100;
-    this.mana = this.maxMana;
-    this.manaRegen = 10;
+    this.maxEnergy = 100;
+    this.energy = this.maxEnergy;
+    this.energyRegen = 10;
     this.pendingBolt = null;
     this.boltLoaded = false;
     this.animations = this.createAnimations();
@@ -37,13 +37,12 @@ export default class Mage extends Character {
 
   update(delta) {
     super.update(delta);
-    this.mana = Math.min(this.mana + this.manaRegen * delta, this.maxMana);
     this.releaseBolt();
   }
 
   attack() {
-    if (this.isOnCooldown() || this.mana < SPELL_COST) return;
-    this.mana -= SPELL_COST;
+    if (this.isOnCooldown() || this.energy < SPELL_COST) return;
+    this.energy -= SPELL_COST;
     this.cooldownTimer = CAST_COOLDOWN;
     this.attackTimer = this.animations.attack.cycleDuration();
     this.boltLoaded = true;

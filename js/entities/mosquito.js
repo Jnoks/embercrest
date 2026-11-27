@@ -70,6 +70,11 @@ export default class Mosquito extends Enemy {
     this.cooldownTimer = DIVE_PAUSE;
   }
 
+  recoil() {
+    super.recoil();
+    this.endDive();
+  }
+
   flyHome(delta) {
     this.speed = RETURN_SPEED;
     this.flyTo(this.homeX, this.homeY, delta);

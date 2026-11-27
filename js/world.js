@@ -37,7 +37,7 @@ export default class World {
 
   applyDifficulty(difficulty) {
     this.character.damageFactor = difficulty.damage;
-    this.character.manaRegen = difficulty.manaRegen;
+    this.character.energyRegen = difficulty.energyRegen;
     this.level.boss.maxHealth = difficulty.bossHealth;
     this.level.boss.health = difficulty.bossHealth;
   }
@@ -238,13 +238,21 @@ export default class World {
   hitCharacter(spell) {
     if (!spell.isHitting()) return;
     if (!spell.isColliding(this.character)) return;
-    this.hurtBySpell(spell);
+    if (!this.blockHit(spell.centerX())) this.hurtBySpell(spell);
     spell.explode();
   }
 
   hurtBySpell(spell) {
     this.character.takeDamage(spell.damage);
     if (spell.slowTime > 0) this.character.slow(spell.slowTime);
+  }
+
+  blockHit(x) {
+    const character = this.character;
+    if (character.isInvincible() || !character.blocks(x)) return false;
+    character.block();
+    sound.play("block");
+    return true;
   }
 
   updateEffects(delta) {
@@ -452,11 +460,14 @@ export default class World {
       const enemy = this.level.enemies[i];
       if (this.character.overlaps(enemy.attackBox())) {
         enemy.attack();
-        if (enemy.isHitting()) {
-          this.character.takeDamage(enemy.damage);
-        }
+        if (enemy.isHitting()) this.strikeCharacter(enemy);
       }
     }
+  }
+
+  strikeCharacter(enemy) {
+    if (this.blockHit(enemy.centerX())) enemy.recoil();
+    else this.character.takeDamage(enemy.damage);
   }
 
   isOver() {

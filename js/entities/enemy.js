@@ -6,6 +6,7 @@ const CHAT_RANGE = 200;
 const BUBBLE_GAP = 12;
 const BUBBLE_SHIFT = 6;
 const ALERT_RANGE = 960;
+const RECOIL_TIME = 0.4;
 const BAR_WIDTH = 32;
 const BAR_HEIGHT = 4;
 const BAR_GAP = 8;
@@ -65,6 +66,11 @@ export default class Enemy extends MovableObject {
   takeDamage(amount) {
     super.takeDamage(amount);
     this.sightRange = ALERT_RANGE;
+  }
+
+  recoil() {
+    this.hurtTimer = RECOIL_TIME;
+    this.attackTimer = 0;
   }
 
   seesTarget() {
