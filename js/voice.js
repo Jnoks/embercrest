@@ -1,5 +1,6 @@
 import { sound } from "./sound.js";
-import { HEROES, INTRO_PAGES, WORLDS } from "./data/story.js";
+import { HEROES, INTRO_PAGES } from "./data/story.js";
+import { WORLDS } from "./data/worlds.js";
 
 const VOICE_PATH = "./assets/audio/voice/";
 const VOICE_VOLUME = 0.5;
