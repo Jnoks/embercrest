@@ -394,6 +394,14 @@ export const CHATS = [
   { first: ["Hob said", "no guests!"], second: ["Smash?"] },
 ];
 
+export const ROADMAP = [
+  "Item shop with new spells",
+  "More life and more mana",
+  "Four more worlds",
+  "New enemies and bosses",
+  "The story goes on",
+];
+
 export const UI_TEXT = {
   pressStart: "Press any key",
   newGame: "New game",
@@ -439,6 +447,7 @@ export const UI_TEXT = {
   endTitle: "Home Again",
   thanks: "Thank you for playing.",
   playAgain: "Play again",
+  comingSoon: "Coming soon",
   soundOn: "Sound: on",
   soundOff: "Sound: off",
 };

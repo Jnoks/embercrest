@@ -13,6 +13,7 @@ import HeroScreen from "./ui/hero-screen.js";
 import DifficultyMenu from "./ui/difficulty-menu.js";
 import PauseMenu from "./ui/pause-menu.js";
 import ControlsScreen from "./ui/controls-screen.js";
+import RoadmapScreen from "./ui/roadmap-screen.js";
 import { loader } from "./loader.js";
 import { sound } from "./sound.js";
 import { voice } from "./voice.js";
@@ -73,7 +74,7 @@ export default class Game {
   createFinale() {
     const cleared = new TextBox(UI_TEXT.worldCleared, WORLD.cleared);
     const ending = new TextBox(TITLE, WORLD.ending);
-    return [cleared, ending];
+    return [cleared, ending, new RoadmapScreen()];
   }
 
   start() {
