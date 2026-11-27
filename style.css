@@ -55,6 +55,10 @@ main {
   gap: 16px;
 }
 
+.game main {
+  width: min(968px, 100%, calc((100dvh - 158px) * 16 / 9));
+}
+
 h1 {
   font-size: 48px;
   font-weight: 700;
