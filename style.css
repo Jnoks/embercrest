@@ -133,6 +133,7 @@ footer a {
 }
 
 .touch-button {
+  position: relative;
   height: 100%;
   aspect-ratio: 1;
   border: none;
@@ -143,6 +144,9 @@ footer a {
 }
 
 .touch-button img {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   image-rendering: pixelated;
