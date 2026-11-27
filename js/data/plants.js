@@ -15,6 +15,9 @@ export const VINES = [
 ];
 const IVY_BIG = { name: "ivy-big", count: 2, width: 50, height: 99, y: 4 };
 const IVY_SMALL = { name: "ivy-small", count: 2, width: 28, height: 37, y: 10 };
+const TUFT = { name: "grass", count: 8, width: 32, height: 32, y: 50 };
+const TUFT_SHARE = 2;
+const TUFT_SHIFT = 8;
 
 export function createPlants(map, kinds) {
   const plants = [];
@@ -37,6 +40,22 @@ export function createIvy(map) {
     plants.push(createPlant(spots[i], kind));
   }
   return plants;
+}
+
+export function createTufts(map) {
+  const tufts = [];
+  const spots = map.stands();
+  for (let i = 0; i < spots.length; i++) {
+    const mix = spots[i].column * 7 + spots[i].row * 13;
+    if (mix % TUFT_SHARE === 0) tufts.push(createTuft(spots[i], mix));
+  }
+  return tufts;
+}
+
+function createTuft(spot, mix) {
+  const number = ((mix / TUFT_SHARE) % TUFT.count) + 1;
+  const shift = ((mix % 5) - 2) * TUFT_SHIFT;
+  return new Plant(spot.x + shift, spot.y + TUFT.y, TUFT, number);
 }
 
 function createPlant(spot, kind) {

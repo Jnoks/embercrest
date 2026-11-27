@@ -23,7 +23,8 @@ import Rain from "../entities/rain.js";
 import Sun from "../entities/sun.js";
 import { WORLDS, SHOUTS } from "./story.js";
 import { LEVEL1_SCREENS } from "./level1-map.js";
-import { TREES, BUSHES, VINES, createPlants, createIvy } from "./plants.js";
+import { TREES, BUSHES, VINES } from "./plants.js";
+import { createPlants, createIvy, createTufts } from "./plants.js";
 
 const BACKGROUND_PATH = "./assets/images/forest/background/";
 const GROUND_Y = 482;
@@ -48,7 +49,7 @@ function createTiles(map, gate, latch) {
   const ground = map.createTiles(GROUND);
   const ivy = createIvy(map);
   const vines = createPlants(map, VINES);
-  const bushes = createPlants(map, BUSHES);
+  const bushes = createPlants(map, BUSHES).concat(createTufts(map));
   return backdrop.concat([gate], trees, ground, ivy, vines, bushes, [latch]);
 }
 

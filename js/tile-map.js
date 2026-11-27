@@ -16,6 +16,7 @@ const CORNER_TILES = [
 export const GROUND = "#";
 export const BACKDROP = "%";
 export const IVY = "&";
+const AIR = ".";
 
 export default class TileMap {
   constructor(screens, height) {
@@ -116,6 +117,19 @@ export default class TileMap {
     for (let row = 0; row < this.rows.length; row++) {
       for (let column = 0; column < this.rows[row].length; column++) {
         if (this.rows[row][column] === char) spots.push(this.spot(column, row));
+      }
+    }
+    return spots;
+  }
+
+  stands() {
+    const spots = [];
+    for (let row = 0; row < this.rows.length; row++) {
+      for (let column = 0; column < this.rows[row].length; column++) {
+        const free = this.rows[row][column] === AIR;
+        if (free && this.isStand(column, row)) {
+          spots.push(this.spot(column, row));
+        }
       }
     }
     return spots;
