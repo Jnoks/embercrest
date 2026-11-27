@@ -1,7 +1,7 @@
 const WIDTH = 960;
 const HEIGHT = 540;
-const COUNT = 220;
-const COLOR = "rgba(214, 232, 255, 0.55)";
+const COUNT = 130;
+const COLOR = "rgba(214, 232, 255, 0.35)";
 const FALL_SPEED = 600;
 const DRIFT_SPEED = 80;
 const STOP_TIME = 2;

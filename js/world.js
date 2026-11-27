@@ -63,11 +63,11 @@ export default class World {
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.drawObjects(this.level.backgroundLayers);
+    this.level.rain.draw(this.ctx);
     this.ctx.save();
     this.ctx.translate(-Math.round(this.cameraX) + this.shake(), this.shake());
     this.drawScene();
     this.ctx.restore();
-    this.level.rain.draw(this.ctx);
     this.hud.draw(this.ctx);
   }
 
