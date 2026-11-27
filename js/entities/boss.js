@@ -35,11 +35,23 @@ const RAGE_EFFECTS = [
 export default class Boss extends Enemy {
   constructor(x, y) {
     super(x, y, 256, 256);
+    this.name = "Hob";
+    this.setBody();
+    this.setStats();
+    this.setSpells();
+    this.animations = this.createAnimations();
+    this.setAnimation(this.animations.idle);
+  }
+
+  setBody() {
     this.anchorY = 207;
     this.anchorX = 99;
     this.hitboxWidth = 60;
     this.hitboxHeight = 100;
     this.facingLeft = true;
+  }
+
+  setStats() {
     this.maxHealth = 240;
     this.health = this.maxHealth;
     this.speed = SPEEDS[0];
@@ -50,7 +62,9 @@ export default class Boss extends Enemy {
     this.stopDistance = 90;
     this.attackCooldown = ATTACK_COOLDOWNS[0];
     this.hurtDuration = 0.2;
-    this.name = "Hob";
+  }
+
+  setSpells() {
     this.castTimer = 0;
     this.spellTimer = 0;
     this.spellLoaded = false;
@@ -61,8 +75,6 @@ export default class Boss extends Enemy {
     this.rageTimer = 0;
     this.pendingEffect = null;
     this.lootTaken = false;
-    this.animations = this.createAnimations();
-    this.setAnimation(this.animations.idle);
   }
 
   createAnimations() {

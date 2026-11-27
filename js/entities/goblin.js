@@ -8,10 +8,23 @@ const GOBLIN_SIZE = 128;
 export default class Goblin extends Enemy {
   constructor(centerX, y, path = GOBLIN_PATH) {
     super(centerX - GOBLIN_SIZE / 2, y, GOBLIN_SIZE, GOBLIN_SIZE);
+    this.setBody();
+    this.setStats();
+    this.greetings = SHOUTS.goblin;
+    this.cry = "goblin";
+    this.animations = this.createAnimations(path);
+    this.setAnimation(this.animations.walk);
+    this.frameTimer = -Math.random() * this.currentAnimation.cycleDuration();
+  }
+
+  setBody() {
     this.anchorY = 89;
     this.hitboxWidth = 36;
     this.hitboxHeight = 44;
     this.facingLeft = true;
+  }
+
+  setStats() {
     this.maxHealth = 40;
     this.health = this.maxHealth;
     this.damage = 15;
@@ -22,11 +35,6 @@ export default class Goblin extends Enemy {
     this.sightRange = 400;
     this.stopDistance = 50;
     this.attackCooldown = 1;
-    this.greetings = SHOUTS.goblin;
-    this.cry = "goblin";
-    this.animations = this.createAnimations(path);
-    this.setAnimation(this.animations.walk);
-    this.frameTimer = -Math.random() * this.currentAnimation.cycleDuration();
   }
 
   createAnimations(path) {

@@ -11,11 +11,7 @@ const RING_HEIGHT = 14;
 export default class Beholder extends Enemy {
   constructor(centerX, centerY) {
     super(centerX - 50, centerY + 25, BEHOLDER_SIZE, BEHOLDER_SIZE);
-    this.anchorX = 50;
-    this.anchorY = 87;
-    this.hitboxWidth = 44;
-    this.hitboxHeight = 50;
-    this.facingLeft = true;
+    this.setBody();
     this.maxHealth = 40;
     this.health = this.maxHealth;
     this.sightRange = 576;
@@ -25,6 +21,14 @@ export default class Beholder extends Enemy {
     this.cry = "beholder";
     this.animations = this.createAnimations();
     this.setAnimation(this.animations.idle);
+  }
+
+  setBody() {
+    this.anchorX = 50;
+    this.anchorY = 87;
+    this.hitboxWidth = 44;
+    this.hitboxHeight = 50;
+    this.facingLeft = true;
   }
 
   createAnimations() {

@@ -8,15 +8,20 @@ export default class SpriteAnimation {
     frameDuration,
     { loopPause = 0, loop = true, padding = 0 } = {},
   ) {
-    this.frames = [];
+    this.frames = this.loadFrames(folder, name, count);
     this.frameDuration = frameDuration;
     this.loopPause = loopPause;
     this.loop = loop;
     this.padding = padding;
+  }
+
+  loadFrames(folder, name, count) {
+    const frames = [];
     for (let i = 1; i <= count; i++) {
       const path = `${folder}${name}/${name}${i}.png`;
-      this.frames.push(loader.createImage(path));
+      frames.push(loader.createImage(path));
     }
+    return frames;
   }
 
   cycleDuration() {

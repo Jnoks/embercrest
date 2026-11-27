@@ -4,14 +4,8 @@ const PORTRAIT_PATH = "./assets/images/portraits/";
 
 export default class Quest {
   constructor(data, boss) {
-    const portrait = PORTRAIT_PATH + data.portrait + ".png";
-    const bossPortrait = PORTRAIT_PATH + boss.portrait + ".png";
-    this.offer = new DialogBox(data.giver, data.offer, portrait);
-    this.reminder = new DialogBox(data.giver, data.reminder, portrait);
-    this.complete = new DialogBox(data.giver, data.complete, portrait);
-    this.farewell = new DialogBox(data.giver, data.farewell, portrait);
-    this.bossIntro = new DialogBox(boss.name, boss.intro, bossPortrait);
-    this.bossDefeat = new DialogBox(boss.name, boss.defeat, bossPortrait);
+    this.createDialogs(data);
+    this.createBossDialogs(boss);
     this.amount = data.amount;
     this.shards = 0;
     this.found = [];
@@ -20,6 +14,20 @@ export default class Quest {
     this.changed = false;
     this.state = "new";
     this.pendingText = null;
+  }
+
+  createDialogs(data) {
+    const portrait = PORTRAIT_PATH + data.portrait + ".png";
+    this.offer = new DialogBox(data.giver, data.offer, portrait);
+    this.reminder = new DialogBox(data.giver, data.reminder, portrait);
+    this.complete = new DialogBox(data.giver, data.complete, portrait);
+    this.farewell = new DialogBox(data.giver, data.farewell, portrait);
+  }
+
+  createBossDialogs(boss) {
+    const portrait = PORTRAIT_PATH + boss.portrait + ".png";
+    this.bossIntro = new DialogBox(boss.name, boss.intro, portrait);
+    this.bossDefeat = new DialogBox(boss.name, boss.defeat, portrait);
   }
 
   meet() {

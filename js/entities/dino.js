@@ -9,11 +9,23 @@ const TURN_TIME = 0.7;
 export default class Dino extends Enemy {
   constructor(centerX, y) {
     super(centerX - 52, y, DINO_SIZE, DINO_SIZE);
+    this.setBody();
+    this.setStats();
+    this.greetings = SHOUTS.dino;
+    this.cry = "dino";
+    this.animations = this.createAnimations();
+    this.setAnimation(this.animations.idle);
+  }
+
+  setBody() {
     this.anchorX = 52;
     this.anchorY = 87;
     this.hitboxWidth = 70;
     this.hitboxHeight = 40;
     this.facingLeft = true;
+  }
+
+  setStats() {
     this.maxHealth = 40;
     this.health = this.maxHealth;
     this.speed = 190;
@@ -25,10 +37,6 @@ export default class Dino extends Enemy {
     this.attackCooldown = 1.2;
     this.hurtDuration = 0.1;
     this.turnTimer = 0;
-    this.greetings = SHOUTS.dino;
-    this.cry = "dino";
-    this.animations = this.createAnimations();
-    this.setAnimation(this.animations.idle);
   }
 
   createAnimations() {

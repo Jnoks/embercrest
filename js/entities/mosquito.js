@@ -11,23 +11,31 @@ const DIVE_PAUSE = 1.5;
 export default class Mosquito extends Enemy {
   constructor(centerX, centerY) {
     super(centerX - 62, centerY + 18, MOSQUITO_SIZE, MOSQUITO_SIZE);
+    this.setBody();
+    this.setFlight(centerX);
+    this.maxHealth = 10;
+    this.health = this.maxHealth;
+    this.sightRange = 230;
+    this.greetings = SHOUTS.mosquito;
+    this.cry = "mosquito";
+    this.animations = this.createAnimations();
+    this.setAnimation(this.animations.idle);
+  }
+
+  setBody() {
     this.anchorX = 62;
     this.anchorY = 82;
     this.hitboxWidth = 36;
     this.hitboxHeight = 36;
     this.facingLeft = true;
-    this.maxHealth = 10;
-    this.health = this.maxHealth;
-    this.sightRange = 230;
+  }
+
+  setFlight(centerX) {
     this.homeX = centerX;
     this.homeY = this.y;
     this.diveX = 0;
     this.diveY = 0;
     this.diving = false;
-    this.greetings = SHOUTS.mosquito;
-    this.cry = "mosquito";
-    this.animations = this.createAnimations();
-    this.setAnimation(this.animations.idle);
   }
 
   createAnimations() {

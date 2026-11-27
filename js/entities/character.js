@@ -11,11 +11,22 @@ const WEB_HEIGHT = 54;
 export default class Character extends MovableObject {
   constructor(x, y, keyboard) {
     super(x, y, 128, 128);
+    this.keyboard = keyboard;
+    this.setBody();
+    this.setPowers();
+    this.alpha = 1;
+    this.web = new DrawableObject(0, 0, WEB_SIZE, WEB_SIZE);
+    this.web.loadImage(WEB_IMAGE);
+  }
+
+  setBody() {
     this.anchorY = 111;
     this.anchorX = 47;
     this.hitboxWidth = 30;
     this.hitboxHeight = 50;
-    this.keyboard = keyboard;
+  }
+
+  setPowers() {
     this.speed = RUN_SPEED;
     this.jumpSpeed = 700;
     this.maxAirJumps = 1;
@@ -24,9 +35,6 @@ export default class Character extends MovableObject {
     this.maxEnergy = 0;
     this.energy = 0;
     this.energyRegen = 0;
-    this.alpha = 1;
-    this.web = new DrawableObject(0, 0, WEB_SIZE, WEB_SIZE);
-    this.web.loadImage(WEB_IMAGE);
   }
 
   update(delta) {

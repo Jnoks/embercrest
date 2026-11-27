@@ -12,10 +12,22 @@ const MOUTH_HEIGHT = 10;
 export default class Spider extends Enemy {
   constructor(centerX, y) {
     super(centerX - SPIDER_SIZE / 2, y, SPIDER_SIZE, SPIDER_SIZE);
+    this.setBody();
+    this.setStats();
+    this.greetings = SHOUTS.spider;
+    this.cry = "spider";
+    this.animations = this.createAnimations();
+    this.setAnimation(this.animations.idle);
+  }
+
+  setBody() {
     this.anchorY = 87;
     this.hitboxWidth = 50;
     this.hitboxHeight = 36;
     this.facingLeft = true;
+  }
+
+  setStats() {
     this.maxHealth = 20;
     this.health = this.maxHealth;
     this.hitFrame = 1;
@@ -24,10 +36,6 @@ export default class Spider extends Enemy {
     this.attackCooldown = 1.5;
     this.shotCooldown = 2.5;
     this.releaseFrame = 1;
-    this.greetings = SHOUTS.spider;
-    this.cry = "spider";
-    this.animations = this.createAnimations();
-    this.setAnimation(this.animations.idle);
   }
 
   createAnimations() {

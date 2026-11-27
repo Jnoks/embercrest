@@ -9,14 +9,23 @@ const BLINK_INTERVAL = 0.1;
 export default class MovableObject extends DrawableObject {
   constructor(x, y, width, height) {
     super(x, y, width, height);
+    this.hitboxWidth = width;
+    this.hitboxHeight = height;
+    this.animations = {};
+    this.setMotion();
+    this.setHealth();
+  }
+
+  setMotion() {
     this.speed = 0;
     this.velocityY = 0;
     this.jumpSpeed = 0;
     this.maxAirJumps = 0;
     this.airJumps = 0;
     this.onGround = false;
-    this.hitboxWidth = width;
-    this.hitboxHeight = height;
+  }
+
+  setHealth() {
     this.maxHealth = 100;
     this.health = this.maxHealth;
     this.hurtTimer = 0;
@@ -25,7 +34,6 @@ export default class MovableObject extends DrawableObject {
     this.cooldownTimer = 0;
     this.invincibleDuration = INVINCIBLE_DURATION;
     this.hurtDuration = HURT_DURATION;
-    this.animations = {};
   }
 
   moveRight(delta) {

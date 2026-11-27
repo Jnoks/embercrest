@@ -17,21 +17,33 @@ export default class Enemy extends MovableObject {
   constructor(x, y, width, height) {
     super(x, y, width, height);
     this.damage = 10;
+    this.invincibleDuration = 0;
+    this.minX = -Infinity;
+    this.maxX = Infinity;
+    this.setTarget();
+    this.setAttack();
+    this.setSpeech();
+  }
+
+  setTarget() {
     this.targetX = 0;
     this.targetY = 0;
     this.targetHidden = false;
+    this.sightRange = 0;
+    this.stopDistance = 0;
+  }
+
+  setAttack() {
     this.pendingSpell = null;
     this.shotCooldown = 0;
     this.releaseFrame = 0;
     this.shotLoaded = false;
-    this.invincibleDuration = 0;
     this.hitFrame = 0;
     this.attackReach = 0;
-    this.sightRange = 0;
-    this.stopDistance = 0;
     this.attackCooldown = 0;
-    this.minX = -Infinity;
-    this.maxX = Infinity;
+  }
+
+  setSpeech() {
     this.lines = [];
     this.greetings = [];
     this.greeted = false;

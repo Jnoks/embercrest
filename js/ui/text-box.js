@@ -39,10 +39,7 @@ export default class TextBox {
   constructor(title, pages, portrait) {
     this.title = new Label(title, CENTER_X, 80, 16, TITLE_COLOR, LIGHT_COLOR);
     this.portrait = this.createPortrait(portrait, 198, 85);
-    this.window = WINDOW;
-    this.hints = HINTS;
-    this.layout = LAYOUT;
-    this.dimColor = DIM_COLOR;
+    this.setLook();
     this.speaker = title;
     this.spoken = false;
     this.pages = pages;
@@ -50,6 +47,13 @@ export default class TextBox {
     this.shown = 0;
     this.time = 0;
     this.seen = false;
+  }
+
+  setLook() {
+    this.window = WINDOW;
+    this.hints = HINTS;
+    this.layout = LAYOUT;
+    this.dimColor = DIM_COLOR;
   }
 
   createPortrait(path, x, y) {

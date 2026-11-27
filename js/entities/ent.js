@@ -10,11 +10,23 @@ const BRANCH_HEIGHT = 40;
 export default class Ent extends Enemy {
   constructor(centerX, y) {
     super(centerX - 117, y, ENT_SIZE, ENT_SIZE);
+    this.setBody();
+    this.setStats();
+    this.greetings = SHOUTS.ent;
+    this.cry = "ent";
+    this.animations = this.createAnimations();
+    this.setAnimation(this.animations.idle);
+  }
+
+  setBody() {
     this.anchorX = 117;
     this.anchorY = 180;
     this.hitboxWidth = 56;
     this.hitboxHeight = 96;
     this.facingLeft = true;
+  }
+
+  setStats() {
     this.maxHealth = 80;
     this.health = this.maxHealth;
     this.speed = 25;
@@ -25,10 +37,6 @@ export default class Ent extends Enemy {
     this.stopDistance = 110;
     this.attackCooldown = 2;
     this.hurtDuration = 0.2;
-    this.greetings = SHOUTS.ent;
-    this.cry = "ent";
-    this.animations = this.createAnimations();
-    this.setAnimation(this.animations.idle);
   }
 
   createAnimations() {
