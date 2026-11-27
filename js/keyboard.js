@@ -10,7 +10,15 @@ const KEY_MAP = {
   KeyQ: "log",
 };
 
-const TOUCH_KEYS = ["left", "right", "jump", "attack", "talk", "cancel"];
+const TOUCH_KEYS = [
+  "left",
+  "right",
+  "jump",
+  "attack",
+  "block",
+  "talk",
+  "cancel",
+];
 
 export default class Keyboard {
   constructor() {
