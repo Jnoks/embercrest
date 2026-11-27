@@ -1,7 +1,7 @@
 const SFX_PATH = "./assets/audio/sfx/";
 const MUSIC_PATH = "./assets/audio/music/";
-const EFFECT_VOLUME = 0.5;
-const MUSIC_VOLUME = 0.3;
+const EFFECT_VOLUME = 0.25;
+const MUSIC_VOLUME = 0.08;
 const MUTE_KEY = "embercrest-muted";
 const TRACKS = ["forest", "boss"];
 const EFFECTS = [

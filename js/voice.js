@@ -2,7 +2,7 @@ import { sound } from "./sound.js";
 import { INTRO_PAGES, WORLDS } from "./data/story.js";
 
 const VOICE_PATH = "./assets/audio/voice/";
-const VOICE_VOLUME = 1;
+const VOICE_VOLUME = 0.5;
 const LANGUAGE = "en-US";
 const NARRATOR = { pitch: 0.9, rate: 0.9 };
 const SPEAKERS = {
