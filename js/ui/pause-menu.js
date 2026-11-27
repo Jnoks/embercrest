@@ -9,7 +9,9 @@ export default class PauseMenu extends Menu {
   constructor() {
     super();
     const title = UI_TEXT.paused;
+    const note = UI_TEXT.saved;
     this.title = new Label(title, CENTER_X, 222, 32, TITLE_COLOR, SHADOW_COLOR);
+    this.note = new Label(note, CENTER_X, 262, 16, "white", SHADOW_COLOR);
     this.choices = ["resume", "controls", "toStart"];
     this.buttons = this.createButtons(290);
     this.addToggle(342);
@@ -24,6 +26,7 @@ export default class PauseMenu extends Menu {
     ctx.fillStyle = DIM_COLOR;
     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     this.title.draw(ctx);
+    this.note.draw(ctx);
     for (let i = 0; i < this.buttons.length; i++) this.buttons[i].draw(ctx);
   }
 }

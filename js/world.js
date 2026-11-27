@@ -272,7 +272,7 @@ export default class World {
       this.level.checkpoints[i].setActive(false);
     }
     checkpoint.setActive(true);
-    this.quest.spawn = { x: checkpoint.centerX(), y: checkpoint.y };
+    this.quest.reach({ x: checkpoint.centerX(), y: checkpoint.y });
     this.effects.push(checkpoint.createEffect());
     sound.play("checkpoint");
   }

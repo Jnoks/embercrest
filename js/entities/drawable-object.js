@@ -1,3 +1,5 @@
+import { loader } from "../loader.js";
+
 export default class DrawableObject {
   constructor(x, y, width, height) {
     this.img = null;
@@ -14,8 +16,7 @@ export default class DrawableObject {
   }
 
   loadImage(path) {
-    this.img = new Image();
-    this.img.src = path;
+    this.img = loader.createImage(path);
   }
 
   setAnimation(animation) {

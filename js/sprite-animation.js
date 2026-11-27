@@ -1,3 +1,5 @@
+import { loader } from "./loader.js";
+
 export default class SpriteAnimation {
   constructor(
     folder,
@@ -12,9 +14,8 @@ export default class SpriteAnimation {
     this.loop = loop;
     this.padding = padding;
     for (let i = 1; i <= count; i++) {
-      const img = new Image();
-      img.src = `${folder}${name}/${name}${i}.png`;
-      this.frames.push(img);
+      const path = `${folder}${name}/${name}${i}.png`;
+      this.frames.push(loader.createImage(path));
     }
   }
 

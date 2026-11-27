@@ -7,11 +7,15 @@ import Quest from "./quest.js";
 import createLevel1 from "./data/level1.js";
 import { TITLE, INTRO_PAGES, WORLDS, UI_TEXT } from "./data/story.js";
 import { DIFFICULTIES } from "./data/difficulty.js";
+import QuestLog from "./ui/quest-log.js";
+import LoadingScreen from "./ui/loading-screen.js";
 import DifficultyMenu from "./ui/difficulty-menu.js";
 import PauseMenu from "./ui/pause-menu.js";
 import ControlsScreen from "./ui/controls-screen.js";
+import { loader } from "./loader.js";
 import { sound } from "./sound.js";
 import { voice } from "./voice.js";
+import { loadSave, storeSave, clearSave } from "./save.js";
 
 const WORLD = WORLDS[0];
 
@@ -22,6 +26,7 @@ export default class Game {
     this.keyboard = new Keyboard();
     this.lastTime = 0;
     this.difficulty = "easy";
+    this.saved = loadSave();
     this.createOverlays();
     this.createControls();
     this.newGame();
@@ -32,12 +37,15 @@ export default class Game {
   createOverlays() {
     const retry = ["tryAgain", "toStart"];
     const again = ["playAgain", "toStart"];
-    this.startScreen = new StartScreen();
+    this.startScreen = new StartScreen(this.saved !== null);
     this.gameOver = new Overlay(UI_TEXT.gameOver, UI_TEXT.heroDown, retry);
     this.victory = new Overlay(UI_TEXT.endTitle, UI_TEXT.thanks, again);
   }
 
   createControls() {
+    this.loading = new LoadingScreen();
+    this.ready = false;
+    this.questLog = new QuestLog(WORLD.quest);
     this.difficultyMenu = new DifficultyMenu();
     this.pauseMenu = new PauseMenu();
     this.controls = new ControlsScreen();
@@ -76,7 +84,8 @@ export default class Game {
   chooseStart() {
     const choice = this.startScreen.choice();
     sound.resume();
-    if (choice === "controls") this.openControls();
+    if (choice === "resume") this.resume();
+    else if (choice === "controls") this.openControls();
     else if (choice === "soundToggle") this.toggleSound();
     else this.menu = this.difficultyMenu;
   }
@@ -87,24 +96,48 @@ export default class Game {
     this.start();
   }
 
+  resume() {
+    this.difficulty = this.saved.difficulty;
+    this.quest.resume(this.saved);
+    this.texts = [];
+    this.menu = null;
+    this.start();
+  }
+
+  save() {
+    const progress = this.quest.progress();
+    progress.difficulty = this.difficulty;
+    storeSave(progress);
+    this.quest.changed = false;
+  }
+
   click(e) {
     const rect = this.canvas.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * this.canvas.width;
     const y = ((e.clientY - rect.top) / rect.height) * this.canvas.height;
+    if (this.clickHud(x, y)) return;
     const overlay = this.overlay();
     if (this.isMenu(overlay) && !overlay.click(x, y)) return;
     this.confirm();
   }
 
+  clickHud(x, y) {
+    if (!this.world.hud.tracker.contains(x, y)) return false;
+    this.toggleLog();
+    return true;
+  }
+
   loop(time) {
     const delta = Math.min((time - this.lastTime) / 1000, 0.1);
     this.lastTime = time;
+    if (loader.isDone()) this.ready = true;
     this.handleKeys();
     this.collectText();
     this.checkEnding();
     const overlay = this.overlay();
     if (overlay) overlay.update(delta);
     else this.world.update(delta);
+    if (this.quest.changed) this.save();
     this.draw(overlay);
     requestAnimationFrame((t) => this.loop(t));
   }
@@ -122,6 +155,7 @@ export default class Game {
   checkEnding() {
     if (!this.world.isWon() || this.finale.length === 0) return;
     sound.play("win");
+    clearSave();
     while (this.finale.length > 0) this.texts.push(this.finale.shift());
   }
 
@@ -130,6 +164,17 @@ export default class Game {
     if (this.keyboard.take("cancel")) this.cancel();
     if (this.isReading() && this.keyboard.take("attack")) this.turnPage();
     this.moveSelection();
+    if (this.keyboard.take("log")) this.toggleLog();
+  }
+
+  toggleLog() {
+    if (this.menu === this.questLog) this.menu = null;
+    else if (this.overlay() === null) this.openLog();
+  }
+
+  openLog() {
+    this.questLog.refresh(this.quest);
+    this.menu = this.questLog;
   }
 
   moveSelection() {
@@ -158,6 +203,7 @@ export default class Game {
   }
 
   overlay() {
+    if (!this.ready) return this.loading;
     if (this.menu) return this.menu;
     if (this.texts.length > 0) return this.texts[0];
     if (this.world.isOver()) return this.gameOver;
@@ -167,6 +213,7 @@ export default class Game {
 
   confirm() {
     const overlay = this.overlay();
+    if (overlay === this.loading) return;
     if (overlay === this.texts[0]) this.turnPage();
     else if (overlay) this.choose(overlay);
   }
@@ -177,6 +224,7 @@ export default class Game {
     else if (overlay === this.difficultyMenu) this.chooseDifficulty();
     else if (overlay === this.pauseMenu) this.choosePause();
     else if (overlay === this.controls) this.menu = this.back;
+    else if (overlay === this.questLog) this.menu = null;
     else this.chooseEnd(overlay);
   }
 
@@ -218,6 +266,7 @@ export default class Game {
     else if (overlay === this.controls) this.menu = this.back;
     else if (overlay === this.difficultyMenu) this.menu = this.startScreen;
     else if (overlay === this.pauseMenu) this.menu = null;
+    else if (overlay === this.questLog) this.menu = null;
     else if (overlay === null) this.openPause();
   }
 
@@ -228,6 +277,8 @@ export default class Game {
 
   toStart() {
     voice.stop();
+    this.saved = loadSave();
+    this.startScreen = new StartScreen(this.saved !== null);
     this.menu = this.startScreen;
     this.newGame();
   }

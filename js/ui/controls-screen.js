@@ -9,6 +9,7 @@ const ROWS = [
   { keys: ["W", "W"], text: UI_TEXT.doubleJump },
   { keys: ["Space"], text: UI_TEXT.attack },
   { keys: ["E"], text: UI_TEXT.talk },
+  { keys: ["Q"], text: UI_TEXT.questLog },
   { keys: ["Esc"], text: UI_TEXT.pause },
   { keys: ["Enter"], text: UI_TEXT.confirm },
 ];

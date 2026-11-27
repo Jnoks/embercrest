@@ -6,6 +6,7 @@ const KEY_MAP = {
   KeyE: "talk",
   Enter: "confirm",
   Escape: "cancel",
+  KeyQ: "log",
 };
 
 const TOUCH_KEYS = ["left", "right", "jump", "attack", "talk", "cancel"];
@@ -55,5 +56,6 @@ export default class Keyboard {
     this.talk = false;
     this.confirm = false;
     this.cancel = false;
+    this.log = false;
   }
 }

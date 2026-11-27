@@ -16,6 +16,7 @@ export default class Quest {
     this.shards = 0;
     this.found = [];
     this.spawn = null;
+    this.changed = false;
     this.state = "new";
     this.pendingText = null;
   }
@@ -25,6 +26,7 @@ export default class Quest {
     else this.pendingText = this.reminder;
     this.pendingText.restart();
     this.state = "running";
+    this.changed = true;
   }
 
   faceBoss() {
@@ -44,6 +46,22 @@ export default class Quest {
   collect(x) {
     this.shards += 1;
     this.found.push(x);
+    this.changed = true;
+  }
+
+  reach(spawn) {
+    this.spawn = spawn;
+    this.changed = true;
+  }
+
+  progress() {
+    return { found: this.found, spawn: this.spawn, state: this.state };
+  }
+
+  resume(progress) {
+    this.found = progress.found;
+    this.spawn = progress.spawn;
+    this.state = progress.state;
   }
 
   isComplete() {
