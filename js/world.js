@@ -45,6 +45,7 @@ export default class World {
 
   applyDifficulty(difficulty) {
     this.weakenEnemies(difficulty.enemyHealth);
+    this.character.damageFactor = difficulty.damage;
     this.character.damage = difficulty.swordDamage;
     this.level.boss.maxHealth = difficulty.bossHealth;
     this.level.boss.health = difficulty.bossHealth;
