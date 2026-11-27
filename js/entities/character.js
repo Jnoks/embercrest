@@ -31,6 +31,7 @@ export default class Character extends MovableObject {
     this.jumpSpeed = 700;
     this.maxAirJumps = 1;
     this.slowTimer = 0;
+    this.turnTo = null;
     this.armor = 1;
     this.maxEnergy = 0;
     this.energy = 0;
@@ -91,18 +92,22 @@ export default class Character extends MovableObject {
   }
 
   handleInput(delta) {
-    if (this.isHurt() || this.isDead()) return;
+    if (this.isDead()) return;
+    this.turn();
+    if (this.isHurt()) return;
     if (this.keyboard.attack) this.attack();
-    if (this.isAttacking()) return;
-    if (this.keyboard.right) {
-      this.moveRight(delta);
-      this.facingLeft = false;
-    }
-    if (this.keyboard.left) {
-      this.moveLeft(delta);
-      this.facingLeft = true;
-    }
     if (this.keyboard.take("jump")) this.jump();
+    if (this.isAttacking()) return;
+    if (this.keyboard.right) this.moveRight(delta);
+    if (this.keyboard.left) this.moveLeft(delta);
+  }
+
+  turn() {
+    if (this.keyboard.right) this.turnTo = "right";
+    if (this.keyboard.left) this.turnTo = "left";
+    if (this.isAttacking() || this.turnTo === null) return;
+    this.facingLeft = this.turnTo === "left";
+    this.turnTo = null;
   }
 
   airAnimation() {

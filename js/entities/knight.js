@@ -68,11 +68,6 @@ export default class Knight extends Character {
     else super.handleInput(delta);
   }
 
-  turn() {
-    if (this.keyboard.left) this.facingLeft = true;
-    if (this.keyboard.right) this.facingLeft = false;
-  }
-
   chooseAnimation() {
     if (this.isBlocking()) this.setAnimation(this.animations.block);
     else super.chooseAnimation();
