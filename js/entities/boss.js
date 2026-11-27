@@ -36,6 +36,7 @@ export default class Boss extends Enemy {
   constructor(x, y) {
     super(x, y, 256, 256);
     this.name = "Hob";
+    this.kind = "boss";
     this.setBody();
     this.setStats();
     this.setSpells();

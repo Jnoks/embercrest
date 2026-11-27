@@ -11,6 +11,7 @@ export default class Dino extends Enemy {
     super(centerX - 52, y, DINO_SIZE, DINO_SIZE);
     this.setBody();
     this.setStats();
+    this.kind = "dino";
     this.greetings = SHOUTS.dino;
     this.cry = "dino";
     this.animations = this.createAnimations();

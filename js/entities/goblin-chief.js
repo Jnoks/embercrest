@@ -10,6 +10,7 @@ export default class GoblinChief extends Goblin {
     this.health = this.maxHealth;
     this.damage = 20;
     this.speed = 100;
+    this.kind = "chief";
     this.greetings = SHOUTS.chief;
     this.cry = "chief";
   }

@@ -14,6 +14,7 @@ export default class Spider extends Enemy {
     super(centerX - SPIDER_SIZE / 2, y, SPIDER_SIZE, SPIDER_SIZE);
     this.setBody();
     this.setStats();
+    this.kind = "spider";
     this.greetings = SHOUTS.spider;
     this.cry = "spider";
     this.animations = this.createAnimations();

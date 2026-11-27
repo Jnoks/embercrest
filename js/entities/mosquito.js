@@ -16,6 +16,7 @@ export default class Mosquito extends Enemy {
     this.maxHealth = 10;
     this.health = this.maxHealth;
     this.sightRange = 230;
+    this.kind = "mosquito";
     this.greetings = SHOUTS.mosquito;
     this.cry = "mosquito";
     this.animations = this.createAnimations();

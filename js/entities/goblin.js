@@ -10,6 +10,7 @@ export default class Goblin extends Enemy {
     super(centerX - GOBLIN_SIZE / 2, y, GOBLIN_SIZE, GOBLIN_SIZE);
     this.setBody();
     this.setStats();
+    this.kind = "goblin";
     this.greetings = SHOUTS.goblin;
     this.cry = "goblin";
     this.animations = this.createAnimations(path);

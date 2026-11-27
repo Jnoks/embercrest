@@ -12,6 +12,7 @@ export default class Ent extends Enemy {
     super(centerX - 117, y, ENT_SIZE, ENT_SIZE);
     this.setBody();
     this.setStats();
+    this.kind = "ent";
     this.greetings = SHOUTS.ent;
     this.cry = "ent";
     this.animations = this.createAnimations();
