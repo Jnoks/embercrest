@@ -3,8 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
     <title>Embercrest</title>
     <link rel="icon" href="./assets/images/hud/portrait-mage.png" />
+    <link rel="apple-touch-icon" href="./assets/images/ui/app-icon.png" />
     <link rel="stylesheet" href="./style.css" />
     <script type="module" src="./script.js"></script>
   </head>
@@ -13,46 +16,48 @@
     <main>
       <h1>Embercrest</h1>
       <div class="stage">
-        <canvas id="canvas" width="960" height="540">
-          Your browser does not support canvas.
-        </canvas>
-        <button
-          id="touch-cancel"
-          class="touch-button touch-menu"
-          aria-label="Menu"
-        >
-          <img src="./assets/images/ui/touch/menu.png" alt="" />
-        </button>
-        <button
-          id="touch-talk"
-          class="touch-button touch-talk"
-          aria-label="Talk"
-        >
-          <img src="./assets/images/ui/touch/talk.png" alt="" />
-        </button>
-        <div class="touch-controls">
-          <div class="touch-group">
-            <button id="touch-left" class="touch-button" aria-label="Move left">
-              <img src="./assets/images/ui/touch/left.png" alt="" />
-            </button>
-            <button
-              id="touch-right"
-              class="touch-button"
-              aria-label="Move right"
-            >
-              <img src="./assets/images/ui/touch/right.png" alt="" />
-            </button>
-          </div>
-          <div class="touch-group">
-            <button id="touch-block" class="touch-button" aria-label="Block">
-              <img src="./assets/images/ui/touch/block.png" alt="" />
-            </button>
-            <button id="touch-attack" class="touch-button" aria-label="Attack">
-              <img src="./assets/images/ui/touch/attack.png" alt="" />
-            </button>
-            <button id="touch-jump" class="touch-button" aria-label="Jump">
-              <img src="./assets/images/ui/touch/jump.png" alt="" />
-            </button>
+        <div class="screen">
+          <canvas id="canvas" width="960" height="540">
+            Your browser does not support canvas.
+          </canvas>
+          <button
+            id="touch-cancel"
+            class="touch-button touch-menu"
+            aria-label="Menu"
+          >
+            <img src="./assets/images/ui/touch/menu.png" alt="" />
+          </button>
+          <div class="touch-controls">
+            <div id="touch-pad" class="touch-group">
+              <button class="touch-button" aria-label="Move left">
+                <img src="./assets/images/ui/touch/left.png" alt="" />
+              </button>
+              <button class="touch-button" aria-label="Move right">
+                <img src="./assets/images/ui/touch/right.png" alt="" />
+              </button>
+            </div>
+            <div class="touch-group">
+              <button
+                id="touch-talk"
+                class="touch-button touch-talk"
+                aria-label="Talk"
+              >
+                <img src="./assets/images/ui/touch/talk.png" alt="" />
+              </button>
+              <button id="touch-block" class="touch-button" aria-label="Block">
+                <img src="./assets/images/ui/touch/block.png" alt="" />
+              </button>
+              <button
+                id="touch-attack"
+                class="touch-button"
+                aria-label="Attack"
+              >
+                <img src="./assets/images/ui/touch/attack.png" alt="" />
+              </button>
+              <button id="touch-jump" class="touch-button" aria-label="Jump">
+                <img src="./assets/images/ui/touch/jump.png" alt="" />
+              </button>
+            </div>
           </div>
         </div>
       </div>

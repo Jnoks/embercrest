@@ -67,14 +67,13 @@ h1 {
 }
 
 canvas {
-  width: 100%;
+  width: min(100%, calc(100dvh * 16 / 9));
   height: auto;
   background-color: #000;
   image-rendering: pixelated;
 }
 
 .stage {
-  position: relative;
   width: 100%;
   display: flex;
   border: 4px solid #191a0c;
@@ -82,13 +81,15 @@ canvas {
 
 .stage:fullscreen {
   align-items: center;
-  justify-content: center;
   border: none;
   background-color: #000;
 }
 
-.stage:fullscreen canvas {
-  width: min(100%, calc(100dvh * 16 / 9));
+.screen {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 footer {
@@ -124,9 +125,11 @@ footer a {
 }
 
 .touch-group {
+  position: relative;
   height: 100%;
   display: flex;
-  gap: 8px;
+  gap: 16px;
+  pointer-events: auto;
 }
 
 .touch-button {
@@ -147,30 +150,36 @@ footer a {
 }
 
 @media (pointer: coarse) {
-  .touch-controls {
+  .screen {
+    touch-action: none;
+  }
+
+  .touch-controls,
+  .touch-menu {
     position: absolute;
-    left: 1%;
-    right: 1%;
+    height: clamp(10.5%, calc((100vw - 100dvh * 16 / 9) / 2 - 8px), 16%);
+  }
+
+  .touch-controls {
+    left: 8px;
+    right: 8px;
     bottom: 0.5%;
-    height: 10.5%;
     display: flex;
     justify-content: space-between;
+    pointer-events: none;
   }
 
   .touch-menu {
     display: block;
-    position: absolute;
     top: 8%;
-    right: 1%;
-    height: 10.5%;
+    right: 8px;
   }
 
   .touch-talk {
     display: block;
     position: absolute;
-    right: 1%;
-    bottom: 13%;
-    height: 10.5%;
+    right: 0;
+    bottom: calc(100% + 16px);
   }
 }
 
@@ -181,7 +190,7 @@ footer a {
   }
 
   .game main {
-    width: min(100%, calc(100dvh * 16 / 9));
+    width: 100%;
   }
 
   .game h1,
@@ -195,8 +204,16 @@ footer a {
 }
 
 @media (pointer: coarse) and (orientation: portrait) {
+  .game .stage {
+    display: none;
+  }
+
   .rotate-hint {
     display: block;
+    font-size: 24px;
+    line-height: 32px;
+    text-align: center;
+    text-shadow: 2px 2px 0 #191a0c;
   }
 }
 

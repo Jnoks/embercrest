@@ -20,6 +20,7 @@ import { sound } from "./sound.js";
 import { voice } from "./voice.js";
 import { loadSave, storeSave, clearSave } from "./save.js";
 import { toggleFullscreen } from "./fullscreen.js";
+import { isPortrait } from "./device.js";
 
 const WORLD = WORLDS[0];
 
@@ -85,7 +86,13 @@ export default class Game {
     this.quest.hero = this.hero;
     this.world = new World(this.canvas, this.keyboard, level, this.quest);
     this.world.applyDifficulty(DIFFICULTIES[this.difficulty]);
+    this.updateBlockButton();
     sound.playMusic("forest");
+  }
+
+  updateBlockButton() {
+    const button = document.getElementById("touch-block");
+    button.hidden = this.hero !== "knight";
   }
 
   chooseStart() {
@@ -145,6 +152,11 @@ export default class Game {
   loop(time) {
     const delta = Math.min((time - this.lastTime) / 1000, 0.1);
     this.lastTime = time;
+    if (!isPortrait()) this.step(delta);
+    requestAnimationFrame((t) => this.loop(t));
+  }
+
+  step(delta) {
     if (loader.isDone()) this.ready = true;
     this.handleKeys();
     this.collectText();
@@ -154,7 +166,6 @@ export default class Game {
     else this.world.update(delta);
     if (this.quest.changed) this.save();
     this.draw(overlay);
-    requestAnimationFrame((t) => this.loop(t));
   }
 
   collectText() {
