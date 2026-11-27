@@ -85,6 +85,11 @@ export default class Sound {
     if (this.track) this.track.pause();
   }
 
+  stopMusic() {
+    this.pause();
+    this.track = null;
+  }
+
   toggle() {
     this.muted = !this.muted;
     localStorage.setItem(MUTE_KEY, String(this.muted));

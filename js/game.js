@@ -165,6 +165,7 @@ export default class Game {
 
   checkEnding() {
     if (!this.world.isWon() || this.finale.length === 0) return;
+    sound.stopMusic();
     sound.play("win");
     clearSave();
     while (this.finale.length > 0) this.texts.push(this.finale.shift());
