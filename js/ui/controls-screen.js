@@ -2,6 +2,7 @@ import Label from "./label.js";
 import Key from "./key.js";
 import { WINDOW } from "./text-box.js";
 import { UI_TEXT } from "../data/story.js";
+import { IS_TOUCH } from "../device.js";
 
 const ROWS = [
   { keys: ["A", "D"], text: UI_TEXT.move },
@@ -14,6 +15,8 @@ const ROWS = [
   { keys: ["Esc"], text: UI_TEXT.pause },
   { keys: ["Enter"], text: UI_TEXT.confirm },
 ];
+const KEYBOARD_ONLY = ["Q", "Enter"];
+const TOUCH_ROWS = ROWS.filter((row) => !KEYBOARD_ONLY.includes(row.keys[0]));
 const KEY_WIDTHS = { Space: 72, Enter: 72, Esc: 48 };
 const ROWS_PER_COLUMN = 5;
 const FIRST_X = 264;
@@ -31,22 +34,29 @@ const DIM_COLOR = "rgba(0, 0, 0, 0.6)";
 export default class ControlsScreen {
   constructor() {
     const title = UI_TEXT.controls;
+    this.rows = ROWS;
+    if (IS_TOUCH) this.rows = TOUCH_ROWS;
     this.parts = [
       new Label(title, 480, 80, 16, TITLE_COLOR, LIGHT_COLOR),
       new Key(432, 494, "Esc", 48, KEY_SIZE),
       new Label(UI_TEXT.closePage, 520, 506, 16, "white", "black"),
     ];
-    for (let i = 0; i < ROWS.length; i++) this.addRow(ROWS[i], i);
+    for (let i = 0; i < this.rows.length; i++) this.addRow(this.rows[i], i);
   }
 
   addRow(row, index) {
     let x = FIRST_X + Math.floor(index / ROWS_PER_COLUMN) * COLUMN_STEP;
     const y = FIRST_Y + (index % ROWS_PER_COLUMN) * ROW_STEP;
     for (let i = 0; i < row.keys.length; i++) {
-      const width = KEY_WIDTHS[row.keys[i]] || KEY_SIZE;
+      const width = this.keyWidth(row.keys[i]);
       this.parts.push(new Key(x, y, row.keys[i], width, KEY_SIZE));
       x += width + KEY_GAP;
     }
+  }
+
+  keyWidth(key) {
+    if (IS_TOUCH) return KEY_SIZE;
+    return KEY_WIDTHS[key] || KEY_SIZE;
   }
 
   update(delta) {}
@@ -64,11 +74,11 @@ export default class ControlsScreen {
     ctx.fillStyle = TEXT_COLOR;
     ctx.textBaseline = "middle";
     ctx.textAlign = "left";
-    for (let i = 0; i < ROWS.length; i++) {
+    for (let i = 0; i < this.rows.length; i++) {
       const column = Math.floor(i / ROWS_PER_COLUMN);
       const x = FIRST_X + column * COLUMN_STEP + TEXT_X;
       const y = FIRST_Y + (i % ROWS_PER_COLUMN) * ROW_STEP + KEY_SIZE / 2;
-      ctx.fillText(ROWS[i].text, x, y);
+      ctx.fillText(this.rows[i].text, x, y);
     }
   }
 }

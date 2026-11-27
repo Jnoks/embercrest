@@ -2,6 +2,7 @@ import HudImage from "./hud-image.js";
 import Label, { TITLE_COLOR, SHADOW_COLOR } from "./label.js";
 import Key from "./key.js";
 import { UI_TEXT } from "../data/story.js";
+import { IS_TOUCH } from "../device.js";
 
 const WINDOW_IMAGE = "./assets/images/ui/dialog-small.png";
 const SHARD_IMAGE = "./assets/images/ember-shard/spin/spin1.png";
@@ -17,11 +18,16 @@ export default class QuestLog {
       new HudImage(206, 194, 548, 152, WINDOW_IMAGE),
       new HudImage(250, 226, 32, 32, SHARD_IMAGE),
       new Label(UI_TEXT.questLabel, 480, 172, 32, TITLE_COLOR, SHADOW_COLOR),
-      new Key(417, 362, "Q", 24, 24),
+      new Key(417, 362, this.closeKey(), 24, 24),
       new Label(UI_TEXT.closePage, 492, 374, 16, "white", "black"),
     ];
     this.count = new Label("", 266, 282, 16, "white", "black");
     this.count.weight = "normal";
+  }
+
+  closeKey() {
+    if (IS_TOUCH) return "Esc";
+    return "Q";
   }
 
   refresh(quest) {
