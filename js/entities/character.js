@@ -20,7 +20,6 @@ export default class Character extends MovableObject {
     this.jumpSpeed = 700;
     this.maxAirJumps = 1;
     this.slowTimer = 0;
-    this.damageFactor = 1;
     this.armor = 1;
     this.maxEnergy = 0;
     this.energy = 0;
@@ -63,7 +62,7 @@ export default class Character extends MovableObject {
 
   takeDamage(amount) {
     const health = this.health;
-    super.takeDamage(amount * this.damageFactor * this.armor);
+    super.takeDamage(amount * this.armor);
     if (this.health === health) return;
     if (this.isDead()) sound.play("death");
     else sound.play("hurt");
