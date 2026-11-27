@@ -205,12 +205,22 @@ footer a {
 
 @media (pointer: coarse) and (orientation: landscape) and (max-height: 500px) {
   canvas {
-    width: min(calc(100% - 116px), calc(100dvh * 16 / 9));
+    width: min(calc(100% - 164px), calc(100dvh * 16 / 9));
   }
 
   .touch-controls,
   .touch-menu {
     height: min(16%, 50px);
+  }
+
+  .touch-controls {
+    left: 24px;
+    right: 24px;
+    bottom: 22%;
+  }
+
+  .touch-menu {
+    right: 24px;
   }
 }
 
